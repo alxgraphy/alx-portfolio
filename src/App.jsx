@@ -102,8 +102,8 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
-  const aboutMePhoto = '/about me/me.jpeg';
-  const avatarUrl = 'https://github.com/user-attachments/assets/e1eb6cb7-1999-43ae-b231-5eab424860b5';
+  const aboutMePhoto = '/pic/me.jpeg';
+  const avatarUrl = 'https://avatars.githubusercontent.com/u/140935258?v=4';
 
   const themes = {
     wireframe: {
