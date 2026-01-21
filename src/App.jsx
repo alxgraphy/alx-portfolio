@@ -103,7 +103,7 @@ function App() {
   }, [lastScrollY]);
 
   const aboutMePhoto = '/pic/me.jpeg';
-  const avatarUrl = 'https://avatars.githubusercontent.com/u/140935258?v=4';
+  const avatarUrl = 'https://avatars.githubusercontent.com/u/198081098?v=4';
 
   const themes = {
     wireframe: {
