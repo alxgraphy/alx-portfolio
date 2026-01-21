@@ -45,7 +45,7 @@ function App() {
   const [randomPhotos, setRandomPhotos] = useState([]);
   const [showNav, setShowNav] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [captchaClicks, setCaptchaClicks] = useState(0); // For /captcha page
+  const [captchaClicks, setCaptchaClicks] = useState(0);
 
   // Handle URL routing
   useEffect(() => {
@@ -62,6 +62,7 @@ function App() {
   const navigate = (page) => {
     setCurrentPage(page);
     window.history.pushState({}, '', `/${page === 'home' ? '' : page}`);
+    setCaptchaClicks(0); // reset captcha on navigation
   };
 
   useEffect(() => {
@@ -130,7 +131,7 @@ function App() {
   const validPages = [
     'home', 'about', 'skills', 'code', 'photography', 'contact',
     'secret', 'admin', 'rickroll', 'source', 'coffee', 'old', 'test', 'terminal',
-    'glowup', 'sus', 'void', 'winner', 'captcha' // NEW
+    'glowup', 'sus', 'void', 'winner', 'captcha'
   ];
 
   const is404 = !validPages.includes(currentPage);
@@ -166,10 +167,10 @@ function App() {
 
   const random404 = funny404Messages[Math.floor(Math.random() * funny404Messages.length)];
 
-  // Pages where nav + footer should be completely hidden
+  // Pages where nav + footer should be hidden
   const hideUIpages = ['rickroll', 'terminal', 'void'];
 
-  // Fake CAPTCHA messages (randomly picked for /captcha page)
+  // Fake CAPTCHA messages
   const captchaChallenges = [
     "Select all squares with traffic lights (there are none, click anyway)",
     "Are you human? Prove it by clicking this button 47 times",
@@ -183,7 +184,10 @@ function App() {
     "Are you worthy of seeing my code? (Answer: no)",
     "Select all images of existential dread",
     "I'm watching you... click faster",
-    "CAPTCHA level: over 9000. Good luck."
+    "CAPTCHA level: over 9000. Good luck.",
+    "Click until your finger falls off",
+    "Are we sure you're not a very slow bot?",
+    "This is not a drill. Click or be suspected forever."
   ];
 
   return (
@@ -545,9 +549,11 @@ function App() {
           </div>
         )}
 
-        {/* HIDDEN / SECRET PAGES */}
+        {/* ────────────────────────────────────────────── */}
+        {/* HIDDEN / SECRET PAGES ────────────────────────── */}
+        {/* ────────────────────────────────────────────── */}
 
-        {/* 1. /secret */}
+        {/* /secret */}
         {currentPage === 'secret' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
@@ -569,7 +575,7 @@ function App() {
           </div>
         )}
 
-        {/* 2. /admin */}
+        {/* /admin */}
         {currentPage === 'admin' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             <h1 className={`text-8xl md:text-10xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
@@ -591,7 +597,7 @@ function App() {
           </div>
         )}
 
-        {/* 3. /rickroll — FULL SCREEN, NO TEXT, SOUND ON, LOOP */}
+        {/* /rickroll */}
         {currentPage === 'rickroll' && (
           <div className="fixed inset-0 z-50 bg-black overflow-hidden">
             <iframe
@@ -605,7 +611,7 @@ function App() {
           </div>
         )}
 
-        {/* 4. /source */}
+        {/* /source */}
         {currentPage === 'source' && (
           <div className="max-w-4xl mx-auto py-32 text-center font-mono">
             <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
@@ -630,7 +636,7 @@ function App() {
           </div>
         )}
 
-        {/* 5. /coffee */}
+        {/* /coffee */}
         {currentPage === 'coffee' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
@@ -653,7 +659,7 @@ function App() {
           </div>
         )}
 
-        {/* 7. /old */}
+        {/* /old */}
         {currentPage === 'old' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
@@ -676,7 +682,7 @@ function App() {
           </div>
         )}
 
-        {/* 9. /test */}
+        {/* /test */}
         {currentPage === 'test' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             <h1 className={`text-8xl md:text-10xl font-black uppercase tracking-tighter mb-8 ${t.accent} animate-pulse`}>
@@ -699,7 +705,7 @@ function App() {
           </div>
         )}
 
-        {/* 10. /terminal */}
+        {/* /terminal */}
         {currentPage === 'terminal' && (
           <div className="fixed inset-0 bg-black text-green-400 font-mono p-8 overflow-auto z-50">
             <pre className="text-xl md:text-2xl leading-relaxed">
@@ -807,51 +813,67 @@ alxgraphy@portfolio:~$ exit
           </div>
         )}
 
-        {/* NEW: /captcha — endless fake robot check with sarcastic end */}
+        {/* /captcha — 1 to 100,000 random clicks */}
         {currentPage === 'captcha' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
-            {captchaClicks < 8 + Math.floor(Math.random() * 5) ? ( // Random 8–12 clicks to "pass"
-              <>
-                <h1 className={`text-6xl md:text-8xl font-black uppercase tracking-tighter mb-8 ${t.accent} animate-pulse`}>
-                  ARE YOU A ROBOT?
-                </h1>
-                <p className="text-3xl md:text-5xl font-bold mb-12">
-                  {captchaChallenges[Math.floor(Math.random() * captchaChallenges.length)]}
-                </p>
-                <button
-                  onClick={() => setCaptchaClicks(c => c + 1)}
-                  className={`px-16 py-8 border-4 ${t.border} ${t.button} text-3xl uppercase tracking-widest font-black transition hover:scale-110 mb-8`}
-                >
-                  I'M NOT A ROBOT
-                </button>
-                <p className={`text-xl ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>
-                  Click count: {captchaClicks} (keep going, human... or whatever you are)
-                </p>
-              </>
-            ) : (
-              <>
-                <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
-                  CONGRATULATIONS...?
-                </h1>
-                <p className="text-4xl md:text-6xl font-bold mb-12 text-green-500">
-                  You passed... I guess?
-                </p>
-                <p className={`text-2xl mb-16 leading-relaxed ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
-                  After all that clicking, you're either human... or a very dedicated bot.<br/>
-                  Either way, go touch grass. You earned it. Or didn't. Who cares.<br/>
-                  (Now leave before I make you do it again)
-                </p>
-                <button
-                  onClick={() => {
-                    navigate('home');
-                    setCaptchaClicks(0); // Reset for next visit
-                  }}
-                  className={`px-12 py-6 border-4 ${t.border} ${t.button} text-2xl uppercase tracking-widest font-black transition hover:scale-110`}
-                >
-                  I'm free... right?
-                </button>
-              </>
-            )}
+            {(() => {
+              // Generate random target only once per page load
+              const [targetClicks] = useState(() => Math.floor(Math.random() * 100000) + 1);
+
+              return captchaClicks < targetClicks ? (
+                <>
+                  <h1 className={`text-6xl md:text-8xl font-black uppercase tracking-tighter mb-8 ${t.accent} animate-pulse`}>
+                    ARE YOU A ROBOT?
+                  </h1>
+                  <p className="text-3xl md:text-5xl font-bold mb-8">
+                    {captchaChallenges[Math.floor(Math.random() * captchaChallenges.length)]}
+                  </p>
+                  <button
+                    onClick={() => setCaptchaClicks(c => c + 1)}
+                    className={`px-16 py-8 border-4 ${t.border} ${t.button} text-3xl uppercase tracking-widest font-black transition hover:scale-110 mb-8`}
+                  >
+                    I'M NOT A ROBOT
+                  </button>
+                  <p className={`text-2xl font-mono ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
+                    Progress: {captchaClicks} / {targetClicks.toLocaleString()} clicks needed
+                    <br />
+                    (yes... up to 100,000. good luck.)
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
+                    YOU... ACTUALLY DID IT?
+                  </h1>
+                  <p className="text-4xl md:text-6xl font-bold mb-12 text-green-500">
+                    CAPTCHA PASSED (miraculously)
+                  </p>
+                  <p className={`text-2xl mb-16 leading-relaxed ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
+                    {targetClicks === 1 
+                      ? "One click. You have a life. Congrats." 
+                      : targetClicks < 100 
+                        ? `Only ${targetClicks.toLocaleString()} clicks? That's adorable.` 
+                        : targetClicks < 1000 
+                          ? `${targetClicks.toLocaleString()} clicks... mildly concerning.` 
+                          : targetClicks < 10000 
+                            ? `${targetClicks.toLocaleString()} clicks?? You need help.` 
+                            : `You clicked ${targetClicks.toLocaleString()} TIMES??? Go outside. Touch grass. Please.`}
+                    <br /><br />
+                    You're either the most patient person alive... or a bot with infinite patience.<br />
+                    Respect either way. Now leave before I make it 1 million next time.
+                  </p>
+                  <button
+                    onClick={() => {
+                      navigate('home');
+                      setCaptchaClicks(0);
+                    }}
+                    className={`px-12 py-6 border-4 ${t.border} ${t.button} text-2xl uppercase tracking-widest font-black transition hover:scale-110`}
+                  >
+                    I'm free... right?
+                  </button>
+                </>
+              );
+            })()}
           </div>
         )}
 
