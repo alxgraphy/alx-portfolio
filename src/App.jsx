@@ -470,7 +470,7 @@ function App() {
               PHOTOGRAPHY
             </h2>
             <div className={`text-sm uppercase tracking-widest mb-12 ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>
-              Random selection of 12 photos • Refresh to see new ones (may be a little slow I am fixing that at the moment srry)
+              Random selection of 12 photos • Refresh to see new ones
             </div>
 
             {randomPhotos.length === 0 ? (
@@ -480,8 +480,13 @@ function App() {
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {randomPhotos.map((photo, i) => (
-                  <div key={i} className={`border-2 ${t.border} overflow-hidden aspect-[4/3] ${theme === 'wireframe' ? 'bg-gray-100' : 'bg-black/50'} group`}>
-                    <img src={photo} alt={`Photo ${i + 1}`} className="w-full h-full object-cover group-hover:scale-105 transition duration-700" />
+                  <div key={i} className={`border-2 ${t.border} overflow-hidden aspect-[4/3] ${theme === 'wireframe' ? 'bg-gray-100' : 'bg-black/50'} group cursor-pointer`}>
+                    <img 
+                      src={photo} 
+                      alt={`Photo ${i + 1}`} 
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-105 transition duration-700" 
+                    />
                   </div>
                 ))}
               </div>
