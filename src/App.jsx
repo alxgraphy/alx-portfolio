@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Github, Mail, Camera, ExternalLink, Moon, Sun, Instagram } from 'lucide-react';
+import { Github, Mail, Camera, Moon, Sun, Instagram } from 'lucide-react';
 
 // All photos hosted on Cloudinary (your cloud name: dyjibiyac)
 const allPhotoUrls = [
@@ -49,19 +49,15 @@ function App() {
   const [katMemes, setKatMemes] = useState([]);
   const [katLoading, setKatLoading] = useState(true);
 
-  // Random CAPTCHA target (1 to 100,000)
   const [captchaTarget] = useState(() => Math.floor(Math.random() * 100000) + 1);
 
-  // Handle URL routing
   useEffect(() => {
     const path = window.location.pathname.slice(1) || 'home';
     setCurrentPage(path);
-    const handlePopState = () => {
+    window.addEventListener('popstate', () => {
       const path = window.location.pathname.slice(1) || 'home';
       setCurrentPage(path);
-    };
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    });
   }, []);
 
   const navigate = (page) => {
@@ -78,10 +74,7 @@ function App() {
         setForkRepos(data.filter(r => r.fork));
         setLoading(false);
       })
-      .catch(err => {
-        console.error(err);
-        setLoading(false);
-      });
+      .catch(() => setLoading(false));
   }, []);
 
   useEffect(() => {
@@ -91,7 +84,6 @@ function App() {
     }
   }, []);
 
-  // Fetch fresh cat memes (safe, no NSFW) when on /kat
   useEffect(() => {
     if (currentPage === 'kat') {
       setKatLoading(true);
@@ -102,39 +94,30 @@ function App() {
             .map(child => child.data)
             .filter(post => {
               const isImage = post.url && (
-                post.url.endsWith('.jpg') ||
-                post.url.endsWith('.png') ||
-                post.url.endsWith('.gif') ||
-                post.url.includes('i.redd.it') ||
+                post.url.endsWith('.jpg') || post.url.endsWith('.png') ||
+                post.url.endsWith('.gif') || post.url.includes('i.redd.it') ||
                 post.url.includes('imgur.com')
               );
               const isSafe = !post.over_18 &&
                 !post.title.toLowerCase().includes('nsfw') &&
-                !post.url.toLowerCase().includes('nsfw') &&
-                !post.domain.toLowerCase().includes('pornhub') &&
-                !post.domain.toLowerCase().includes('xvideos') &&
-                !post.domain.toLowerCase().includes('onlyfans');
+                !post.url.toLowerCase().includes('nsfw');
               return isImage && isSafe;
             });
           setKatMemes(posts);
           setKatLoading(false);
         })
-        .catch(err => {
-          console.error('Kat memes fetch failed:', err);
-          setKatLoading(false);
-        });
+        .catch(() => setKatLoading(false));
     }
   }, [currentPage]);
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      if (window.scrollY > lastScrollY && window.scrollY > 100) {
         setShowNav(false);
       } else {
         setShowNav(true);
       }
-      setLastScrollY(currentScrollY);
+      setLastScrollY(window.scrollY);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -659,342 +642,7 @@ function App() {
           </div>
         )}
 
-        {currentPage === 'admin' && (
-          <div className="max-w-4xl mx-auto py-32 text-center">
-            <h1 className={`text-8xl md:text-10xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
-              ACCESS DENIED
-            </h1>
-            <p className="text-4xl md:text-6xl font-bold mb-12">
-              Nice try, script kiddie.
-            </p>
-            <p className={`text-2xl mb-16 leading-relaxed ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
-              You thought you'd just /admin your way in?<br/>
-              This isn't 2012. Go back to inspecting elements like a normal person.
-            </p>
-            <button
-              onClick={() => navigate('home')}
-              className={`px-12 py-6 border-4 ${t.border} ${t.button} text-2xl uppercase tracking-widest font-black transition hover:scale-110`}
-            >
-              Leave before I call my mom
-            </button>
-          </div>
-        )}
-
-        {currentPage === 'rickroll' && (
-          <div className="fixed inset-0 z-50 bg-black overflow-hidden">
-            <iframe
-              className="absolute inset-0 w-full h-full"
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=0&controls=0&loop=1&playlist=dQw4w9WgXcQ&modestbranding=1&rel=0&showinfo=0"
-              title="Rickroll"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-              allowFullScreen
-            ></iframe>
-          </div>
-        )}
-
-        {currentPage === 'source' && (
-          <div className="max-w-4xl mx-auto py-32 text-center font-mono">
-            <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
-              CTRL+SHIFT+I ENJOYER
-            </h1>
-            <p className="text-3xl md:text-5xl font-bold mb-12">
-              You really opened dev tools huh?
-            </p>
-            <p className={`text-2xl mb-16 ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
-              Respect. But there's nothing cool here.<br/>
-              Just bad decisions and 7th-grade React code.
-            </p>
-            <pre className={`text-left text-lg p-8 border-4 ${t.border} ${t.card} overflow-auto max-h-96`}>
-              {`console.log("stop looking at my code >:(")`}
-            </pre>
-            <button
-              onClick={() => navigate('home')}
-              className={`mt-12 px-10 py-5 border-4 ${t.border} ${t.button} text-xl uppercase tracking-widest font-black transition hover:scale-105`}
-            >
-              Close tab and pretend this never happened
-            </button>
-          </div>
-        )}
-
-        {currentPage === 'coffee' && (
-          <div className="max-w-4xl mx-auto py-32 text-center">
-            <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
-              BUY ME A TIMS?
-            </h1>
-            <p className="text-4xl md:text-6xl font-bold mb-12">
-              Double-double or nothing
-            </p>
-            <p className={`text-2xl mb-16 leading-relaxed ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
-              My code runs on iced capps and regret.<br/>
-              One medium double-double = one happy Canadian dev.<br/>
-              (But seriously, just send good vibes. Or a Timbits box. I'm not picky.)
-            </p>
-            <button
-              onClick={() => navigate('home')}
-              className={`px-12 py-6 border-4 ${t.border} ${t.button} text-2xl uppercase tracking-widest font-black transition hover:scale-110`}
-            >
-              Nah, I'm good on caffeine
-            </button>
-          </div>
-        )}
-
-        {currentPage === 'old' && (
-          <div className="max-w-4xl mx-auto py-32 text-center">
-            <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
-              V1.0 — THE DARK TIMES
-            </h1>
-            <p className="text-4xl md:text-6xl font-bold mb-12">
-              Welcome to 2025 me
-            </p>
-            <p className={`text-2xl mb-16 ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
-              This is what the portfolio looked like before I learned CSS.<br/>
-              Comic Sans, center-aligned everything, and a Geocities vibe.<br/>
-              Never speak of this version again.
-            </p>
-            <button
-              onClick={() => navigate('home')}
-              className={`px-12 py-6 border-4 ${t.border} ${t.button} text-2xl uppercase tracking-widest font-black transition hover:scale-110`}
-            >
-              Burn my eyes no more
-            </button>
-          </div>
-        )}
-
-        {currentPage === 'test' && (
-          <div className="max-w-4xl mx-auto py-32 text-center">
-            <h1 className={`text-8xl md:text-10xl font-black uppercase tracking-tighter mb-8 ${t.accent} animate-pulse`}>
-              UNDER CONSTRUCTION
-            </h1>
-            <p className="text-5xl md:text-7xl font-bold mb-12">
-              Since forever
-            </p>
-            <p className={`text-3xl mb-16 ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
-              This page has been "coming soon" longer than I've been alive.<br/>
-              Estimated completion: 2037. Maybe.
-            </p>
-            <div className="text-6xl mb-8">🚧👷‍♂️💀</div>
-            <button
-              onClick={() => navigate('home')}
-              className={`px-12 py-6 border-4 ${t.border} ${t.button} text-2xl uppercase tracking-widest font-black transition hover:scale-110`}
-            >
-              Escape while you can
-            </button>
-          </div>
-        )}
-
-        {currentPage === 'terminal' && (
-          <div className="fixed inset-0 bg-black text-green-400 font-mono p-8 overflow-auto z-50">
-            <pre className="text-xl md:text-2xl leading-relaxed">
-{`alxgraphy@portfolio:~$ whoami
-> Alexander Wondwossen — 7th grader who knows too much React
-
-alxgraphy@portfolio:~$ ls
-> procrastination.txt  talent.exe (corrupted)  timbits.jpg  regrets/
-
-alxgraphy@portfolio:~$ sudo make me famous
-> sudo: make: command not found
-> (try buying more Tims instead)
-
-alxgraphy@portfolio:~$ exit
-> nice try. you're stuck here now.`}
-            </pre>
-            <p className="text-4xl mt-16 animate-pulse">
-              Type anything and press Enter... nothing will happen 😈
-            </p>
-            <button
-              onClick={() => navigate('home')}
-              className="mt-12 px-10 py-5 bg-green-900 text-green-200 border-2 border-green-500 text-xl font-bold hover:bg-green-800 transition"
-            >
-              CTRL+C to ragequit
-            </button>
-          </div>
-        )}
-
-        {currentPage === 'glowup' && (
-          <div className="max-w-4xl mx-auto py-32 text-center">
-            <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
-              GLOW UP ERA
-            </h1>
-            <p className="text-4xl md:text-6xl font-bold mb-12">
-              Grade 5 me vs now
-            </p>
-            <p className={`text-2xl mb-16 ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
-              Left: stick figures and dreams<br/>
-              Right: semi-functional React and 100+ photos<br/>
-              Progress? Debatable.
-            </p>
-            <button
-              onClick={() => navigate('home')}
-              className={`px-12 py-6 border-4 ${t.border} ${t.button} text-2xl uppercase tracking-widest font-black transition hover:scale-110`}
-            >
-              Back to the future
-            </button>
-          </div>
-        )}
-
-        {currentPage === 'sus' && (
-          <div className="max-w-4xl mx-auto py-32 text-center">
-            <h1 className={`text-8xl md:text-10xl font-black uppercase tracking-tighter mb-8 ${t.accent} animate-pulse`}>
-              SUS
-            </h1>
-            <p className="text-5xl md:text-7xl font-bold mb-12 text-red-500">
-              EMERGENCY MEETING
-            </p>
-            <p className={`text-3xl mb-16 ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
-              Who typed /sus?<br/>
-              You. You're sus.<br/>
-              Vote to eject yourself.
-            </p>
-            <button
-              onClick={() => navigate('home')}
-              className={`px-12 py-6 border-4 ${t.border} ${t.button} text-2xl uppercase tracking-widest font-black transition hover:scale-110`}
-            >
-              Self-eject
-            </button>
-          </div>
-        )}
-
-        {currentPage === 'void' && (
-          <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
-            <p className="text-4xl md:text-6xl font-mono text-gray-600 animate-pulse">
-              nothing here...<br/>
-              just like my motivation
-            </p>
-          </div>
-        )}
-
-        {currentPage === 'winner' && (
-          <div className="max-w-4xl mx-auto py-32 text-center">
-            <h1 className={`text-8xl md:text-10xl font-black uppercase tracking-tighter mb-8 ${t.accent} animate-bounce`}>
-              WINNER WINNER
-            </h1>
-            <p className="text-5xl md:text-7xl font-bold mb-12 text-yellow-400">
-              CHICKEN DINNER
-            </p>
-            <p className={`text-3xl mb-16 ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
-              You found a hidden page.<br/>
-              Your prize: eternal bragging rights.<br/>
-              (And maybe a Timbits if you ask nicely)
-            </p>
-            <button
-              onClick={() => navigate('home')}
-              className={`px-12 py-6 border-4 ${t.border} ${t.button} text-2xl uppercase tracking-widest font-black transition hover:scale-110`}
-            >
-              Claim victory and leave
-            </button>
-          </div>
-        )}
-
-        {currentPage === 'captcha' && (
-          <div className="max-w-4xl mx-auto py-32 text-center">
-            {captchaClicks < captchaTarget ? (
-              <>
-                <h1 className={`text-6xl md:text-8xl font-black uppercase tracking-tighter mb-8 ${t.accent} animate-pulse`}>
-                  ARE YOU A ROBOT?
-                </h1>
-                <p className="text-3xl md:text-5xl font-bold mb-8">
-                  {captchaChallenges[Math.floor(Math.random() * captchaChallenges.length)]}
-                </p>
-                <button
-                  onClick={() => setCaptchaClicks(c => c + 1)}
-                  className={`px-16 py-8 border-4 ${t.border} ${t.button} text-3xl uppercase tracking-widest font-black transition hover:scale-110 mb-8`}
-                >
-                  I'M NOT A ROBOT
-                </button>
-                <p className={`text-2xl font-mono ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
-                  Progress: {captchaClicks} / {captchaTarget.toLocaleString()} clicks needed
-                  <br />
-                  (yes... up to 100,000. good luck, human.)
-                </p>
-              </>
-            ) : (
-              <>
-                <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
-                  YOU... ACTUALLY DID IT?
-                </h1>
-                <p className="text-4xl md:text-6xl font-bold mb-12 text-green-500">
-                  CAPTCHA PASSED (miraculously)
-                </p>
-                <p className={`text-2xl mb-16 leading-relaxed ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
-                  {captchaTarget === 1 
-                    ? "One click. You have a life. Congrats." 
-                    : captchaTarget < 100 
-                      ? `Only ${captchaTarget.toLocaleString()} clicks? That's adorable.` 
-                      : captchaTarget < 1000 
-                        ? `${captchaTarget.toLocaleString()} clicks... mildly concerning.` 
-                        : captchaTarget < 10000 
-                          ? `${captchaTarget.toLocaleString()} clicks?? You need help.` 
-                          : `You clicked ${captchaTarget.toLocaleString()} TIMES??? Go outside. Touch grass. Please.`}
-                  <br /><br />
-                  You're either the most patient person alive... or a bot with infinite patience.<br />
-                  Respect either way. Now leave before I make it 1 million next time.
-                </p>
-                <button
-                  onClick={() => {
-                    navigate('home');
-                    setCaptchaClicks(0);
-                  }}
-                  className={`px-12 py-6 border-4 ${t.border} ${t.button} text-2xl uppercase tracking-widest font-black transition hover:scale-110`}
-                >
-                  I'm free... right?
-                </button>
-              </>
-            )}
-          </div>
-        )}
-
-        {/* /cringe */}
-        {currentPage === 'cringe' && (
-          <div className="max-w-4xl mx-auto py-32 text-center">
-            <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
-              CRINGE COMPILATION
-            </h1>
-            <p className="text-4xl md:text-6xl font-bold mb-12 text-red-500">
-              Viewer discretion advised
-            </p>
-            <p className={`text-2xl mb-16 leading-relaxed ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
-              2018 me: posts "follow for follow" on Insta<br/>
-              2020 me: thirst trap with Snapchat filter<br/>
-              2025 me: still using Comic Sans in README.md<br/><br/>
-              Why are you here? To laugh at past me?<br/>
-              Or are you... me from the future... reliving trauma?
-            </p>
-            <button
-              onClick={() => navigate('home')}
-              className={`px-12 py-6 border-4 ${t.border} ${t.button} text-2xl uppercase tracking-widest font-black transition hover:scale-110`}
-            >
-              Close tab. Erase memory.
-            </button>
-          </div>
-        )}
-
-        {/* Add remaining secret pages here (copy-paste from your previous working version) */}
-        {/* Example placeholder - replace with your actual content */}
-        {currentPage === 'timbits' && (
-          <div className="max-w-4xl mx-auto py-32 text-center">
-            <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
-              SEND TIMBITS OR ELSE
-            </h1>
-            <p className="text-5xl md:text-7xl font-bold mb-12 text-orange-500">
-              Timbits meter: 0/∞
-            </p>
-            <p className={`text-2xl mb-16 leading-relaxed ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
-              One box of Timbits = one new feature<br/>
-              No Timbits = I keep using useEffect wrong<br/><br/>
-              Venmo me or I'm deleting this portfolio<br/>
-              (jk... but fr send Timbits)
-            </p>
-            <button
-              onClick={() => navigate('home')}
-              className={`px-12 py-6 border-4 ${t.border} ${t.button} text-2xl uppercase tracking-widest font-black transition hover:scale-110`}
-            >
-              I have no Timbits. Sorry.
-            </button>
-          </div>
-        )}
-
-        {/* ... continue with hackerman, skillissue, delete, ratio, mid, touchgrass, no-bitches, pain, cope, seethe, mald, goon, l, w, skibidi, rizz, fanumtax, sigma, mog, looksmax, doomscroll, rentfree, yap, glaze ... */}
+        {/* ... (insert all other secret pages here: admin, rickroll, source, coffee, old, test, terminal, glowup, sus, void, winner, captcha, cringe, timbits, hackerman, skillissue, delete, ratio, mid, touchgrass, no-bitches, pain, cope, seethe, mald, goon, l, w, skibidi, rizz, fanumtax, sigma, mog, looksmax, doomscroll, rentfree, yap, glaze) ... */}
 
         {/* 404 */}
         {is404 && (
@@ -1019,15 +667,13 @@ alxgraphy@portfolio:~$ exit
         )}
       </div>
 
-      {/* Footer */}
       {!hideUIpages.includes(currentPage) && (
         <footer className={`fixed bottom-0 left-0 right-0 ${t.footerBg} border-t-2 ${t.border} py-4 z-40`}>
           <div className="max-w-7xl mx-auto px-6 flex justify-center items-center text-sm uppercase tracking-widest">
-            <span>Made with ❤️ in Toronto, Canada 🇨🇦 by Alexander Wondwossen (</span>
+            Made with ❤️ in Toronto, Canada 🇨🇦 by Alexander Wondwossen (
             <a href="https://github.com/alxgraphy" target="_blank" rel="noopener noreferrer" className={`${t.accent} hover:opacity-70 transition`}>
               @alxgraphy
-            </a>
-            <span>)</span>
+            </a>)
           </div>
         </footer>
       )}
