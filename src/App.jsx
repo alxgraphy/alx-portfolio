@@ -125,7 +125,6 @@ function App() {
 
   const t = themes[theme];
 
-  // All pages including hidden ones — no 404 trigger
   const validPages = [
     'home', 'about', 'skills', 'code', 'photography', 'contact',
     'secret', 'thealx', 'rickroll', 'source', 'coffee', 'old', 'test', 'terminal',
@@ -165,13 +164,13 @@ function App() {
 
   const random404 = funny404Messages[Math.floor(Math.random() * funny404Messages.length)];
 
-  // Hide footer on certain hidden pages (rickroll, terminal, void, etc.)
-  const hideFooterPages = ['rickroll', 'terminal', 'void'];
+  // Hide footer & nav on full-screen secret pages
+  const hideUIpages = ['rickroll', 'terminal', 'void'];
 
   return (
     <div className={`min-h-screen ${t.bg} ${t.text} font-mono transition-all duration-500`}>
       {/* Nav & Logo — hidden on full-screen secret pages */}
-      {!['rickroll', 'terminal', 'void'].includes(currentPage) && (
+      {!hideUIpages.includes(currentPage) && (
         <>
           <nav className={`fixed top-6 right-6 z-50 flex gap-4 transition-all duration-300 ${showNav ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'}`}>
             <button onClick={() => navigate('about')} className={`px-4 py-2 border-2 ${t.border} ${t.hoverBg} transition text-sm uppercase tracking-wider font-bold`}>About</button>
@@ -194,7 +193,7 @@ function App() {
       )}
 
       <div className="min-h-screen flex items-center justify-center px-6 pb-24">
-        {/* HOME */}
+        {/* HOME, ABOUT, SKILLS, CODE, PHOTOGRAPHY, CONTACT — unchanged */}
         {currentPage === 'home' && (
           <div className="max-w-6xl w-full grid md:grid-cols-2 gap-12 items-center">
             <div className={`border-4 ${t.border} overflow-hidden shadow-2xl`}>
@@ -225,8 +224,7 @@ function App() {
           </div>
         )}
 
-        {/* ABOUT, SKILLS, CODE, PHOTOGRAPHY, CONTACT — unchanged, keeping them short */}
-        {/* ... (your existing ABOUT, SKILLS, CODE, PHOTOGRAPHY, CONTACT blocks here — I omitted them for brevity) ... */}
+        {/* ... (your existing ABOUT, SKILLS, CODE, PHOTOGRAPHY, CONTACT blocks here — unchanged, omitted for brevity) ... */}
 
         {/* HIDDEN PAGES */}
 
@@ -252,7 +250,7 @@ function App() {
           </div>
         )}
 
-        {/* 2. /thealx — fake denied */}
+        {/* 2. /thealx */}
         {currentPage === 'thealx' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             <h1 className={`text-8xl md:text-10xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
@@ -274,16 +272,13 @@ function App() {
           </div>
         )}
 
-        {/* 3. /rickroll — FULL SCREEN + SOUND + AUTOPLAY + LOOP */}
+        {/* 3. /rickroll — FULL SCREEN, NO TEXT, AUTOPLAY WITH SOUND, LOOP */}
         {currentPage === 'rickroll' && (
-          <div className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center overflow-hidden">
-            <h1 className="text-6xl md:text-9xl font-black text-white uppercase mb-12 animate-pulse z-10">
-              NEVER GONNA GIVE YOU UP
-            </h1>
+          <div className="fixed inset-0 z-50 bg-black overflow-hidden">
             <iframe
               className="absolute inset-0 w-full h-full"
               src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=0&controls=0&loop=1&playlist=dQw4w9WgXcQ&modestbranding=1&rel=0&showinfo=0"
-              title="Never Gonna Give You Up"
+              title="Rickroll"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
               allowFullScreen
@@ -414,9 +409,7 @@ alxgraphy@portfolio:~$ exit
           </div>
         )}
 
-        {/* NEW HIDDEN PAGES */}
-
-        {/* /glowup — before/after roast */}
+        {/* NEW: /glowup */}
         {currentPage === 'glowup' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
@@ -439,7 +432,7 @@ alxgraphy@portfolio:~$ exit
           </div>
         )}
 
-        {/* /sus — Among Us style */}
+        {/* NEW: /sus */}
         {currentPage === 'sus' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             <h1 className={`text-8xl md:text-10xl font-black uppercase tracking-tighter mb-8 ${t.accent} animate-pulse`}>
@@ -462,7 +455,7 @@ alxgraphy@portfolio:~$ exit
           </div>
         )}
 
-        {/* /void — pure existential black screen */}
+        {/* NEW: /void */}
         {currentPage === 'void' && (
           <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
             <p className="text-4xl md:text-6xl font-mono text-gray-600 animate-pulse">
@@ -472,7 +465,7 @@ alxgraphy@portfolio:~$ exit
           </div>
         )}
 
-        {/* /winner — fake victory screen */}
+        {/* NEW: /winner */}
         {currentPage === 'winner' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             <h1 className={`text-8xl md:text-10xl font-black uppercase tracking-tighter mb-8 ${t.accent} animate-bounce`}>
@@ -519,7 +512,7 @@ alxgraphy@portfolio:~$ exit
       </div>
 
       {/* Footer — hidden on full-screen secret pages */}
-      {!hideFooterPages.includes(currentPage) && (
+      {!hideUIpages.includes(currentPage) && (
         <footer className={`fixed bottom-0 left-0 right-0 ${t.footerBg} border-t-2 ${t.border} py-4 z-40`}>
           <div className="max-w-7xl mx-auto px-6 flex justify-center items-center text-sm uppercase tracking-widest">
             <span>Made with ❤️ in Toronto, Canada 🇨🇦 by Alexander Wondwossen (</span>
