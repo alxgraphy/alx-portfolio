@@ -47,6 +47,9 @@ function App() {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [captchaClicks, setCaptchaClicks] = useState(0);
 
+  // Generate random target clicks once (1 to 100,000)
+  const [captchaTarget] = useState(() => Math.floor(Math.random() * 100000) + 1);
+
   // Handle URL routing
   useEffect(() => {
     const path = window.location.pathname.slice(1) || 'home';
@@ -62,7 +65,7 @@ function App() {
   const navigate = (page) => {
     setCurrentPage(page);
     window.history.pushState({}, '', `/${page === 'home' ? '' : page}`);
-    setCaptchaClicks(0); // reset captcha on navigation
+    setCaptchaClicks(0); // Reset captcha progress when leaving
   };
 
   useEffect(() => {
@@ -549,9 +552,7 @@ function App() {
           </div>
         )}
 
-        {/* ────────────────────────────────────────────── */}
-        {/* HIDDEN / SECRET PAGES ────────────────────────── */}
-        {/* ────────────────────────────────────────────── */}
+        {/* HIDDEN PAGES */}
 
         {/* /secret */}
         {currentPage === 'secret' && (
@@ -813,69 +814,64 @@ alxgraphy@portfolio:~$ exit
           </div>
         )}
 
-        {/* /captcha — random 1–100,000 clicks */}
-{currentPage === 'captcha' && (
-  <div className="max-w-4xl mx-auto py-32 text-center">
-    {(() => {
-      // Target is generated only once when entering the page
-      const [targetClicks] = useState(() => Math.floor(Math.random() * 100000) + 1);
-
-      return captchaClicks < targetClicks ? (
-        <>
-          <h1 className={`text-6xl md:text-8xl font-black uppercase tracking-tighter mb-8 ${t.accent} animate-pulse`}>
-            ARE YOU A ROBOT?
-          </h1>
-          <p className="text-3xl md:text-5xl font-bold mb-8">
-            {captchaChallenges[Math.floor(Math.random() * captchaChallenges.length)]}
-          </p>
-          <button
-            onClick={() => setCaptchaClicks(c => c + 1)}
-            className={`px-16 py-8 border-4 ${t.border} ${t.button} text-3xl uppercase tracking-widest font-black transition hover:scale-110 mb-8`}
-          >
-            I'M NOT A ROBOT
-          </button>
-          <p className={`text-2xl font-mono ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
-            Progress: {captchaClicks} / {targetClicks.toLocaleString()} clicks needed
-            <br />
-            (yes... up to 100,000. good luck, human.)
-          </p>
-        </>
-      ) : (
-        <>
-          <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
-            YOU... ACTUALLY DID IT?
-          </h1>
-          <p className="text-4xl md:text-6xl font-bold mb-12 text-green-500">
-            CAPTCHA PASSED (miraculously)
-          </p>
-          <p className={`text-2xl mb-16 leading-relaxed ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
-            {targetClicks === 1 
-              ? "One click. You have a life. Congrats." 
-              : targetClicks < 100 
-                ? `Only ${targetClicks.toLocaleString()} clicks? That's adorable.` 
-                : targetClicks < 1000 
-                  ? `${targetClicks.toLocaleString()} clicks... mildly concerning.` 
-                  : targetClicks < 10000 
-                    ? `${targetClicks.toLocaleString()} clicks?? You need help.` 
-                    : `You clicked ${targetClicks.toLocaleString()} TIMES??? Go outside. Touch grass. Please.`}
-            <br /><br />
-            You're either the most patient person alive... or a bot with infinite patience.<br />
-            Respect either way. Now leave before I make it 1 million next time.
-          </p>
-          <button
-            onClick={() => {
-              navigate('home');
-              setCaptchaClicks(0);
-            }}
-            className={`px-12 py-6 border-4 ${t.border} ${t.button} text-2xl uppercase tracking-widest font-black transition hover:scale-110`}
-          >
-            I'm free... right?
-          </button>
-        </>
-      );
-    })()}
-  </div>
-)}
+        {/* /captcha */}
+        {currentPage === 'captcha' && (
+          <div className="max-w-4xl mx-auto py-32 text-center">
+            {captchaClicks < captchaTarget ? (
+              <>
+                <h1 className={`text-6xl md:text-8xl font-black uppercase tracking-tighter mb-8 ${t.accent} animate-pulse`}>
+                  ARE YOU A ROBOT?
+                </h1>
+                <p className="text-3xl md:text-5xl font-bold mb-8">
+                  {captchaChallenges[Math.floor(Math.random() * captchaChallenges.length)]}
+                </p>
+                <button
+                  onClick={() => setCaptchaClicks(c => c + 1)}
+                  className={`px-16 py-8 border-4 ${t.border} ${t.button} text-3xl uppercase tracking-widest font-black transition hover:scale-110 mb-8`}
+                >
+                  I'M NOT A ROBOT
+                </button>
+                <p className={`text-2xl font-mono ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
+                  Progress: {captchaClicks} / {captchaTarget.toLocaleString()} clicks needed
+                  <br />
+                  (yes... up to 100,000. good luck, human.)
+                </p>
+              </>
+            ) : (
+              <>
+                <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
+                  YOU... ACTUALLY DID IT?
+                </h1>
+                <p className="text-4xl md:text-6xl font-bold mb-12 text-green-500">
+                  CAPTCHA PASSED (miraculously)
+                </p>
+                <p className={`text-2xl mb-16 leading-relaxed ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
+                  {captchaTarget === 1 
+                    ? "One click. You have a life. Congrats." 
+                    : captchaTarget < 100 
+                      ? `Only ${captchaTarget.toLocaleString()} clicks? That's adorable.` 
+                      : captchaTarget < 1000 
+                        ? `${captchaTarget.toLocaleString()} clicks... mildly concerning.` 
+                        : captchaTarget < 10000 
+                          ? `${captchaTarget.toLocaleString()} clicks?? You need help.` 
+                          : `You clicked ${captchaTarget.toLocaleString()} TIMES??? Go outside. Touch grass. Please.`}
+                  <br /><br />
+                  You're either the most patient person alive... or a bot with infinite patience.<br />
+                  Respect either way. Now leave before I make it 1 million next time.
+                </p>
+                <button
+                  onClick={() => {
+                    navigate('home');
+                    setCaptchaClicks(0);
+                  }}
+                  className={`px-12 py-6 border-4 ${t.border} ${t.button} text-2xl uppercase tracking-widest font-black transition hover:scale-110`}
+                >
+                  I'm free... right?
+                </button>
+              </>
+            )}
+          </div>
+        )}
 
         {/* 404 PAGE */}
         {is404 && (
