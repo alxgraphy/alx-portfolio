@@ -49,10 +49,8 @@ function App() {
   const [katMemes, setKatMemes] = useState([]);
   const [katLoading, setKatLoading] = useState(true);
 
-  // Random CAPTCHA target (1 to 100,000)
   const [captchaTarget] = useState(() => Math.floor(Math.random() * 100000) + 1);
 
-  // Handle URL routing
   useEffect(() => {
     const path = window.location.pathname.slice(1) || 'home';
     setCurrentPage(path);
@@ -91,7 +89,6 @@ function App() {
     }
   }, []);
 
-  // Fetch fresh cat memes (safe, no NSFW) when on /kat
   useEffect(() => {
     if (currentPage === 'kat') {
       setKatLoading(true);
@@ -101,7 +98,6 @@ function App() {
           const posts = data.data.children
             .map(child => child.data)
             .filter(post => {
-              // Only images
               const isImage = post.url && (
                 post.url.endsWith('.jpg') ||
                 post.url.endsWith('.png') ||
@@ -109,7 +105,6 @@ function App() {
                 post.url.includes('i.redd.it') ||
                 post.url.includes('imgur.com')
               );
-              // No NSFW
               const isSafe = !post.over_18 &&
                 !post.title.toLowerCase().includes('nsfw') &&
                 !post.url.toLowerCase().includes('nsfw') &&
@@ -173,13 +168,16 @@ function App() {
   const validPages = [
     'home', 'about', 'skills', 'code', 'photography', 'contact',
     'secret', 'admin', 'rickroll', 'source', 'coffee', 'old', 'test', 'terminal',
-    'glowup', 'sus', 'void', 'winner', 'captcha',
-    'cringe', 'timbits', 'hackerman', 'skillissue', 'delete',
-    'ratio', 'mid', 'touchgrass', 'no-bitches', 'pain',
-    'cope', 'seethe', 'mald', 'goon',
-    'l', 'w',
-    'yap', 'glaze',
-    'kat'
+    'glowup', 'sus', 'void', 'winner', 'captcha', 'cringe', 'timbits', 'hackerman',
+    'skillissue', 'delete', 'ratio', 'mid', 'touchgrass', 'no-bitches', 'pain',
+    'cope', 'seethe', 'mald', 'goon', 'l', 'w', 'yap', 'glaze', 'kat',
+    // new 38 guessable pages (no brainrot)
+    '404vibes', 'amogus', 'bald', 'broke', 'clowned', 'cooked', 'dadleft', 'deadinside',
+    'depressionarc', 'divorcedparents', 'f2p', 'foreveralone', 'friendless', 'gamerword',
+    'ghosted', 'grass', 'heightmogged', 'incel', 'invisible', 'jobless', 'loner', 'lowt',
+    'mathlete', 'mogged', 'neckbeard', 'ngmi', 'normie', 'npc', 'oversharing', 'pajeet',
+    'passportbro', 'paypig', 'poorguy', 'rejectionarc', 'shortking', 'simped',
+    'socialanxiety', 'virgin'
   ];
 
   const is404 = !validPages.includes(currentPage);
@@ -594,7 +592,7 @@ function App() {
           </div>
         )}
 
-        {/* KAT MEMES */}
+        {/* KAT */}
         {currentPage === 'kat' && (
           <div className="max-w-7xl w-full py-20">
             <h2 className={`text-5xl md:text-6xl font-black uppercase tracking-tight mb-2 ${t.accent}`}>
@@ -638,7 +636,7 @@ function App() {
           </div>
         )}
 
-        {/* SECRET / HIDDEN PAGES (18 original + no-bitches) */}
+        {/* ─── SECRET PAGES ─────────────────────────────────────── */}
         {currentPage === 'secret' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
@@ -972,7 +970,7 @@ alxgraphy@portfolio:~$ exit
         {currentPage === 'no-bitches' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             <h1 className={`text-8xl md:text-10xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
-              NO BITCHES?
+              NO BI*CHES?
             </h1>
             <p className="text-6xl md:text-8xl font-bold mb-12 text-purple-500">
               SKILL ISSUE
