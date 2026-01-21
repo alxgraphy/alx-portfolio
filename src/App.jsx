@@ -46,6 +46,7 @@ function App() {
   const [showNav, setShowNav] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
+  // Handle URL routing
   useEffect(() => {
     const path = window.location.pathname.slice(1) || 'home';
     setCurrentPage(path);
@@ -127,7 +128,7 @@ function App() {
 
   const validPages = [
     'home', 'about', 'skills', 'code', 'photography', 'contact',
-    'secret', 'thealx', 'rickroll', 'source', 'coffee', 'old', 'test', 'terminal',
+    'secret', 'admin', 'rickroll', 'source', 'coffee', 'old', 'test', 'terminal',
     'glowup', 'sus', 'void', 'winner'
   ];
 
@@ -164,7 +165,7 @@ function App() {
 
   const random404 = funny404Messages[Math.floor(Math.random() * funny404Messages.length)];
 
-  // Hide footer & nav on full-screen secret pages
+  // Pages where nav + footer should be completely hidden
   const hideUIpages = ['rickroll', 'terminal', 'void'];
 
   return (
@@ -193,7 +194,7 @@ function App() {
       )}
 
       <div className="min-h-screen flex items-center justify-center px-6 pb-24">
-        {/* HOME, ABOUT, SKILLS, CODE, PHOTOGRAPHY, CONTACT — unchanged */}
+        {/* HOME */}
         {currentPage === 'home' && (
           <div className="max-w-6xl w-full grid md:grid-cols-2 gap-12 items-center">
             <div className={`border-4 ${t.border} overflow-hidden shadow-2xl`}>
@@ -224,9 +225,309 @@ function App() {
           </div>
         )}
 
-        {/* ... (your existing ABOUT, SKILLS, CODE, PHOTOGRAPHY, CONTACT blocks here — unchanged, omitted for brevity) ... */}
+        {/* ABOUT */}
+        {currentPage === 'about' && (
+          <div className="max-w-6xl w-full py-20">
+            <h2 className={`text-5xl md:text-6xl font-black uppercase tracking-tight mb-2 ${t.accent}`}>
+              ABOUT ME
+            </h2>
+            <div className={`text-sm uppercase tracking-widest mb-12 ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>
+              Grade 7 • Toronto, Canada
+            </div>
+            <div className="space-y-16">
+              <div className={`border-2 ${t.border} ${t.card} p-8`}>
+                <h3 className={`text-2xl font-black uppercase tracking-tight mb-6 ${t.accent}`}>WHO I AM</h3>
+                <div className="space-y-4 text-lg leading-relaxed">
+                  <p>Hello, my name is Alexander, a passionate photographer, student and a coder in grade 7 who enjoys capturing memorable and compelling moments.</p>
+                  <p>I like experimenting with different perspectives, composition and light, turning everyday scenes into visually appealing photographs.</p>
+                  <p>In my spare time, I practice for my next image and try to stay in the moment — in school, real life or through a lens.</p>
+                </div>
+              </div>
+              <div className={`border-2 ${t.border} ${t.card} p-8`}>
+                <h3 className={`text-2xl font-black uppercase tracking-tight mb-6 ${t.accent}`}>INTERESTS</h3>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="text-lg font-bold uppercase mb-3">Photography</h4>
+                    <p className={`${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
+                      Street photography, portraits, landscapes, and experimental composition. Always looking for unique perspectives and compelling moments.
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold uppercase mb-3">Coding</h4>
+                    <p className={`${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
+                      Building web applications, learning new frameworks, and creating tools that solve real problems. Passionate about clean, minimal design.
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold uppercase mb-3">Learning</h4>
+                    <p className={`${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
+                      Currently exploring human-centered design, web development best practices, and advanced photography techniques.
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold uppercase mb-3">Creating</h4>
+                    <p className={`${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
+                      Love building projects from scratch — whether it's a portfolio, a photo series, or a new web app. Always making something.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className={`border-2 ${t.border} ${t.card} p-8`}>
+                <h3 className={`text-2xl font-black uppercase tracking-tight mb-6 ${t.accent}`}>AWARDS & ACHIEVEMENTS</h3>
+                <div className="space-y-6">
+                  <div className={`border-l-4 ${t.border} pl-6`}>
+                    <h4 className="text-xl font-bold uppercase mb-2">The Field Guide to Human-Centered Design</h4>
+                    <p className={`text-sm uppercase tracking-wider mb-3 ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>
+                      Canvas • Design Certification
+                    </p>
+                    <p className={`${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
+                      Completed comprehensive training in human-centered design principles, focusing on empathy, ideation, and iteration in the design process.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className={`border-2 ${t.border} ${t.card} p-8`}>
+                <h3 className={`text-2xl font-black uppercase tracking-tight mb-6 ${t.accent}`}>CURRENTLY</h3>
+                <ul className="space-y-3 text-lg">
+                  <li className="flex items-start gap-3">
+                    <span className={`${t.accent} font-bold`}>→</span>
+                    <span>Building this portfolio and learning React</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className={`${t.accent} font-bold`}>→</span>
+                    <span>Practicing street photography in Toronto</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className={`${t.accent} font-bold`}>→</span>
+                    <span>Grade 7 student, balancing school and creative projects</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className={`${t.accent} font-bold`}>→</span>
+                    <span>Open to collaboration on photography or code projects</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        )}
 
-        {/* HIDDEN PAGES */}
+        {/* SKILLS */}
+        {currentPage === 'skills' && (
+          <div className="max-w-6xl w-full py-20">
+            <h2 className={`text-5xl md:text-6xl font-black uppercase tracking-tight mb-2 ${t.accent}`}>
+              SKILLS
+            </h2>
+            <div className={`text-sm uppercase tracking-widest mb-12 ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>
+              Tools & technologies I work with
+            </div>
+            <div className="space-y-12">
+              <div className={`border-2 ${t.border} ${t.card} p-8`}>
+                <h3 className={`text-2xl font-black uppercase tracking-tight mb-6 ${t.accent}`}>DEVELOPMENT</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                  {['HTML/CSS', 'JavaScript', 'React', 'Tailwind', 'Git', 'GitHub', 'Vite', 'VS Code'].map(skill => (
+                    <div key={skill} className={`border-2 ${t.border} p-4 text-center ${t.hoverBg} transition`}>
+                      <div className="text-xl font-bold">{skill}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className={`border-2 ${t.border} ${t.card} p-8`}>
+                <h3 className={`text-2xl font-black uppercase tracking-tight mb-6 ${t.accent}`}>DESIGN</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                  {['Figma', 'Adobe LR', 'UI/UX', 'Typography'].map(skill => (
+                    <div key={skill} className={`border-2 ${t.border} p-4 text-center ${t.hoverBg} transition`}>
+                      <div className="text-xl font-bold">{skill}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className={`border-2 ${t.border} ${t.card} p-8`}>
+                <h3 className={`text-2xl font-black uppercase tracking-tight mb-6 ${t.accent}`}>PHOTOGRAPHY</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                  {['Composition', 'Lighting', 'Editing', 'Street', 'Portraits', 'Landscapes'].map(skill => (
+                    <div key={skill} className={`border-2 ${t.border} p-4 text-center ${t.hoverBg} transition`}>
+                      <div className="text-xl font-bold">{skill}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className={`border-2 ${t.border} ${t.card} p-8`}>
+                <h3 className={`text-2xl font-black uppercase tracking-tight mb-6 ${t.accent}`}>SOFT SKILLS</h3>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className={`border-l-4 ${t.border} pl-6`}>
+                    <h4 className="text-lg font-bold uppercase mb-2">Problem Solving</h4>
+                    <p className={`${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
+                      Breaking down complex problems into manageable pieces and finding creative solutions.
+                    </p>
+                  </div>
+                  <div className={`border-l-4 ${t.border} pl-6`}>
+                    <h4 className="text-lg font-bold uppercase mb-2">Attention to Detail</h4>
+                    <p className={`${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
+                      Obsessed with pixel-perfect designs and clean, readable code.
+                    </p>
+                  </div>
+                  <div className={`border-l-4 ${t.border} pl-6`}>
+                    <h4 className="text-lg font-bold uppercase mb-2">Self-Learning</h4>
+                    <p className={`${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
+                      Constantly exploring new technologies, frameworks, and techniques independently.
+                    </p>
+                  </div>
+                  <div className={`border-l-4 ${t.border} pl-6`}>
+                    <h4 className="text-lg font-bold uppercase mb-2">Human-Centered Design</h4>
+                    <p className={`${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
+                      Trained in empathy-driven design thinking to create user-focused solutions.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* CODE */}
+        {currentPage === 'code' && (
+          <div className="max-w-7xl w-full py-20">
+            <div className="mb-20">
+              <h2 className={`text-5xl md:text-6xl font-black uppercase tracking-tight mb-2 ${t.accent}`}>
+                PROJECTS
+              </h2>
+              <div className={`text-sm uppercase tracking-widest mb-12 ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>
+                Original repositories auto-updating from GitHub
+              </div>
+              {loading ? (
+                <div className={`text-center text-xl ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>Loading projects...</div>
+              ) : repos.length === 0 ? (
+                <div className={`text-center text-xl ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>No projects yet.</div>
+              ) : (
+                <div className="space-y-8">
+                  {repos.map(repo => (
+                    <div key={repo.id} className={`border-2 ${t.border} ${t.card} p-8 ${t.hoverBg} transition group`}>
+                      <div>
+                        <h3 className={`text-3xl font-black uppercase tracking-tight mb-3 ${t.accent} group-hover:opacity-70 transition`}>
+                          {repo.name}
+                        </h3>
+                        <p className={`text-base mb-4 ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
+                          {repo.description || 'No description provided.'}
+                        </p>
+                        <div className="flex flex-wrap gap-4 text-sm">
+                          <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 underline ${t.accent} hover:opacity-70 transition`}>
+                            <Github size={18} /> View Repo
+                          </a>
+                          {repo.homepage && (
+                            <a href={repo.homepage} target="_blank" rel="noopener noreferrer" className="underline hover:opacity-70 transition">
+                              → Live Demo
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            {forkRepos.length > 0 && (
+              <div className="mt-32">
+                <h2 className={`text-4xl md:text-5xl font-black uppercase tracking-tight mb-2 ${t.accent}`}>
+                  CONTRIBUTED TO
+                </h2>
+                <div className={`text-sm uppercase tracking-widest mb-12 ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>
+                  Forked repositories
+                </div>
+                <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+                  {forkRepos.map(repo => (
+                    <a key={repo.id} href={repo.html_url} target="_blank" rel="noopener noreferrer" className={`border-2 ${t.border} ${t.card} p-6 ${t.hoverBg} transition group`}>
+                      <h4 className={`text-xl font-bold uppercase mb-2 ${t.accent} group-hover:opacity-70 transition`}>
+                        {repo.name}
+                      </h4>
+                      <div className={`text-sm uppercase tracking-wider ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>View →</div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* PHOTOGRAPHY */}
+        {currentPage === 'photography' && (
+          <div className="max-w-7xl w-full py-20">
+            <h2 className={`text-5xl md:text-6xl font-black uppercase tracking-tight mb-2 ${t.accent}`}>
+              PHOTOGRAPHY
+            </h2>
+            <div className={`text-sm uppercase tracking-widest mb-12 ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>
+              Random selection of 12 photos • Refresh to see new ones
+            </div>
+            {randomPhotos.length === 0 ? (
+              <div className={`text-center text-xl ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>
+                No photos found. Add images to /public/photos/
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {randomPhotos.map((photo, i) => (
+                  <div key={i} className={`border-2 ${t.border} overflow-hidden aspect-[4/3] ${theme === 'wireframe' ? 'bg-gray-100' : 'bg-black/50'} group cursor-pointer`}>
+                    <img
+                      src={photo}
+                      alt={`Photo ${i + 1}`}
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* CONTACT */}
+        {currentPage === 'contact' && (
+          <div className="max-w-4xl w-full">
+            <h2 className={`text-5xl md:text-6xl font-black uppercase tracking-tight mb-2 ${t.accent}`}>
+              LET'S CONNECT
+            </h2>
+            <div className={`text-sm uppercase tracking-widest mb-12 ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>
+              Reach out for collaboration
+            </div>
+            <div className={`border-2 ${t.border} ${t.card} p-12`}>
+              <div className="space-y-8">
+                <div>
+                  <h3 className={`text-sm uppercase tracking-widest mb-4 ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>EMAIL</h3>
+                  <a href="mailto:alxgraphy@icloud.com" className={`flex items-center gap-3 text-2xl ${t.accent} hover:opacity-70 transition group`}>
+                    <Mail size={28} />
+                    <span className="group-hover:translate-x-2 transition">alxgraphy@icloud.com</span>
+                  </a>
+                </div>
+                <div>
+                  <h3 className={`text-sm uppercase tracking-widest mb-4 ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>GITHUB</h3>
+                  <a href="https://github.com/alxgraphy" target="_blank" rel="noopener noreferrer" className={`flex items-center gap-3 text-2xl ${t.accent} hover:opacity-70 transition group`}>
+                    <Github size={28} />
+                    <span className="group-hover:translate-x-2 transition">@alxgraphy</span>
+                  </a>
+                </div>
+                <div>
+                  <h3 className={`text-sm uppercase tracking-widest mb-4 ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>INSTAGRAM</h3>
+                  <a href="https://www.instagram.com/alexedgraphy/" target="_blank" rel="noopener noreferrer" className={`flex items-center gap-3 text-2xl ${t.accent} hover:opacity-70 transition group`}>
+                    <Instagram size={28} />
+                    <span className="group-hover:translate-x-2 transition">@alexedgraphy</span>
+                  </a>
+                </div>
+                <div>
+                  <h3 className={`text-sm uppercase tracking-widest mb-4 ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>TIKTOK</h3>
+                  <a href="https://www.tiktok.com/@alxgraphy" target="_blank" rel="noopener noreferrer" className={`flex items-center gap-3 text-2xl ${t.accent} hover:opacity-70 transition group`}>
+                    <Camera size={28} />
+                    <span className="group-hover:translate-x-2 transition">@alxgraphy</span>
+                  </a>
+                </div>
+                <div className={`pt-8 border-t-2 ${theme === 'wireframe' ? 'border-black/20' : 'border-white/20'}`}>
+                  <p className={`text-lg ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
+                    Interested in collaboration on photography or code? Reach out anytime.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* HIDDEN / SECRET PAGES */}
 
         {/* 1. /secret */}
         {currentPage === 'secret' && (
@@ -250,8 +551,8 @@ function App() {
           </div>
         )}
 
-        {/* 2. /thealx */}
-        {currentPage === 'thealx' && (
+        {/* 2. /admin (changed from /thealx) */}
+        {currentPage === 'admin' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             <h1 className={`text-8xl md:text-10xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
               ACCESS DENIED
@@ -260,7 +561,7 @@ function App() {
               Nice try, script kiddie.
             </p>
             <p className={`text-2xl mb-16 leading-relaxed ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
-              You thought you'd just /thealx your way in?<br/>
+              You thought you'd just /admin your way in?<br/>
               This isn't 2012. Go back to inspecting elements like a normal person.
             </p>
             <button
@@ -272,7 +573,7 @@ function App() {
           </div>
         )}
 
-        {/* 3. /rickroll — FULL SCREEN, NO TEXT, AUTOPLAY WITH SOUND, LOOP */}
+        {/* 3. /rickroll — FULL SCREEN, NO TEXT, SOUND ON, LOOP */}
         {currentPage === 'rickroll' && (
           <div className="fixed inset-0 z-50 bg-black overflow-hidden">
             <iframe
@@ -380,7 +681,7 @@ function App() {
           </div>
         )}
 
-        {/* 10. /terminal — full screen, no footer */}
+        {/* 10. /terminal */}
         {currentPage === 'terminal' && (
           <div className="fixed inset-0 bg-black text-green-400 font-mono p-8 overflow-auto z-50">
             <pre className="text-xl md:text-2xl leading-relaxed">
@@ -409,7 +710,7 @@ alxgraphy@portfolio:~$ exit
           </div>
         )}
 
-        {/* NEW: /glowup */}
+        {/* Extra: /glowup */}
         {currentPage === 'glowup' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
@@ -432,7 +733,7 @@ alxgraphy@portfolio:~$ exit
           </div>
         )}
 
-        {/* NEW: /sus */}
+        {/* Extra: /sus */}
         {currentPage === 'sus' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             <h1 className={`text-8xl md:text-10xl font-black uppercase tracking-tighter mb-8 ${t.accent} animate-pulse`}>
@@ -455,7 +756,7 @@ alxgraphy@portfolio:~$ exit
           </div>
         )}
 
-        {/* NEW: /void */}
+        {/* Extra: /void */}
         {currentPage === 'void' && (
           <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
             <p className="text-4xl md:text-6xl font-mono text-gray-600 animate-pulse">
@@ -465,7 +766,7 @@ alxgraphy@portfolio:~$ exit
           </div>
         )}
 
-        {/* NEW: /winner */}
+        {/* Extra: /winner */}
         {currentPage === 'winner' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             <h1 className={`text-8xl md:text-10xl font-black uppercase tracking-tighter mb-8 ${t.accent} animate-bounce`}>
