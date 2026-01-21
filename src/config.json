@@ -1,0 +1,68 @@
+{
+  "bio": {
+    "paragraph1": "Hello, my name is Alexander, a passionate photographer, student and a coder in grade 7 who enjoys capturing memorable and compelling moments.",
+    "paragraph2": "I like experimenting with different perspectives, composition and light, turning everyday scenes into visually appealing photographs.",
+    "paragraph3": "In my spare time, I practice for my next image and try to stay in the moment - in school, real life or through a lens."
+  },
+  "skills": {
+    "development": ["HTML/CSS", "JavaScript", "React", "Tailwind", "Git", "GitHub", "Vite", "VS Code"],
+    "design": ["Figma", "Adobe LR", "UI/UX", "Typography"],
+    "photography": ["Composition", "Lighting", "Editing", "Street", "Portraits", "Landscapes"],
+    "softSkills": [
+      {
+        "title": "Problem Solving",
+        "description": "Breaking down complex problems into manageable pieces and finding creative solutions."
+      },
+      {
+        "title": "Attention to Detail",
+        "description": "Obsessed with pixel-perfect designs and clean, readable code."
+      },
+      {
+        "title": "Self-Learning",
+        "description": "Constantly exploring new technologies, frameworks, and techniques independently."
+      },
+      {
+        "title": "Human-Centered Design",
+        "description": "Trained in empathy-driven design thinking to create user-focused solutions."
+      }
+    ]
+  },
+  "interests": [
+    {
+      "title": "Photography",
+      "description": "Street photography, portraits, landscapes, and experimental composition. Always looking for unique perspectives and compelling moments."
+    },
+    {
+      "title": "Coding",
+      "description": "Building web applications, learning new frameworks, and creating tools that solve real problems. Passionate about clean, minimal design."
+    },
+    {
+      "title": "Learning",
+      "description": "Currently exploring human-centered design, web development best practices, and advanced photography techniques."
+    },
+    {
+      "title": "Creating",
+      "description": "Love building projects from scratch - whether it's a portfolio, a photo series, or a new web app. Always making something."
+    }
+  ],
+  "currently": [
+    "Building this portfolio and learning React",
+    "Practicing street photography in Toronto",
+    "Grade 7 student, balancing school and creative projects",
+    "Open to collaboration on photography or code projects"
+  ],
+  "awards": [
+    {
+      "title": "The Field Guide to Human-Centered Design",
+      "organization": "Canvas • Design Certification",
+      "description": "Completed comprehensive training in human-centered design principles, focusing on empathy, ideation, and iteration in the design process."
+    }
+  ],
+  "contact": {
+    "email": "alxgraphy@icloud.com",
+    "github": "@alxgraphy",
+    "instagram": "@alexedgraphy",
+    "tiktok": "@alxgraphy",
+    "message": "Interested in collaboration on photography or code? Reach out anytime."
+  }
+}
