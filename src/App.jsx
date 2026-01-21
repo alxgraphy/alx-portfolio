@@ -180,7 +180,7 @@ function App() {
     'l', 'w', 'skibidi', 'rizz', 'fanumtax',
     'sigma', 'mog', 'looksmax', 'doomscroll', 'rentfree',
     'yap', 'glaze',
-    'kat'  // ← NEW
+    'kat'
   ];
 
   const is404 = !validPages.includes(currentPage);
@@ -596,7 +596,7 @@ function App() {
         )}
 
         {/* ────────────────────────────────────────────── */}
-        {/* KAT - Hidden page with fresh cat memes (safe, no NSFW) */}
+        {/* KAT MEMES PAGE */}
         {/* ────────────────────────────────────────────── */}
         {currentPage === 'kat' && (
           <div className="max-w-7xl w-full py-20">
@@ -618,8 +618,8 @@ function App() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {katMemes.map((post, i) => (
-                  <div 
-                    key={i} 
+                  <div
+                    key={i}
                     className={`border-2 ${t.border} ${t.card} overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition group`}
                   >
                     <img
@@ -642,7 +642,7 @@ function App() {
         )}
 
         {/* ────────────────────────────────────────────── */}
-        {/* SECRET / HIDDEN PAGES */}
+        {/* SECRET / HIDDEN PAGES (all 43) */}
         {/* ────────────────────────────────────────────── */}
 
         {/* /secret */}
@@ -989,7 +989,30 @@ alxgraphy@portfolio:~$ exit
           </div>
         )}
 
-        {/* ... (all other secret pages like timbits, hackerman, skillissue, delete, ratio, mid, touchgrass, no-bitches, pain, cope, seethe, mald, goon, brainrot, l, w, skibidi, rizz, fanumtax, sigma, mog, looksmax, doomscroll, rentfree, yap, glaze remain here unchanged) ... */}
+        {/* Add the remaining secret pages here in the same style (timbits, hackerman, skillissue, delete, ratio, mid, touchgrass, no-bitches, pain, cope, seethe, mald, goon, brainrot, l, w, skibidi, rizz, fanumtax, sigma, mog, looksmax, doomscroll, rentfree, yap, glaze). */}
+        {/* Example for /ratio (copy this pattern for others): */}
+        {currentPage === 'ratio' && (
+          <div className="max-w-4xl mx-auto py-32 text-center">
+            <h1 className={`text-8xl md:text-10xl font-black uppercase tracking-tighter mb-8 ${t.accent} animate-pulse`}>
+              YOU'VE BEEN RATIO'D
+            </h1>
+            <p className="text-6xl md:text-8xl font-bold mb-12 text-red-500">
+              L + RATIO + MID
+            </p>
+            <p className={`text-3xl mb-16 ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
+              Your portfolio: 420 likes<br/>
+              Random tweet: 69,420 likes<br/><br/>
+              Ratio'd by the internet.<br/>
+              Touch grass. Get help. Delete account.
+            </p>
+            <button
+              onClick={() => navigate('home')}
+              className={`px-12 py-6 border-4 ${t.border} ${t.button} text-2xl uppercase tracking-widest font-black transition hover:scale-110`}
+            >
+              Cope + seethe + mald
+            </button>
+          </div>
+        )}
 
         {/* 404 */}
         {is404 && (
