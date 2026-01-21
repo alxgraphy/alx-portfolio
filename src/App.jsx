@@ -166,14 +166,14 @@ function App() {
       footerBg: 'bg-white'
     },
     aether: {
-      bg: 'bg-gradient-to-br from-gray-900 via-black to-gray-900',
+      bg: 'bg-black',
       text: 'text-white',
       accent: 'text-white',
       border: 'border-white',
       hoverBg: 'hover:bg-white hover:text-black',
       button: 'bg-white text-black hover:bg-black hover:text-white hover:border-white',
-      card: 'bg-black/60 backdrop-blur-md border-white',
-      footerBg: 'bg-black/80 backdrop-blur-md'
+      card: 'bg-black border-white',
+      footerBg: 'bg-black'
     }
   };
 
