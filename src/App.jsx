@@ -49,7 +49,7 @@ function App() {
   const [katMemes, setKatMemes] = useState([]);
   const [katLoading, setKatLoading] = useState(true);
 
-  // Generate random target clicks once (1 to 100,000)
+  // Random CAPTCHA target (1 to 100,000)
   const [captchaTarget] = useState(() => Math.floor(Math.random() * 100000) + 1);
 
   // Handle URL routing
@@ -101,7 +101,6 @@ function App() {
           const posts = data.data.children
             .map(child => child.data)
             .filter(post => {
-              // Only images
               const isImage = post.url && (
                 post.url.endsWith('.jpg') ||
                 post.url.endsWith('.png') ||
@@ -109,7 +108,6 @@ function App() {
                 post.url.includes('i.redd.it') ||
                 post.url.includes('imgur.com')
               );
-              // No NSFW
               const isSafe = !post.over_18 &&
                 !post.title.toLowerCase().includes('nsfw') &&
                 !post.url.toLowerCase().includes('nsfw') &&
@@ -176,7 +174,7 @@ function App() {
     'glowup', 'sus', 'void', 'winner', 'captcha',
     'cringe', 'timbits', 'hackerman', 'skillissue', 'delete',
     'ratio', 'mid', 'touchgrass', 'no-bitches', 'pain',
-    'cope', 'seethe', 'mald', 'goon', 'brainrot',
+    'cope', 'seethe', 'mald', 'goon',
     'l', 'w', 'skibidi', 'rizz', 'fanumtax',
     'sigma', 'mog', 'looksmax', 'doomscroll', 'rentfree',
     'yap', 'glaze',
@@ -595,9 +593,7 @@ function App() {
           </div>
         )}
 
-        {/* ────────────────────────────────────────────── */}
-        {/* KAT MEMES PAGE */}
-        {/* ────────────────────────────────────────────── */}
+        {/* KAT MEMES */}
         {currentPage === 'kat' && (
           <div className="max-w-7xl w-full py-20">
             <h2 className={`text-5xl md:text-6xl font-black uppercase tracking-tight mb-2 ${t.accent}`}>
@@ -641,11 +637,7 @@ function App() {
           </div>
         )}
 
-        {/* ────────────────────────────────────────────── */}
-        {/* SECRET / HIDDEN PAGES (all 43) */}
-        {/* ────────────────────────────────────────────── */}
-
-        {/* /secret */}
+        {/* SECRET PAGES */}
         {currentPage === 'secret' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
@@ -667,7 +659,6 @@ function App() {
           </div>
         )}
 
-        {/* /admin */}
         {currentPage === 'admin' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             <h1 className={`text-8xl md:text-10xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
@@ -689,7 +680,6 @@ function App() {
           </div>
         )}
 
-        {/* /rickroll */}
         {currentPage === 'rickroll' && (
           <div className="fixed inset-0 z-50 bg-black overflow-hidden">
             <iframe
@@ -703,7 +693,6 @@ function App() {
           </div>
         )}
 
-        {/* /source */}
         {currentPage === 'source' && (
           <div className="max-w-4xl mx-auto py-32 text-center font-mono">
             <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
@@ -728,7 +717,6 @@ function App() {
           </div>
         )}
 
-        {/* /coffee */}
         {currentPage === 'coffee' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
@@ -751,7 +739,6 @@ function App() {
           </div>
         )}
 
-        {/* /old */}
         {currentPage === 'old' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
@@ -774,7 +761,6 @@ function App() {
           </div>
         )}
 
-        {/* /test */}
         {currentPage === 'test' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             <h1 className={`text-8xl md:text-10xl font-black uppercase tracking-tighter mb-8 ${t.accent} animate-pulse`}>
@@ -797,7 +783,6 @@ function App() {
           </div>
         )}
 
-        {/* /terminal */}
         {currentPage === 'terminal' && (
           <div className="fixed inset-0 bg-black text-green-400 font-mono p-8 overflow-auto z-50">
             <pre className="text-xl md:text-2xl leading-relaxed">
@@ -826,7 +811,6 @@ alxgraphy@portfolio:~$ exit
           </div>
         )}
 
-        {/* /glowup */}
         {currentPage === 'glowup' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
@@ -849,7 +833,6 @@ alxgraphy@portfolio:~$ exit
           </div>
         )}
 
-        {/* /sus */}
         {currentPage === 'sus' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             <h1 className={`text-8xl md:text-10xl font-black uppercase tracking-tighter mb-8 ${t.accent} animate-pulse`}>
@@ -872,7 +855,6 @@ alxgraphy@portfolio:~$ exit
           </div>
         )}
 
-        {/* /void */}
         {currentPage === 'void' && (
           <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
             <p className="text-4xl md:text-6xl font-mono text-gray-600 animate-pulse">
@@ -882,7 +864,6 @@ alxgraphy@portfolio:~$ exit
           </div>
         )}
 
-        {/* /winner */}
         {currentPage === 'winner' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             <h1 className={`text-8xl md:text-10xl font-black uppercase tracking-tighter mb-8 ${t.accent} animate-bounce`}>
@@ -905,7 +886,6 @@ alxgraphy@portfolio:~$ exit
           </div>
         )}
 
-        {/* /captcha */}
         {currentPage === 'captcha' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
             {captchaClicks < captchaTarget ? (
@@ -989,30 +969,32 @@ alxgraphy@portfolio:~$ exit
           </div>
         )}
 
-        {/* Add the remaining secret pages here in the same style (timbits, hackerman, skillissue, delete, ratio, mid, touchgrass, no-bitches, pain, cope, seethe, mald, goon, brainrot, l, w, skibidi, rizz, fanumtax, sigma, mog, looksmax, doomscroll, rentfree, yap, glaze). */}
-        {/* Example for /ratio (copy this pattern for others): */}
-        {currentPage === 'ratio' && (
+        {/* Add remaining secret pages here (copy-paste from your previous working version) */}
+        {/* Example placeholder - replace with your actual content */}
+        {currentPage === 'timbits' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
-            <h1 className={`text-8xl md:text-10xl font-black uppercase tracking-tighter mb-8 ${t.accent} animate-pulse`}>
-              YOU'VE BEEN RATIO'D
+            <h1 className={`text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 ${t.accent}`}>
+              SEND TIMBITS OR ELSE
             </h1>
-            <p className="text-6xl md:text-8xl font-bold mb-12 text-red-500">
-              L + RATIO + MID
+            <p className="text-5xl md:text-7xl font-bold mb-12 text-orange-500">
+              Timbits meter: 0/∞
             </p>
-            <p className={`text-3xl mb-16 ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
-              Your portfolio: 420 likes<br/>
-              Random tweet: 69,420 likes<br/><br/>
-              Ratio'd by the internet.<br/>
-              Touch grass. Get help. Delete account.
+            <p className={`text-2xl mb-16 leading-relaxed ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'}`}>
+              One box of Timbits = one new feature<br/>
+              No Timbits = I keep using useEffect wrong<br/><br/>
+              Venmo me or I'm deleting this portfolio<br/>
+              (jk... but fr send Timbits)
             </p>
             <button
               onClick={() => navigate('home')}
               className={`px-12 py-6 border-4 ${t.border} ${t.button} text-2xl uppercase tracking-widest font-black transition hover:scale-110`}
             >
-              Cope + seethe + mald
+              I have no Timbits. Sorry.
             </button>
           </div>
         )}
+
+        {/* ... continue with hackerman, skillissue, delete, ratio, mid, touchgrass, no-bitches, pain, cope, seethe, mald, goon, l, w, skibidi, rizz, fanumtax, sigma, mog, looksmax, doomscroll, rentfree, yap, glaze ... */}
 
         {/* 404 */}
         {is404 && (
