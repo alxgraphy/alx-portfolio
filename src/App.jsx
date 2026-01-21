@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Github, Mail, Camera, Moon, Sun, Instagram } from 'lucide-react';
 
+// Your Cloudinary photos (unchanged)
 const allPhotoUrls = [
   "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005836/IMG_0649_jmyszm.jpg",
   "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005835/IMG_0645_b679gp.jpg",
@@ -47,39 +48,44 @@ function App() {
   const [captchaClicks, setCaptchaClicks] = useState(0);
   const [katMemes, setKatMemes] = useState([]);
   const [katLoading, setKatLoading] = useState(true);
+
+  // ─── LANDING PAGE STATES ─────────────────────────────────────
   const [hasEntered, setHasEntered] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
 
   const [captchaTarget] = useState(() => Math.floor(Math.random() * 100000) + 1);
+
+  // Update time every second
   useEffect(() => {
-  const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-  return () => clearInterval(timer);
-}, []);
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
-const getGreeting = () => {
-  const hour = currentTime.getHours();
-  if (hour < 12) return 'Good Morning';
-  if (hour < 17) return 'Good Afternoon';
-  if (hour < 21) return 'Good Evening';
-  return 'Good Night';
-};
+  const getGreeting = () => {
+    const hour = currentTime.getHours();
+    if (hour < 12) return 'Good Morning';
+    if (hour < 17) return 'Good Afternoon';
+    if (hour < 21) return 'Good Evening';
+    return 'Good Night';
+  };
 
-const getFormattedTime = () => {
-  return currentTime.toLocaleTimeString('en-US', {
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true
-  });
-};
+  const getFormattedTime = () => {
+    return currentTime.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+  };
 
   useEffect(() => {
     const path = window.location.pathname.slice(1) || 'home';
     setCurrentPage(path);
-    window.addEventListener('popstate', () => {
+    const handlePopState = () => {
       const path = window.location.pathname.slice(1) || 'home';
       setCurrentPage(path);
-    });
-    return () => window.removeEventListener('popstate', () => {});
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
   const navigate = (page) => {
@@ -235,48 +241,35 @@ const getFormattedTime = () => {
     "This is not a drill. Click or be suspected forever."
   ];
 
- if (!hasEntered) {
-  return (
-    <div className={`min-h-screen ${t.bg} ${t.text} font-mono flex items-center justify-center px-6`}>
-      <div className="max-w-2xl w-full text-center space-y-8">
-        <h1 className={`text-6xl md:text-8xl font-black uppercase tracking-tighter ${t.accent} animate-pulse`}>
-          WELCOME
-        </h1>
-        <p className="text-3xl md:text-4xl font-bold">
-          TO ALEXANDER'S PORTFOLIO
-        </p>
-        <div className={`text-xl md:text-2xl ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>
-          {getGreeting()}, it's {getFormattedTime()}
-        </div>
-        <button
-          onClick={() => setHasEntered(true)}
-          className={`px-16 py-6 border-4 ${t.border} ${t.button} text-2xl uppercase tracking-widest font-black transition hover:scale-110 mt-12`}
-        >
-          LET'S GO →
-        </button>
-        <div className={`text-sm uppercase tracking-widest mt-8 ${theme === 'wireframe' ? 'opacity-50' : 'opacity-60'}`}>
-          Grade 7 • Toronto • Developer & Photographer
+  // ─── LANDING SCREEN ──────────────────────────────────────────
+  if (!hasEntered) {
+    return (
+      <div className={`min-h-screen ${t.bg} ${t.text} font-mono flex items-center justify-center px-6`}>
+        <div className="max-w-2xl w-full text-center space-y-8">
+          <h1 className={`text-6xl md:text-8xl font-black uppercase tracking-tighter ${t.accent} animate-pulse`}>
+            WELCOME
+          </h1>
+          <p className="text-3xl md:text-4xl font-bold">
+            TO ALEXANDER'S PORTFOLIO
+          </p>
+          <div className={`text-xl md:text-2xl ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>
+            {getGreeting()}, it's {getFormattedTime()}
+          </div>
+          <button
+            onClick={() => setHasEntered(true)}
+            className={`px-16 py-6 border-4 ${t.border} ${t.button} text-2xl uppercase tracking-widest font-black transition hover:scale-110 mt-12`}
+          >
+            LET'S GO →
+          </button>
+          <div className={`text-sm uppercase tracking-widest mt-8 ${theme === 'wireframe' ? 'opacity-50' : 'opacity-60'}`}>
+            Grade 7 • Toronto • Developer & Photographer
+          </div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
-return (
-  <div className={`min-h-screen ${t.bg} ${t.text} font-mono transition-all duration-500`}>
-    {!hideUIpages.includes(currentPage) && (
-      <>
-        <nav className={`fixed top-6 right-6 z-50 flex gap-4 transition-all duration-300 ${showNav ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'}`}>
-          <button onClick={() => navigate('about')} className={`px-4 py-2 border-2 ${t.border} ${t.hoverBg} transition text-sm uppercase tracking-wider font-bold`}>About</button>
-          <button onClick={() => navigate('skills')} className={`px-4 py-2 border-2 ${t.border} ${t.hoverBg} transition text-sm uppercase tracking-wider font-bold`}>Skills</button>
-          <button onClick={() => navigate('code')} className={`px-4 py-2 border-2 ${t.border} ${t.hoverBg} transition text-sm uppercase tracking-wider font-bold`}>Code</button>
-          <button onClick={() => navigate('photography')} className={`px-4 py-2 border-2 ${t.border} ${t.hoverBg} transition text-sm uppercase tracking-wider font-bold`}>Photography</button>
-          <button onClick={() => navigate('contact')} className={`px-4 py-2 border-2 ${t.border} ${t.hoverBg} transition text-sm uppercase tracking-wider font-bold`}>Contact</button>
-          <button onClick={() => setTheme(theme === 'wireframe' ? 'aether' : 'wireframe')} className={`px-4 py-2 border-2 ${t.border} ${t.hoverBg} transition`}>
-            {theme === 'wireframe' ? <Moon size={18} /> : <Sun size={18} />}
-          </button>
-        </nav> 
- 
+  // ─── MAIN PORTFOLIO ──────────────────────────────────────────
   return (
     <div className={`min-h-screen ${t.bg} ${t.text} font-mono transition-all duration-500`}>
       {!hideUIpages.includes(currentPage) && (
@@ -679,7 +672,7 @@ return (
           </div>
         )}
 
-        {/* SECRET PAGES - all 25 */}
+        {/* ─── ALL 25 SECRET PAGES ──────────────────────────────────────── */}
 
         {currentPage === 'secret' && (
           <div className="max-w-4xl mx-auto py-32 text-center">
