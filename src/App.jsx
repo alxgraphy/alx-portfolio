@@ -48,11 +48,10 @@ function App() {
   const [captchaClicks, setCaptchaClicks] = useState(0);
   const [katMemes, setKatMemes] = useState([]);
   const [katLoading, setKatLoading] = useState(true);
-  // AFTER your other useEffect hooks (GitHub repos, randomPhotos, etc.)
-useEffect(() => {
+  useEffect(() => {
   if (currentPage === 'kat') {
     setKatLoading(true);
-    fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent('https://www.reddit.com/r/catmemes/hot.json?limit=15'))
+    fetch('https://thingproxy.freeboard.io/fetch/https://www.reddit.com/r/catmemes/hot.json?limit=15')
       .then(res => res.json())
       .then(data => {
         const posts = data.data.children
