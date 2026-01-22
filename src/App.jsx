@@ -241,33 +241,34 @@ function App() {
     "This is not a drill. Click or be suspected forever."
   ];
 
-  // ─── LANDING SCREEN ──────────────────────────────────────────
-  if (!hasEntered) {
-    return (
-      <div className={`min-h-screen ${t.bg} ${t.text} font-mono flex items-center justify-center px-6`}>
-        <div className="max-w-2xl w-full text-center space-y-8">
-          <h1 className={`text-6xl md:text-8xl font-black uppercase tracking-tighter ${t.accent} animate-pulse`}>
-            WELCOME
-          </h1>
-          <p className="text-3xl md:text-4xl font-bold">
-            TO ALEXANDER'S PORTFOLIO
-          </p>
-          <div className={`text-xl md:text-2xl ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>
-            {getGreeting()}, it's {getFormattedTime()}
-          </div>
-          <button
-            onClick={() => setHasEntered(true)}
-            className={`px-16 py-6 border-4 ${t.border} ${t.button} text-2xl uppercase tracking-widest font-black transition hover:scale-110 mt-12`}
-          >
-            LET'S GO →
-          </button>
-          <div className={`text-sm uppercase tracking-widest mt-8 ${theme === 'wireframe' ? 'opacity-50' : 'opacity-60'}`}>
-            Grade 7 • Toronto • Developer & Photographer
-          </div>
+ // ─── LANDING SCREEN ──────────────────────────────────────────
+// Only show intro on the root/home page (not on direct secret page URLs)
+if (!hasEntered && (currentPage === 'home' || currentPage === '')) {
+  return (
+    <div className={`min-h-screen ${t.bg} ${t.text} font-mono flex items-center justify-center px-6`}>
+      <div className="max-w-2xl w-full text-center space-y-8">
+        <h1 className={`text-6xl md:text-8xl font-black uppercase tracking-tighter ${t.accent} animate-pulse`}>
+          WELCOME
+        </h1>
+        <p className="text-3xl md:text-4xl font-bold">
+          TO ALEXANDER'S PORTFOLIO
+        </p>
+        <div className={`text-xl md:text-2xl ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>
+          {getGreeting()}, it's {getFormattedTime()}
+        </div>
+        <button
+          onClick={() => setHasEntered(true)}
+          className={`px-16 py-6 border-4 ${t.border} ${t.button} text-2xl uppercase tracking-widest font-black transition hover:scale-110 mt-12`}
+        >
+          LET'S GO →
+        </button>
+        <div className={`text-sm uppercase tracking-widest mt-8 ${theme === 'wireframe' ? 'opacity-50' : 'opacity-60'}`}>
+          Grade 7 • Toronto • Developer & Photographer
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   // ─── MAIN PORTFOLIO ──────────────────────────────────────────
   return (
