@@ -515,11 +515,9 @@ if (!hasEntered && (currentPage === 'home' || currentPage === '')) {
             </div>
           </div>
         )}
-
 {/* CODE */}
 {currentPage === 'code' && (
   <div className="max-w-7xl w-full py-20">
-
     {/* MAIN PROJECTS */}
     <div className="mb-20">
       <h2 className={`text-5xl md:text-6xl font-black uppercase tracking-tight mb-2 ${t.accent}`}>
@@ -528,7 +526,6 @@ if (!hasEntered && (currentPage === 'home' || currentPage === '')) {
       <div className={`text-sm uppercase tracking-widest mb-12 ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>
         Original repositories auto-updating from GitHub
       </div>
-
       {loading ? (
         <div className={`text-center text-xl ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>Loading projects...</div>
       ) : repos.length === 0 ? (
@@ -536,19 +533,19 @@ if (!hasEntered && (currentPage === 'home' || currentPage === '')) {
       ) : (
         <div className="space-y-8">
           {repos.map(repo => (
-            <div key={repo.id} className={`border-2 ${t.border} ${t.card} p-8 transition-all duration-300 group hover:bg-black hover:text-white hover:border-white`}>
-              <h3 className={`text-3xl font-black uppercase tracking-tight mb-3 ${t.accent} group-hover:text-white transition-colors duration-300`}>
+            <div key={repo.id} className={`border-2 ${t.border} ${t.card} p-8 transition-all duration-300 group ${theme === 'dark' ? 'hover:bg-white hover:text-black hover:border-white' : 'hover:bg-black hover:text-white hover:border-black'}`}>
+              <h3 className={`text-3xl font-black uppercase tracking-tight mb-3 ${t.accent} ${theme === 'dark' ? 'group-hover:text-black' : 'group-hover:text-white'} transition-colors duration-300`}>
                 {repo.name}
               </h3>
-              <p className={`text-base mb-4 ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'} group-hover:text-white transition-colors duration-300`}>
+              <p className={`text-base mb-4 ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'} ${theme === 'dark' ? 'group-hover:text-black' : 'group-hover:text-white'} transition-colors duration-300`}>
                 {repo.description || 'No description provided.'}
               </p>
               <div className="flex flex-wrap gap-4 text-sm">
-                <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 underline ${t.accent} group-hover:text-white transition-colors duration-300`}>
+                <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 underline ${t.accent} ${theme === 'dark' ? 'group-hover:text-black' : 'group-hover:text-white'} transition-colors duration-300`}>
                   <Github size={18} /> View Repo
                 </a>
                 {repo.homepage && (
-                  <a href={repo.homepage} target="_blank" rel="noopener noreferrer" className={`underline group-hover:text-white transition-colors duration-300`}>
+                  <a href={repo.homepage} target="_blank" rel="noopener noreferrer" className={`underline ${theme === 'dark' ? 'group-hover:text-black' : 'group-hover:text-white'} transition-colors duration-300`}>
                     → Live Demo
                   </a>
                 )}
@@ -558,7 +555,6 @@ if (!hasEntered && (currentPage === 'home' || currentPage === '')) {
         </div>
       )}
     </div>
-
     {/* FORKED PROJECTS */}
     {forkRepos.length > 0 && (
       <div className="mt-32">
@@ -570,17 +566,17 @@ if (!hasEntered && (currentPage === 'home' || currentPage === '')) {
         </div>
         <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
           {forkRepos.map(repo => (
-            <a
+            
               key={repo.id}
               href={repo.html_url}
               target="_blank"
               rel="noopener noreferrer"
-              className={`border-2 ${t.border} ${t.card} p-6 transition-all duration-300 group`}
+              className={`border-2 ${t.border} ${t.card} p-6 transition-all duration-300 group ${theme === 'dark' ? 'hover:bg-white hover:border-white' : 'hover:bg-black hover:border-black'}`}
             >
-              <h4 className={`text-xl font-bold uppercase mb-2 ${t.accent} group-hover:text-white transition-colors duration-300`}>
+              <h4 className={`text-xl font-bold uppercase mb-2 ${t.accent} ${theme === 'dark' ? 'group-hover:text-black' : 'group-hover:text-white'} transition-colors duration-300`}>
                 {repo.name}
               </h4>
-              <div className={`text-sm uppercase tracking-wider ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'} group-hover:text-white transition-colors duration-300`}>
+              <div className={`text-sm uppercase tracking-wider ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'} ${theme === 'dark' ? 'group-hover:text-black' : 'group-hover:text-white'} transition-colors duration-300`}>
                 View →
               </div>
             </a>
@@ -588,7 +584,6 @@ if (!hasEntered && (currentPage === 'home' || currentPage === '')) {
         </div>
       </div>
     )}
-
   </div>
 )}
 
