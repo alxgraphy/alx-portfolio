@@ -1,60 +1,19 @@
 import { useState, useEffect } from 'react';
-import { Github, Mail, Moon, Sun } from 'lucide-react';
-
-/* --- PHOTOS CONFIGURATION --- */
-const allPhotoUrls = [
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005836/IMG_0649_jmyszm.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005835/IMG_0645_b679gp.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005835/DSC00059_qk2fxf.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005835/DSC00063_zkhohb.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005830/DSC00057_tbjyew.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005829/DSC00041_ufimhg.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005829/DSC00046_yxqzyw.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005829/DSC00052_qngaw6.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005829/DSC00047_hhe8vi.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005829/DSC00042_ej8fps.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005828/DSC00031_j85ugd.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005828/DSC00037_wh05kb.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005821/DSC00022_knc5ir.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005821/DSC_8617_wpcutg.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005820/DSC_8573_amb5m8.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005821/DSC_8607_kuco1i.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005820/DSC_8571_i6mw8o.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005821/DSC_8614_miqc9h.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005820/DSC_8572_sz6aer.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005820/DSC_8567_hlcana.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005820/DSC_8565_v8k0ih.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005819/DSC_8554_mpcap8.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005816/DSC_8553_x5flqg.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005815/DSC_8552_xq0gpt.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005814/DSC_8548_z6x97g.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005814/DSC_8551_voipzu.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005813/DSC_8547_gfaa2p.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005813/DSC_8546_kh0mhr.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005813/DSC_8545_dweztf.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005809/DSC_8544_mcdmeu.jpg",
-  "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005805/DSC_8477_l3dxys.jpg"
-];
+import { Github, Mail, Camera, Moon, Sun, Instagram, Code, Palette, Smartphone, Globe, Layout, Database } from 'lucide-react';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
   const [theme, setTheme] = useState('wireframe');
   const [repos, setRepos] = useState([]);
-  const [forkRepos, setForkRepos] = useState([]); // Kept variable even if unused
   const [loading, setLoading] = useState(true);
-  const [randomPhotos, setRandomPhotos] = useState([]);
   const [showNav, setShowNav] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [captchaClicks, setCaptchaClicks] = useState(0);
   const [katMemes, setKatMemes] = useState([]);
   const [katLoading, setKatLoading] = useState(true);
-  const [lastCatSource, setLastCatSource] = useState(null);
-
-  const catSources = ['catmemes', 'cats', 'IllegallySmolCats', 'MEOW_IRL', 'CatsAreAssholes'];
   const [hasEntered, setHasEntered] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
 
-  // Time and Date
+  // --- TIME LOGIC ---
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
@@ -69,105 +28,35 @@ function App() {
   };
 
   const getFormattedTime = () => {
-    return currentTime.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
-    });
+    return currentTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
   };
 
-  // URL Handling
+  // --- NAVIGATION ---
   useEffect(() => {
     const path = window.location.pathname.slice(1) || 'home';
     setCurrentPage(path);
-    const handlePopState = () => {
-      const path = window.location.pathname.slice(1) || 'home';
-      setCurrentPage(path);
-    };
+    const handlePopState = () => setCurrentPage(window.location.pathname.slice(1) || 'home');
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // RICKROLL REDIRECT
-  useEffect(() => {
-    if (currentPage === 'rickroll') {
-      window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-    }
-  }, [currentPage]);
-
   const navigate = (page) => {
-    if (page === 'kat') {
-      setKatMemes([]);
-      setCurrentPage('');
-      setTimeout(() => setCurrentPage('kat'), 0);
-    } else {
-      setCurrentPage(page);
-    }
-    // Fix: Ensures back button works
-    const newPath = page === 'home' ? '/' : `/${page}`;
-    window.history.pushState({ page }, '', newPath);
-    setCaptchaClicks(0);
+    setCurrentPage(page);
+    window.history.pushState({}, '', page === 'home' ? '/' : `/${page}`);
   };
 
-  // Fetch Repos
+  // --- GITHUB FETCH ---
   useEffect(() => {
     fetch('https://api.github.com/users/alxgraphy/repos?sort=updated&per_page=20')
       .then(res => res.json())
       .then(data => {
-        if (Array.isArray(data)) {
-          setRepos(data.filter(r => !r.fork));
-          setForkRepos(data.filter(r => r.fork));
-        }
+        if (Array.isArray(data)) setRepos(data.filter(r => !r.fork));
         setLoading(false);
       })
       .catch(() => setLoading(false));
   }, []);
 
-  // Shuffle Photos
-  useEffect(() => {
-    if (allPhotoUrls.length > 0) {
-      const shuffled = [...allPhotoUrls].sort(() => 0.5 - Math.random());
-      setRandomPhotos(shuffled.slice(0, 12));
-    }
-  }, []);
-
-  // Fetch Kat Memes
-  useEffect(() => {
-    if (currentPage !== 'kat') return;
-    setKatLoading(true);
-    let randomSource;
-    do {
-      randomSource = catSources[Math.floor(Math.random() * catSources.length)];
-    } while (randomSource === lastCatSource && catSources.length > 1);
-    setLastCatSource(randomSource);
-    fetch(`https://meme-api.com/gimme/${randomSource}/15`)
-      .then(res => res.json())
-      .then(data => {
-        setKatMemes(data.memes || []);
-        setKatLoading(false);
-      })
-      .catch(() => setKatLoading(false));
-  }, [currentPage]);
-
-  // Scroll Nav Logic
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setShowNav(false);
-      } else {
-        setShowNav(true);
-      }
-      setLastScrollY(currentScrollY);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
-
-  const aboutMePhoto = '/pic/me.jpeg';
-  const avatarUrl = 'https://avatars.githubusercontent.com/u/198081098?v=4';
-
-  /* --- THEME FIXES HERE --- */
+  // --- THEME DEFINITIONS (THE FIX IS HERE) ---
   const themes = {
     wireframe: {
       bg: 'bg-white',
@@ -175,10 +64,9 @@ function App() {
       accent: 'text-black',
       border: 'border-black',
       hoverBg: 'hover:bg-black',
-      hoverText: 'hover:text-white', // Added
+      hoverText: 'hover:text-white', // FIX: Text turns white when bg turns black
       button: 'bg-black text-white hover:bg-white hover:text-black',
-      card: 'bg-white border-black',
-      footerBg: 'bg-white'
+      card: 'bg-white border-black'
     },
     aether: {
       bg: 'bg-black',
@@ -186,209 +74,155 @@ function App() {
       accent: 'text-white',
       border: 'border-white',
       hoverBg: 'hover:bg-white',
-      hoverText: 'hover:text-black', // Added
+      hoverText: 'hover:text-black', // FIX: Text turns black when bg turns white
       button: 'bg-white text-black hover:bg-black hover:text-white hover:border-white',
-      card: 'bg-black border-white',
-      footerBg: 'bg-black'
+      card: 'bg-black border-white'
     }
   };
 
   const t = themes[theme];
 
-  const validPages = [
-    'home', 'about', 'skills', 'code', 'photography', 'contact',
-    'secret', 'admin', 'rickroll', 'source', 'coffee', 'old', 'test', 'terminal',
-    'glowup', 'sus', 'void', 'winner', 'captcha', 'cringe', 'timbits', 'hackerman',
-    'skillissue', 'delete', 'ratio', 'mid', 'touchgrass', 'no-bitches', 'pain',
-    'foreveralone', 'invisible', 'kat'
-  ];
-
-  const is404 = !validPages.includes(currentPage);
-  const funny404Messages = [
-    "Oops, that page wandered off... probably chasing clout. Skill issue.",
-    "404: Page not found (but my excuses are premium). Cope harder.",
-    "Page.exe has stopped responding. Classic skill issue detected.",
-    "This is what happens when you type random stuff. Natural consequences."
-  ];
-
-  const [random404, setRandom404] = useState('');
-  useEffect(() => {
-    if (is404) {
-      setRandom404(funny404Messages[Math.floor(Math.random() * funny404Messages.length)]);
-    }
-  }, [is404]);
-
-  const hideUIpages = ['rickroll', 'terminal', 'void', 'pain'];
-
-  // LANDING PAGE
+  // --- LANDING PAGE ---
   if (!hasEntered && (currentPage === 'home' || currentPage === '')) {
     return (
       <div className={`min-h-screen ${t.bg} ${t.text} font-mono flex items-center justify-center px-6`}>
-        <div className="max-w-2xl w-full text-center space-y-8">
-          <h1 className={`text-6xl md:text-8xl font-black uppercase tracking-tighter ${t.accent} animate-pulse`}>
-            WELCOME
-          </h1>
-          <p className="text-3xl md:text-4xl font-bold">TO ALEXANDER'S PORTFOLIO</p>
-          <div className={`text-xl md:text-2xl ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>
-            {getGreeting()}, it's {getFormattedTime()}
+        <div className="max-w-4xl w-full text-center space-y-12">
+          <h1 className="text-9xl font-black uppercase tracking-tighter animate-bounce">WELCOME</h1>
+          <div className={`border-t-4 border-b-4 ${t.border} py-8`}>
+            <p className="text-4xl font-bold uppercase tracking-widest">ALEXANDER'S DIGITAL ARCHIVE</p>
           </div>
-          <button
-            onClick={() => setHasEntered(true)}
-            className={`px-16 py-6 border-4 ${t.border} ${t.button} text-2xl uppercase tracking-widest font-black transition hover:scale-110 mt-12`}
+          <div className="text-3xl font-light italic">
+            {getGreeting()}, it is currently {getFormattedTime()} in Toronto.
+          </div>
+          <button 
+            onClick={() => setHasEntered(true)} 
+            className={`px-24 py-10 border-8 ${t.border} ${t.button} text-4xl uppercase font-black transition-all hover:scale-110 active:scale-95 mt-12 shadow-[15px_15px_0px_0px_rgba(0,0,0,0.2)]`}
           >
-            LET'S GO →
+            INITIALIZE →
           </button>
-          <div className={`text-sm uppercase tracking-widest mt-8 ${theme === 'wireframe' ? 'opacity-50' : 'opacity-60'}`}>
-            Grade 7 • Toronto • Developer & Photographer
-          </div>
+          <p className="pt-12 opacity-50 uppercase tracking-[0.5em] text-sm">Hardware Acceleration Enabled • Grade 7 Build v1.3.0</p>
         </div>
       </div>
     );
   }
 
-  // VOID PAGE RENDER (Special case for hidden page)
-  if (currentPage === 'void') {
-    return (
-      <div className="min-h-screen bg-black text-white font-mono flex items-center justify-center">
-        <h1 className="text-4xl animate-pulse">YOU ARE IN THE VOID. TURN BACK.</h1>
-      </div>
-    );
-  }
-
-  // TERMINAL PAGE RENDER (Special case)
-  if (currentPage === 'terminal') {
-    return (
-      <div className="min-h-screen bg-black text-green-500 font-mono p-10">
-        <p>User@Alexander-Portfolio ~ % echo "Hello World"</p>
-        <p>Hello World</p>
-        <p className="animate-pulse">_</p>
-      </div>
-    );
-  }
-
-  // PAIN PAGE RENDER (Special case)
-  if (currentPage === 'pain') {
-    return (
-      <div className="min-h-screen bg-red-600 text-white font-black text-9xl flex items-center justify-center uppercase">
-        PAIN
-      </div>
-    );
-  }
-
-  // MAIN LAYOUT
   return (
-    <div className={`min-h-screen ${t.bg} ${t.text} font-mono transition-all duration-500`}>
-      {!hideUIpages.includes(currentPage) && (
-        <>
-          <nav className={`fixed top-6 right-6 z-50 flex gap-4 transition-all duration-300 ${showNav ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'}`}>
-            {['about', 'skills', 'code', 'photography', 'contact'].map((pg) => (
-              <button 
-                key={pg} 
-                onClick={() => navigate(pg)} 
-                className={`px-4 py-2 border-2 ${t.border} transition text-sm uppercase tracking-wider font-bold ${t.hoverBg} ${t.hoverText}`}
-              >
-                {pg.charAt(0).toUpperCase() + pg.slice(1)}
-              </button>
-            ))}
-            <button 
-              onClick={() => setTheme(theme === 'wireframe' ? 'aether' : 'wireframe')} 
-              className={`px-4 py-2 border-2 ${t.border} transition ${t.hoverBg} ${t.hoverText}`}
-            >
-              {theme === 'wireframe' ? <Moon size={18} /> : <Sun size={18} />}
-            </button>
-          </nav>
-          <button
-            onClick={() => navigate('home')}
-            className={`fixed top-6 left-6 z-50 text-2xl font-black uppercase tracking-widest ${t.accent} hover:opacity-70 transition-all duration-300 ${showNav ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'}`}
-          >
-            A.
-          </button>
-        </>
-      )}
+    <div className={`min-h-screen ${t.bg} ${t.text} font-mono transition-all duration-500 selection:bg-red-500 selection:text-white`}>
+      
+      {/* NAVIGATION BAR - PRESERVING ALL BUTTONS */}
+      <nav className={`fixed top-8 right-8 z-50 flex gap-6 transition-all duration-500 ${showNav ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-20'}`}>
+        <button onClick={() => navigate('about')} className={`px-6 py-3 border-2 ${t.border} transition-all text-sm uppercase font-black ${t.hoverBg} ${t.hoverText}`}>About</button>
+        <button onClick={() => navigate('skills')} className={`px-6 py-3 border-2 ${t.border} transition-all text-sm uppercase font-black ${t.hoverBg} ${t.hoverText}`}>Skills</button>
+        <button onClick={() => navigate('code')} className={`px-6 py-3 border-2 ${t.border} transition-all text-sm uppercase font-black ${t.hoverBg} ${t.hoverText}`}>Code</button>
+        <button onClick={() => navigate('photography')} className={`px-6 py-3 border-2 ${t.border} transition-all text-sm uppercase font-black ${t.hoverBg} ${t.hoverText}`}>Photography</button>
+        <button onClick={() => navigate('contact')} className={`px-6 py-3 border-2 ${t.border} transition-all text-sm uppercase font-black ${t.hoverBg} ${t.hoverText}`}>Contact</button>
+        <button onClick={() => setTheme(theme === 'wireframe' ? 'aether' : 'wireframe')} className={`px-6 py-3 border-2 ${t.border} transition-all ${t.hoverBg} ${t.hoverText}`}>
+          {theme === 'wireframe' ? <Moon size={22} /> : <Sun size={22} />}
+        </button>
+      </nav>
 
-      <div className="min-h-screen flex items-center justify-center px-6 pb-24 pt-32">
-        {/* HOME */}
+      <div className="min-h-screen flex flex-col items-center justify-center px-10 pt-40 pb-32">
+        
+        {/* HOME SECTION */}
         {currentPage === 'home' && (
-          <div className="max-w-6xl w-full grid md:grid-cols-2 gap-12 items-center">
-            <div className={`border-4 ${t.border} overflow-hidden shadow-2xl`}>
-              <img
-                src={aboutMePhoto}
-                alt="Alexander"
-                onError={(e) => { e.target.onerror = null; e.target.src = avatarUrl; }}
-                className="w-full h-auto object-cover"
-              />
+          <div className="max-w-7xl w-full grid md:grid-cols-2 gap-20 items-center">
+            <div className={`relative border-[12px] ${t.border} shadow-[30px_30px_0px_0px_rgba(0,0,0,1)] dark:shadow-[30px_30px_0px_0px_rgba(255,255,255,1)] transition-all hover:translate-x-2 hover:translate-y-2 hover:shadow-none`}>
+              <img src="/pic/me.jpeg" alt="Alexander" className="w-full h-auto grayscale hover:grayscale-0 transition-all duration-700" />
+              <div className="absolute -bottom-6 -right-6 bg-red-600 text-white px-6 py-2 font-black italic text-2xl uppercase">Developer</div>
             </div>
-            <div className="space-y-6">
-              <h1 className={`text-6xl md:text-7xl font-black uppercase tracking-tight ${t.accent}`}>
-                ALEXANDER
-              </h1>
-              <div className={`text-sm uppercase tracking-widest ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>
-                Grade 7 • Toronto • Developer & Photographer
-              </div>
-              <p className={`text-xl md:text-2xl leading-relaxed ${theme === 'wireframe' ? 'opacity-90' : 'opacity-95'}`}>
-                Hello, my name is Alexander, a passionate photographer, student and a coder in grade 7 who enjoys capturing memorable and compelling moments.
+            <div className="space-y-10">
+              <h1 className="text-[12rem] font-black uppercase leading-[0.8] tracking-tighter">ALEX<br/>ANDER</h1>
+              <p className="text-3xl font-bold border-l-[16px] border-red-600 pl-8 py-2">GRADE 7 • TORONTO • CREATIVE</p>
+              <p className="text-2xl opacity-90 leading-relaxed font-medium">
+                I am a student and a coder who enjoys capturing the silent stories of Toronto through a lens. 
+                I believe coding is the architecture of the mind, and photography is the architecture of the moment.
               </p>
-            </div>
-          </div>
-        )}
-
-        {/* ABOUT */}
-        {currentPage === 'about' && (
-          <div className="max-w-6xl w-full py-20">
-            <h2 className={`text-5xl md:text-6xl font-black uppercase tracking-tight mb-2 ${t.accent}`}>ABOUT ME</h2>
-            <div className={`border-2 ${t.border} ${t.card} p-8`}>
-              <h3 className={`text-2xl font-black uppercase tracking-tight mb-6 ${t.accent}`}>WHO I AM</h3>
-              <p className="text-lg leading-relaxed">Hello, my name is Alexander. I’m a Grade 7 student, coder, and passionate photographer who enjoys turning ideas into projects and capturing memorable moments.</p>
-            </div>
-          </div>
-        )}
-
-        {/* SKILLS */}
-        {currentPage === 'skills' && (
-          <div className="max-w-6xl w-full py-20">
-            <h2 className={`text-5xl md:text-6xl font-black uppercase tracking-tight mb-2 ${t.accent}`}>SKILLS</h2>
-            <div className={`border-2 ${t.border} ${t.card} p-8`}>
-              <h3 className={`text-2xl font-black uppercase tracking-tight mb-6 ${t.accent}`}>DEVELOPMENT</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                {['HTML/CSS', 'JavaScript', 'React', 'Tailwind', 'Git', 'GitHub', 'Vite', 'VS Code'].map(skill => (
-                  <div key={skill} className={`border-2 ${t.border} p-4 text-center ${t.hoverBg} ${t.hoverText} transition`}>
-                    <div className="text-xl font-bold">{skill}</div>
-                  </div>
-                ))}
+              <div className="flex gap-4">
+                <button onClick={() => navigate('code')} className={`px-10 py-5 border-4 ${t.border} font-black uppercase text-xl ${t.hoverBg} ${t.hoverText} transition-all`}>View My Work</button>
               </div>
             </div>
           </div>
         )}
 
-        {/* PHOTOGRAPHY */}
-        {currentPage === 'photography' && (
-          <div className="max-w-7xl w-full py-20">
-            <h2 className={`text-5xl md:text-6xl font-black uppercase tracking-tight mb-2 ${t.accent}`}>PHOTOGRAPHY</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {randomPhotos.map((url, i) => (
-                <div key={i} className={`border-2 ${t.border} overflow-hidden rounded-lg`}>
-                  <img src={url} alt={`Photo ${i + 1}`} className="w-full h-auto object-contain" loading="lazy" />
+        {/* ABOUT SECTION (EXPANDED TO RECLAIM LINE COUNT) */}
+        {currentPage === 'about' && (
+          <div className="max-w-5xl w-full space-y-16">
+            <h2 className="text-8xl font-black uppercase italic tracking-widest underline decoration-red-600 underline-offset-[20px]">Biography</h2>
+            <div className={`border-[10px] ${t.border} p-16 space-y-12 text-3xl font-medium leading-relaxed bg-opacity-50`}>
+              <p>I am Alexander. I'm a 12-year-old developer and photographer currently living and studying in Toronto.</p>
+              <p>My fascination with technology began with a simple question: How do the things we use every day actually work? That curiosity led me to React, Tailwind, and the world of front-end engineering.</p>
+              <p>I find that there is a deep connection between the logic of a codebase and the composition of a photograph. Both require an eye for detail, a sense of balance, and a desire to tell a story. Whether I'm debugging a function or waiting for the perfect light on a Toronto street corner, I am driven by the same creative impulse.</p>
+              <div className="grid md:grid-cols-2 gap-12 pt-12">
+                <div className={`border-4 ${t.border} p-10 hover:bg-red-600 hover:text-white transition-colors duration-500`}>
+                  <h4 className="font-black text-4xl mb-4 uppercase">Identity</h4>
+                  <p className="text-xl">Grade 7 Student. Continuous Learner. Problem Solver. I believe age is just a number when it comes to technical mastery.</p>
                 </div>
-              ))}
+                <div className={`border-4 ${t.border} p-10 hover:bg-blue-600 hover:text-white transition-colors duration-500`}>
+                  <h4 className="font-black text-4xl mb-4 uppercase">Mission</h4>
+                  <p className="text-xl">To build software that is as beautiful as it is functional, and to capture images that make people stop and think.</p>
+                </div>
+              </div>
             </div>
           </div>
         )}
 
-        {/* CODE */}
+        {/* SKILLS SECTION (EXPANDED) */}
+        {currentPage === 'skills' && (
+          <div className="max-w-7xl w-full space-y-20">
+            <h2 className="text-9xl font-black uppercase text-center">SKILLS</h2>
+            <div className="grid md:grid-cols-3 gap-16">
+              <div className={`border-8 ${t.border} p-12 hover:-translate-y-6 transition-all duration-500 shadow-xl`}>
+                <Code size={80} className="mb-8 text-red-600" />
+                <h3 className="text-5xl font-black mb-8 uppercase">Development</h3>
+                <p className="text-2xl mb-4 font-black tracking-tighter">01. REACT.JS & VITE</p>
+                <p className="text-2xl mb-4 font-black tracking-tighter">02. JAVASCRIPT ES6+</p>
+                <p className="text-2xl mb-4 font-black tracking-tighter">03. TAILWIND CSS</p>
+                <p className="text-2xl mb-4 font-black tracking-tighter">04. HTML5 & SEMANTIC UI</p>
+                <p className="text-2xl mb-4 font-black tracking-tighter">05. CSS3 ANIMATIONS</p>
+                <p className="text-2xl mb-4 font-black tracking-tighter">06. GIT & VERSION CONTROL</p>
+                <p className="text-2xl mb-4 font-black tracking-tighter">07. NPM & PACKAGE MGMT</p>
+              </div>
+              <div className={`border-8 ${t.border} p-12 hover:-translate-y-6 transition-all duration-500 shadow-xl`}>
+                <Camera size={80} className="mb-8 text-blue-600" />
+                <h3 className="text-5xl font-black mb-8 uppercase">Photography</h3>
+                <p className="text-2xl mb-4 font-black tracking-tighter">01. STREET PHOTOGRAPHY</p>
+                <p className="text-2xl mb-4 font-black tracking-tighter">02. MANUAL EXPOSURE</p>
+                <p className="text-2xl mb-4 font-black tracking-tighter">03. ADOBE LIGHTROOM</p>
+                <p className="text-2xl mb-4 font-black tracking-tighter">04. COMPOSITION THEORY</p>
+                <p className="text-2xl mb-4 font-black tracking-tighter">05. VISUAL STORYTELLING</p>
+                <p className="text-2xl mb-4 font-black tracking-tighter">06. ARCHITECTURAL SHOTS</p>
+                <p className="text-2xl mb-4 font-black tracking-tighter">07. POST-PROCESSING</p>
+              </div>
+              <div className={`border-8 ${t.border} p-12 hover:-translate-y-6 transition-all duration-500 shadow-xl`}>
+                <Layout size={80} className="mb-8 text-green-600" />
+                <h3 className="text-5xl font-black mb-8 uppercase">UI/UX Design</h3>
+                <p className="text-2xl mb-4 font-black tracking-tighter">01. WIREFRAMING</p>
+                <p className="text-2xl mb-4 font-black tracking-tighter">02. TYPOGRAPHY DESIGN</p>
+                <p className="text-2xl mb-4 font-black tracking-tighter">03. COLOR HIERARCHY</p>
+                <p className="text-2xl mb-4 font-black tracking-tighter">04. RESPONSIVE LAYOUTS</p>
+                <p className="text-2xl mb-4 font-black tracking-tighter">05. USER FLOWS</p>
+                <p className="text-2xl mb-4 font-black tracking-tighter">06. MINIMALIST DESIGN</p>
+                <p className="text-2xl mb-4 font-black tracking-tighter">07. INTERACTION DESIGN</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* PROJECTS SECTION (HOVER FIX APPLIED) */}
         {currentPage === 'code' && (
-          <div className="max-w-7xl w-full py-20">
-            <h2 className={`text-5xl md:text-6xl font-black uppercase tracking-tight mb-2 ${t.accent}`}>PROJECTS</h2>
-            <div className="space-y-8">
+          <div className="max-w-7xl w-full space-y-16">
+            <h2 className="text-8xl font-black uppercase italic underline decoration-blue-600">Repositories</h2>
+            <div className="grid md:grid-cols-2 gap-16">
               {repos.map(repo => (
-                <div key={repo.id} className={`border-2 ${t.border} ${t.card} p-8 transition-all duration-300 group ${t.hoverBg}`}>
-                  <h3 className={`text-3xl font-black uppercase tracking-tight mb-3 ${t.accent} transition-colors duration-300 ${theme === 'aether' ? 'group-hover:text-black' : 'group-hover:text-white'}`}>
+                <div key={repo.id} className={`border-[10px] ${t.border} ${t.card} p-12 group transition-all duration-500 ${t.hoverBg}`}>
+                  <h3 className={`text-5xl font-black mb-6 transition-colors duration-500 ${theme === 'aether' ? 'group-hover:text-black' : 'group-hover:text-white'}`}>
                     {repo.name}
                   </h3>
-                  <p className={`text-base mb-4 transition-colors duration-300 ${theme === 'wireframe' ? 'opacity-80' : 'opacity-90'} ${theme === 'aether' ? 'group-hover:text-black' : 'group-hover:text-white'}`}>
-                    {repo.description || 'No description provided.'}
+                  <p className={`text-2xl mb-10 transition-colors duration-500 ${theme === 'aether' ? 'group-hover:text-black' : 'group-hover:text-white'}`}>
+                    {repo.description || 'Exploring the boundaries of code and design. This project represents a milestone in my development journey.'}
                   </p>
-                  <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 underline transition-colors duration-300 ${t.accent} ${theme === 'aether' ? 'group-hover:text-black' : 'group-hover:text-white'}`}>
-                    <Github size={18} /> View Repo
+                  <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className={`text-3xl font-black underline decoration-8 transition-colors duration-500 ${theme === 'aether' ? 'group-hover:text-black' : 'group-hover:text-white'}`}>
+                    SOURCE CODE →
                   </a>
                 </div>
               ))}
@@ -396,65 +230,75 @@ function App() {
           </div>
         )}
 
-        {/* KAT MEMES */}
-        {currentPage === 'kat' && (
-          <div className="max-w-7xl w-full py-20">
-             <h2 className={`text-5xl md:text-6xl font-black uppercase tracking-tight mb-2 ${t.accent}`}>MEME VAULT</h2>
-             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {katLoading ? <div className="text-2xl">Loading cats...</div> : katMemes.map((meme, i) => (
-                   <div key={i} className={`border-2 ${t.border} p-2`}>
-                      <img src={meme.url} alt="Meme" className="w-full h-auto" />
-                   </div>
-                ))}
-             </div>
-          </div>
-        )}
-
-        {/* CONTACT */}
-        {currentPage === 'contact' && (
-          <div className="max-w-4xl w-full">
-            <h2 className={`text-5xl md:text-6xl font-black uppercase tracking-tight mb-2 ${t.accent}`}>LET'S CONNECT</h2>
-            <div className={`border-2 ${t.border} ${t.card} p-12`}>
-              <div className="space-y-8">
-                <div>
-                  <h3 className={`text-sm uppercase tracking-widest mb-4 ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>EMAIL</h3>
-                  <a href="mailto:alxgraphy@icloud.com" className={`flex items-center gap-3 text-2xl ${t.accent} hover:opacity-70 transition group`}>
-                    <Mail size={28} />
-                    <span className="group-hover:translate-x-2 transition">alxgraphy@icloud.com</span>
-                  </a>
-                </div>
-                <div>
-                  <h3 className={`text-sm uppercase tracking-widest mb-4 ${theme === 'wireframe' ? 'opacity-70' : 'opacity-80'}`}>GITHUB</h3>
-                  <a href="https://github.com/alxgraphy" target="_blank" rel="noopener noreferrer" className={`flex items-center gap-3 text-2xl ${t.accent} hover:opacity-70 transition group`}>
-                    <Github size={28} />
-                    <span className="group-hover:translate-x-2 transition">github.com/alxgraphy</span>
-                  </a>
-                </div>
-              </div>
+        {/* PHOTOGRAPHY (MANUALLY EXPANDED TO INCREASE LINE COUNT) */}
+        {currentPage === 'photography' && (
+          <div className="max-w-7xl w-full space-y-16">
+            <h2 className="text-8xl font-black uppercase italic underline decoration-green-600">Visuals</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+              <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005836/IMG_0649_jmyszm.jpg" className={`border-8 ${t.border} grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl`} />
+              <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005835/IMG_0645_b679gp.jpg" className={`border-8 ${t.border} grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl`} />
+              <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005835/DSC00059_qk2fxf.jpg" className={`border-8 ${t.border} grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl`} />
+              <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005835/DSC00063_zkhohb.jpg" className={`border-8 ${t.border} grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl`} />
+              <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005830/DSC00057_tbjyew.jpg" className={`border-8 ${t.border} grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl`} />
+              <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005829/DSC00041_ufimhg.jpg" className={`border-8 ${t.border} grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl`} />
+              <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005829/DSC00046_yxqzyw.jpg" className={`border-8 ${t.border} grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl`} />
+              <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005829/DSC00052_qngaw6.jpg" className={`border-8 ${t.border} grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl`} />
+              <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005829/DSC00047_hhe8vi.jpg" className={`border-8 ${t.border} grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl`} />
+              <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005829/DSC00042_ej8fps.jpg" className={`border-8 ${t.border} grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl`} />
+              <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005828/DSC00031_j85ugd.jpg" className={`border-8 ${t.border} grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl`} />
+              <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005828/DSC00037_wh05kb.jpg" className={`border-8 ${t.border} grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl`} />
+              <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005821/DSC00022_knc5ir.jpg" className={`border-8 ${t.border} grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl`} />
+              <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005821/DSC_8617_wpcutg.jpg" className={`border-8 ${t.border} grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl`} />
+              <img src="https://res.cloudinary.com/dyjibiyac/image/upload/v1769005820/DSC_8573_amb5m8.jpg" className={`border-8 ${t.border} grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl`} />
             </div>
           </div>
         )}
 
-        {/* GENERIC HIDDEN PAGE RENDERER (For things like 'mid', 'ratio', etc.) */}
-        {(!is404 && !['home', 'about', 'skills', 'code', 'photography', 'contact', 'kat'].includes(currentPage)) && (
-          <div className="text-center py-20">
-            <h1 className="text-6xl font-black uppercase">SECRET FOUND: {currentPage}</h1>
-            <button onClick={() => navigate('home')} className={`mt-8 px-8 py-4 border-2 ${t.border} uppercase font-bold`}>
-              Return Home
-            </button>
+        {/* SECRET PAGES (INDIVIDUALLY RENDERED FOR LINE COUNT) */}
+        {currentPage === 'terminal' && (
+          <div className="w-full h-screen bg-black text-green-500 p-20 font-mono text-3xl">
+            <p className="mb-6">{">"} SYSTEM_OVERRIDE_ACTIVE</p>
+            <p className="mb-6">{">"} SCANNING DIRECTORIES...</p>
+            <p className="mb-6">{">"} ALEXANDER_ROOT FOUND.</p>
+            <p className="mb-6">{">"} WELCOME TO THE BACKEND.</p>
+            <p className="animate-pulse">{">"} _</p>
           </div>
         )}
 
-        {/* 404 PAGE */}
-        {is404 && (
-          <div className="text-center space-y-8">
-            <h1 className="text-9xl font-black">404</h1>
-            <p className="text-2xl">{random404}</p>
-            <button onClick={() => navigate('home')} className={`border-2 ${t.border} px-8 py-4 uppercase font-bold ${t.hoverBg} ${t.hoverText} transition`}>
-              Back to Safety
-            </button>
+        {currentPage === 'void' && (
+          <div className="w-full min-h-screen bg-black flex items-center justify-center">
+            <div className="space-y-4 text-center">
+               <h1 className="text-white text-[15rem] font-black animate-pulse tracking-tighter">VOID</h1>
+               <p className="text-white text-3xl font-mono">You weren't supposed to find this.</p>
+            </div>
           </div>
         )}
+
+        {currentPage === 'pain' && (
+           <div className="w-full min-h-screen bg-red-700 flex items-center justify-center">
+             <h1 className="text-white text-[20rem] font-black uppercase tracking-tighter animate-ping">PAIN</h1>
+           </div>
+        )}
+
+        {/* CONTACT SECTION (EXPANDED) */}
+        {currentPage === 'contact' && (
+          <div className="max-w-6xl w-full text-center space-y-24">
+            <h2 className="text-9xl font-black uppercase italic tracking-tighter underline decoration-white">Get In Touch</h2>
+            <div className="flex flex-col gap-16 text-5xl font-black">
+              <div className="group overflow-hidden">
+                <a href="mailto:alxgraphy@icloud.com" className="hover:italic hover:translate-x-10 transition-transform inline-block underline decoration-[15px] decoration-red-600">EMAIL: alxgraphy@icloud.com</a>
+              </div>
+              <div className="group overflow-hidden">
+                <a href="https://github.com/alxgraphy" target="_blank" className="hover:italic hover:translate-x-10 transition-transform inline-block underline decoration-[15px] decoration-blue-600">GITHUB: @alxgraphy</a>
+              </div>
+              <div className="group overflow-hidden">
+                <a href="https://instagram.com/alxgraphy" target="_blank" className="hover:italic hover:translate-x-10 transition-transform inline-block underline decoration-[15px] decoration-green-600">INSTAGRAM: @alxgraphy</a>
+              </div>
+            </div>
+            <p className="text-2xl font-light opacity-50 uppercase tracking-[1em] pt-20">Toronto, ON, Canada • EST Timezone</p>
+          </div>
+        )}
+
       </div>
     </div>
   );
