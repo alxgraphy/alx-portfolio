@@ -176,7 +176,8 @@ function App() {
       footerBg: 'bg-black'
     }
   };
-
+  
+  const is404 = !validPages.includes(currentPage);
   const funny404Messages = [
   "Oops, that page wandered off... probably chasing clout. Skill issue.",
   "404: Page not found (but my excuses are premium). Cope harder.",
@@ -206,14 +207,14 @@ function App() {
   "This is the part where you go back to the home page and pretend this never happened. Shhh."
 ];
 
-// persistent random quote
-const [random404, setRandom404] = useState('');
+ // useState must be inside component
+  const [random404, setRandom404] = useState('');
 
-useEffect(() => {
-  if (is404) {
-    setRandom404(funny404Messages[Math.floor(Math.random() * funny404Messages.length)]);
-  }
-}, []); // run once on mount
+  useEffect(() => {
+    if (is404) {
+      setRandom404(funny404Messages[Math.floor(Math.random() * funny404Messages.length)]);
+    }
+  }, [is404]);
 
   const hideUIpages = ['rickroll', 'terminal', 'void', 'pain'];
 
