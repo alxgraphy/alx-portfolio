@@ -187,7 +187,7 @@ function App() {
     'foreveralone', 'invisible', 'kat'
   ];
 
- const [currentPage, setCurrentPage] = useState('home'); // or from router/state
+
   const is404 = !validPages.includes(currentPage);
 
   const funny404Messages = [
