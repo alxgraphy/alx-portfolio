@@ -48,6 +48,33 @@ function App() {
   const [captchaClicks, setCaptchaClicks] = useState(0);
   const [katMemes, setKatMemes] = useState([]);
   const [katLoading, setKatLoading] = useState(true);
+  // AFTER your other useEffect hooks (GitHub repos, randomPhotos, etc.)
+useEffect(() => {
+  if (currentPage === 'kat') {
+    setKatLoading(true);
+    fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent('https://www.reddit.com/r/catmemes/hot.json?limit=15'))
+      .then(res => res.json())
+      .then(data => {
+        const posts = data.data.children
+          .map(child => child.data)
+          .filter(post => {
+            const isImage = post.url && (
+              post.url.endsWith('.jpg') || post.url.endsWith('.png') ||
+              post.url.endsWith('.gif') || post.url.includes('i.redd.it') ||
+              post.url.includes('imgur.com')
+            );
+            const isSafe = !post.over_18 &&
+              !post.title.toLowerCase().includes('nsfw') &&
+              !post.url.toLowerCase().includes('nsfw');
+            return isImage && isSafe;
+          });
+        setKatMemes(posts);
+        setKatLoading(false);
+      })
+      .catch(() => setKatLoading(false));
+  }
+}, [currentPage]);
+
 
   // ─── LANDING PAGE STATES ─────────────────────────────────────
   const [hasEntered, setHasEntered] = useState(false);
