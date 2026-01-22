@@ -51,23 +51,10 @@ function App() {
   useEffect(() => {
   if (currentPage === 'kat') {
     setKatLoading(true);
-    fetch('https://thingproxy.freeboard.io/fetch/https://www.reddit.com/r/catmemes/hot.json?limit=15')
+    fetch('https://meme-api.com/gimme/catmemes/15')
       .then(res => res.json())
       .then(data => {
-        const posts = data.data.children
-          .map(child => child.data)
-          .filter(post => {
-            const isImage = post.url && (
-              post.url.endsWith('.jpg') || post.url.endsWith('.png') ||
-              post.url.endsWith('.gif') || post.url.includes('i.redd.it') ||
-              post.url.includes('imgur.com')
-            );
-            const isSafe = !post.over_18 &&
-              !post.title.toLowerCase().includes('nsfw') &&
-              !post.url.toLowerCase().includes('nsfw');
-            return isImage && isSafe;
-          });
-        setKatMemes(posts);
+        setKatMemes(data.memes); // data.memes is an array
         setKatLoading(false);
       })
       .catch(() => setKatLoading(false));
@@ -138,31 +125,18 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    if (currentPage === 'kat') {
-      setKatLoading(true);
-      fetch('https://www.reddit.com/r/catmemes/hot.json?limit=15')
-        .then(res => res.json())
-        .then(data => {
-          const posts = data.data.children
-            .map(child => child.data)
-            .filter(post => {
-              const isImage = post.url && (
-                post.url.endsWith('.jpg') || post.url.endsWith('.png') ||
-                post.url.endsWith('.gif') || post.url.includes('i.redd.it') ||
-                post.url.includes('imgur.com')
-              );
-              const isSafe = !post.over_18 &&
-                !post.title.toLowerCase().includes('nsfw') &&
-                !post.url.toLowerCase().includes('nsfw');
-              return isImage && isSafe;
-            });
-          setKatMemes(posts);
-          setKatLoading(false);
-        })
-        .catch(() => setKatLoading(false));
-    }
-  }, [currentPage]);
+useEffect(() => {
+  if (currentPage === 'kat') {
+    setKatLoading(true);
+    fetch('https://meme-api.com/gimme/catmemes/15')
+      .then(res => res.json())
+      .then(data => {
+        setKatMemes(data.memes || []); // assign memes directly
+        setKatLoading(false);
+      })
+      .catch(() => setKatLoading(false));
+  }
+}, [currentPage]);
 
   useEffect(() => {
     const handleScroll = () => {
