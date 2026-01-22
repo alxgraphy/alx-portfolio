@@ -187,6 +187,7 @@ function App() {
     'foreveralone', 'invisible', 'kat'
   ];
 
+ const [currentPage, setCurrentPage] = useState('home'); // or from router/state
   const is404 = !validPages.includes(currentPage);
 
   const funny404Messages = [
@@ -218,7 +219,14 @@ function App() {
     "This is the part where you go back to the home page and pretend this never happened. Shhh."
   ];
 
-  const random404 = funny404Messages[Math.floor(Math.random() * funny404Messages.length)];
+  const [random404, setRandom404] = useState('');
+
+  useEffect(() => {
+    if (is404) {
+      const pick = funny404Messages[Math.floor(Math.random() * funny404Messages.length)];
+      setRandom404(pick);
+    }
+  }, [is404]); // run only when is404 changes
 
   const hideUIpages = ['rickroll', 'terminal', 'void', 'pain'];
 
