@@ -48,19 +48,31 @@ function App() {
   const [captchaClicks, setCaptchaClicks] = useState(0);
   const [katMemes, setKatMemes] = useState([]);
   const [katLoading, setKatLoading] = useState(true);
-useEffect(() => {
-  if (currentPage === 'kat') {
-    setKatLoading(true);
+const catSources = [
+  'catmemes',
+  'cats',
+  'IllegallySmolCats',
+  'MEOW_IRL',
+  'CatsAreAssholes'
+];
 
-    fetch(`https://meme-api.com/gimme/catmemes/15?cb=${Date.now()}`)
-      .then(res => res.json())
-      .then(data => {
-        setKatMemes(data.memes || []);
-        setKatLoading(false);
-      })
-      .catch(() => setKatLoading(false));
-  }
+  useEffect(() => {
+  if (currentPage !== 'kat') return;
+
+  setKatLoading(true);
+
+  const randomSource =
+    catSources[Math.floor(Math.random() * catSources.length)];
+
+  fetch(`https://meme-api.com/gimme/${randomSource}/15`)
+    .then(res => res.json())
+    .then(data => {
+      setKatMemes(data.memes || []);
+      setKatLoading(false);
+    })
+    .catch(() => setKatLoading(false));
 }, [currentPage]);
+
 
 
 
@@ -103,11 +115,21 @@ useEffect(() => {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  const navigate = (page) => {
-    setCurrentPage(page);
-    window.history.pushState({}, '', page === 'home' ? '/' : `/${page}`);
-    setCaptchaClicks(0);
-  };
+const navigate = (page) => {
+  // force reload when clicking KAT again
+  if (page === currentPage && page === 'kat') {
+    setKatMemes([]);
+    window.history.pushState({}, '', '/kat');
+    setCurrentPage('');              // force state change
+    setTimeout(() => setCurrentPage('kat'), 0);
+    return;
+  }
+
+  setCurrentPage(page);
+  window.history.pushState({}, '', page === 'home' ? '/' : `/${page}`);
+  setCaptchaClicks(0);
+};
+
 
   useEffect(() => {
     fetch('https://api.github.com/users/alxgraphy/repos?sort=updated&per_page=20')
