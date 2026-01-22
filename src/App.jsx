@@ -48,21 +48,21 @@ function App() {
   const [captchaClicks, setCaptchaClicks] = useState(0);
   const [katMemes, setKatMemes] = useState([]);
   const [katLoading, setKatLoading] = useState(true);
-const catSources = [
-  'catmemes',
-  'cats',
-  'IllegallySmolCats',
-  'MEOW_IRL',
-  'CatsAreAssholes'
-];
+const [lastCatSource, setLastCatSource] = useState(null);
 
-  useEffect(() => {
+const catSources = ['catmemes', 'cats', 'IllegallySmolCats', 'MEOW_IRL', 'CatsAreAssholes'];
+
+useEffect(() => {
   if (currentPage !== 'kat') return;
 
   setKatLoading(true);
 
-  const randomSource =
-    catSources[Math.floor(Math.random() * catSources.length)];
+  let randomSource;
+  do {
+    randomSource = catSources[Math.floor(Math.random() * catSources.length)];
+  } while (randomSource === lastCatSource && catSources.length > 1);
+
+  setLastCatSource(randomSource);
 
   fetch(`https://meme-api.com/gimme/${randomSource}/15`)
     .then(res => res.json())
@@ -72,7 +72,6 @@ const catSources = [
     })
     .catch(() => setKatLoading(false));
 }, [currentPage]);
-
 
 
 
@@ -116,11 +115,9 @@ const catSources = [
   }, []);
 
 const navigate = (page) => {
-  // force reload when clicking KAT again
-  if (page === currentPage && page === 'kat') {
-    setKatMemes([]);
-    window.history.pushState({}, '', '/kat');
-    setCurrentPage('');              // force state change
+  if (page === 'kat') {
+    setKatMemes([]); // clear old memes
+    setCurrentPage(''); // force state change
     setTimeout(() => setCurrentPage('kat'), 0);
     return;
   }
@@ -129,6 +126,7 @@ const navigate = (page) => {
   window.history.pushState({}, '', page === 'home' ? '/' : `/${page}`);
   setCaptchaClicks(0);
 };
+
 
 
   useEffect(() => {
