@@ -1,40 +1,72 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Moon, Sun, Camera, Code, Terminal, Layers, ArrowRight, 
-  Activity, User, MapPin, Calendar, ExternalLink, Loader2 
+  Activity, User, MapPin, Calendar, ExternalLink, Loader2,
+  Cpu, Zap, Shield, Database, Radio
 } from 'lucide-react';
+
+/* --- UTILITY: CYPHER EFFECT HOOK --- */
+const useCypher = (text, active) => {
+  const [output, setOutput] = useState(text);
+  const chars = "!@#$%^&*()_+[]{};<>/?";
+  
+  useEffect(() => {
+    if (!active) { setOutput(text); return; }
+    let iteration = 0;
+    const interval = setInterval(() => {
+      setOutput(prev => 
+        text.split("").map((letter, index) => {
+          if (index < iteration) return text[index];
+          return chars[Math.floor(Math.random() * chars.length)];
+        }).join("")
+      );
+      if (iteration >= text.length) clearInterval(interval);
+      iteration += 1 / 3;
+    }, 30);
+    return () => clearInterval(interval);
+  }, [active, text]);
+  
+  return output;
+};
+
+/* --- COMPONENT: CYPHER TEXT --- */
+const CypherText = ({ text, className }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const scrambled = useCypher(text, isHovered);
+  return (
+    <span onMouseEnter={() => setIsHovered(true)} className={className}>
+      {scrambled}
+    </span>
+  );
+};
 
 export default function App() {
   const [page, setPage] = useState('home');
   const [theme, setTheme] = useState('dark');
-  const [showNav, setShowNav] = useState(true);
   const [repos, setRepos] = useState([]);
   const [loadingRepos, setLoadingRepos] = useState(true);
-  const lastScrollY = useRef(0);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-  // FETCH LIVE GITHUB DATA
+  /* --- 1. DATA FETCHING --- */
   useEffect(() => {
-    fetch('https://api.github.com/users/alxgraphy/repos?sort=updated&per_page=20')
+    fetch('https://api.github.com/users/alxgraphy/repos?sort=updated&per_page=6')
       .then(res => res.json())
       .then(data => {
         setRepos(Array.isArray(data) ? data : []);
         setLoadingRepos(false);
-      })
-      .catch(() => setLoadingRepos(false));
+      });
   }, []);
 
+  /* --- 2. INTERACTIVE EFFECTS --- */
   useEffect(() => {
-    const handleScroll = () => {
-      setShowNav(window.scrollY < lastScrollY.current || window.scrollY < 50);
-      lastScrollY.current = window.scrollY;
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const handleMouseMove = (e) => setMousePos({ x: e.clientX, y: e.clientY });
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   const t = theme === 'dark' 
-    ? { bg: 'bg-black', text: 'text-white', border: 'border-white', panel: 'bg-[#0a0a0a]', grid: 'opacity-10' }
-    : { bg: 'bg-white', text: 'text-black', border: 'border-black', panel: 'bg-[#f5f5f5]', grid: 'opacity-5' };
+    ? { bg: 'bg-black', text: 'text-white', border: 'border-white', panel: 'bg-[#0a0a0a]', sub: 'text-zinc-500' }
+    : { bg: 'bg-white', text: 'text-black', border: 'border-black', panel: 'bg-[#f5f5f5]', sub: 'text-zinc-400' };
 
   const Corners = () => (
     <>
@@ -46,19 +78,33 @@ export default function App() {
   );
 
   return (
-    <div className={`min-h-screen ${t.bg} ${t.text} font-mono transition-colors duration-500 selection:bg-white selection:text-black`}>
-      {/* GRID */}
-      <div className={`fixed inset-0 pointer-events-none z-0 ${t.grid}`}>
-        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+    <div className={`min-h-screen ${t.bg} ${t.text} font-mono transition-colors duration-500 overflow-hidden cursor-none`}>
+      
+      {/* CUSTOM SCANNER CURSOR */}
+      <div 
+        className="fixed top-0 left-0 w-10 h-10 border-2 border-current rounded-full pointer-events-none z-[9999] mix-blend-difference flex items-center justify-center transition-transform duration-100 ease-out"
+        style={{ transform: `translate(${mousePos.x - 20}px, ${mousePos.y - 20}px)` }}
+      >
+        <div className="w-1 h-1 bg-current" />
       </div>
 
-      <header className={`fixed top-0 w-full z-50 flex justify-between items-center px-6 md:px-12 py-8 backdrop-blur-md border-b ${t.border} transition-transform duration-500 ${showNav ? 'translate-y-0' : '-translate-y-full'}`}>
-        <button onClick={() => setPage('home')} className="text-4xl font-black italic tracking-tighter transition-transform hover:scale-110">ALX</button>
+      {/* BACKGROUND DECORATION */}
+      <div className="fixed inset-0 pointer-events-none opacity-10">
+        <div className="absolute top-10 left-10 text-[10px]">ID: 00198081098</div>
+        <div className="absolute bottom-10 right-10 text-[10px] rotate-90 underline">ALX_ARCHIVE_2026</div>
+      </div>
+
+      <header className={`fixed top-0 w-full z-50 flex justify-between items-center px-6 md:px-12 py-8 backdrop-blur-md border-b ${t.border}`}>
+        <button onClick={() => setPage('home')} className="text-4xl font-black italic tracking-tighter">
+          <CypherText text="ALX." />
+        </button>
         <nav className="flex items-center gap-6 text-[10px] font-black uppercase tracking-[0.3em]">
           {['about', 'skills', 'code', 'photography', 'contact'].map(item => (
-            <button key={item} onClick={() => setPage(item)} className={`hover:line-through ${page === item ? 'underline underline-offset-4' : ''}`}>{item}</button>
+            <button key={item} onClick={() => setPage(item)} className={`hover:line-through ${page === item ? 'underline' : ''}`}>
+              {item}
+            </button>
           ))}
-          <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} className={`p-2 border-2 ${t.border} hover:bg-white hover:text-black transition-all`}>
+          <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} className={`p-2 border-2 ${t.border} hover:invert transition-all`}>
             {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
           </button>
         </nav>
@@ -66,81 +112,86 @@ export default function App() {
 
       <main className="relative z-10 pt-48 pb-20 px-6 md:px-12 max-w-7xl mx-auto">
         
-        {/* HOME */}
+        {/* --- HOME PAGE DASHBOARD --- */}
         {page === 'home' && (
-          <div className="flex flex-col items-center space-y-20 animate-in fade-in zoom-in duration-700">
-            <div className="relative group">
-              <div className={`border-2 ${t.border} p-4 transition-transform duration-500 group-hover:-translate-y-2`}>
-                <Corners />
-                <img src="https://avatars.githubusercontent.com/u/198081098?v=4" className="w-64 h-64 md:w-80 md:h-80 object-cover grayscale brightness-110 contrast-125 group-hover:grayscale-0 transition-all duration-700" alt="Avatar" />
+          <div className="grid lg:grid-cols-12 gap-8 animate-in fade-in duration-1000">
+            {/* HERO SECTION */}
+            <div className="lg:col-span-8 space-y-12">
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-xs opacity-50"><Radio size={14} className="animate-pulse" /> BROADCASTING_FROM: TORONTO, CA</div>
+                <h1 className="text-7xl md:text-9xl font-black leading-none italic tracking-tighter">
+                  <CypherText text="DEVELOPER" /><br/>
+                  <span className="opacity-20">& CREATOR</span>
+                </h1>
               </div>
-            </div>
-            <h1 className="text-6xl md:text-[10vw] font-black leading-[0.8] tracking-tighter uppercase italic text-center">
-              ALEXANDER<br/><span className="text-transparent" style={{ WebkitTextStroke: `1px ${theme === 'dark' ? 'white' : 'black'}` }}>WONDWOSSEN</span>
-            </h1>
-          </div>
-        )}
-
-        {/* ABOUT */}
-        {page === 'about' && (
-          <div className="grid md:grid-cols-2 gap-16 animate-in slide-in-from-left duration-500">
-            <div className={`p-10 border-2 ${t.border} ${t.panel} relative h-fit`}>
-              <Corners />
-              <div className="space-y-6 uppercase font-black text-sm tracking-widest">
-                <div className="flex items-center gap-4 border-b border-current/10 pb-4"><User size={18}/><p>Alex Wondwossen</p></div>
-                <div className="flex items-center gap-4 border-b border-current/10 pb-4"><MapPin size={18}/><p>Toronto, CA</p></div>
-                <div className="flex items-center gap-4"><Activity size={18}/><p className="opacity-50 italic">System: Active</p></div>
-              </div>
-            </div>
-            <div className="space-y-8 text-3xl font-light italic leading-tight">
-              <p>I build digital architectures where <span className="font-black underline">raw code</span> meets industrial design.</p>
-              <p>Specializing in <span className="font-black">React</span>, I design systems that prioritize performance and minimalist aesthetics.</p>
-            </div>
-          </div>
-        )}
-
-        {/* SKILLS (FIXED HOVER) */}
-        {page === 'skills' && (
-          <div className="grid md:grid-cols-3 gap-0 border-2 border-current animate-in fade-in duration-500">
-            {[
-              { title: 'Frontend', items: ['React.js', 'Vite', 'JavaScript', 'Tailwind'], icon: <Terminal /> },
-              { title: 'Visuals', items: ['35mm Photo', 'Composition', 'Industrial UX', 'Figma'], icon: <Camera /> },
-              { title: 'Systems', items: ['Logic State', 'API Sync', 'Performance', 'Node'], icon: <Layers /> }
-            ].map((s, i) => (
-              <div key={i} className={`p-12 border-r-2 last:border-r-0 ${t.border} group hover:bg-white transition-all duration-300`}>
-                <div className="mb-8 opacity-30 group-hover:opacity-100 group-hover:text-black transition-all">{s.icon}</div>
-                <h3 className="text-2xl font-black uppercase mb-8 italic group-hover:text-black transition-colors">{s.title}</h3>
-                <div className="space-y-4">
-                  {s.items.map(item => (
-                    <div key={item} className="text-xs font-black uppercase tracking-widest opacity-40 group-hover:opacity-100 group-hover:text-black flex items-center gap-2">
-                      <div className={`w-1.5 h-1.5 ${theme === 'dark' ? 'bg-white' : 'bg-black'} group-hover:bg-black`} /> {item}
-                    </div>
-                  ))}
+              
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className={`p-8 border-2 ${t.border} relative group hover:bg-current hover:text-black transition-all`}>
+                  <Corners />
+                  <h3 className="text-xl font-black mb-4 italic">01 // CODE_BASE</h3>
+                  <p className="text-sm opacity-60 group-hover:opacity-100">Building scalable systems with React and industrial logic. Currently focusing on UI performance.</p>
+                </div>
+                <div className={`p-8 border-2 ${t.border} relative group hover:bg-current hover:text-black transition-all`}>
+                  <Corners />
+                  <h3 className="text-xl font-black mb-4 italic">02 // VISUAL_SYNC</h3>
+                  <p className="text-sm opacity-60 group-hover:opacity-100">Capturing the raw architecture of the city through a 35mm lens. 12 years deep in the creative grind.</p>
                 </div>
               </div>
-            ))}
+            </div>
+
+            {/* SIDEBAR DASHBOARD */}
+            <div className="lg:col-span-4 space-y-8">
+              <div className={`border-2 ${t.border} p-6 relative`}>
+                <Corners />
+                <h4 className="text-[10px] font-black opacity-30 uppercase tracking-[0.5em] mb-6">System_Status</h4>
+                <div className="space-y-4 text-[11px]">
+                  <div className="flex justify-between border-b border-current/10 pb-2"><span>UPTIME</span><span className="font-bold">99.9%</span></div>
+                  <div className="flex justify-between border-b border-current/10 pb-2"><span>CORES</span><span className="font-bold text-green-500">ACTIVE_04</span></div>
+                  <div className="flex justify-between border-b border-current/10 pb-2"><span>SYNC</span><span className="font-bold">GITHUB_OK</span></div>
+                  <div className="flex justify-between"><span>LATENCY</span><span className="font-bold">24ms</span></div>
+                </div>
+              </div>
+
+              <div className={`p-6 bg-current ${theme === 'dark' ? 'text-black' : 'text-white'} italic font-black text-center`}>
+                <p className="animate-pulse">AVAILABLE FOR HIRE // 2026</p>
+              </div>
+
+              {/* LIVE REPO MINI-LIST */}
+              <div className="space-y-4">
+                <h4 className="text-[10px] font-black opacity-30 uppercase tracking-[0.5em]">Recent_Push</h4>
+                {repos.slice(0, 3).map(repo => (
+                  <div key={repo.id} className="text-[10px] flex items-center gap-3">
+                    <div className="w-1 h-1 bg-current animate-ping" />
+                    <span className="font-bold uppercase truncate">{repo.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         )}
 
-        {/* CODE (LIVE GITHUB SYNC) */}
+        {/* --- CODE PAGE (LIVE GITHUB) --- */}
         {page === 'code' && (
           <div className="space-y-12 animate-in slide-in-from-right duration-500">
-            <h2 className="text-7xl font-black italic uppercase tracking-tighter">Live_Repos</h2>
+            <h2 className="text-8xl font-black italic tracking-tighter uppercase"><CypherText text="Repositories" /></h2>
             {loadingRepos ? (
-              <div className="flex justify-center py-20"><Loader2 className="animate-spin" size={48} /></div>
+              <Loader2 className="animate-spin mx-auto" size={48} />
             ) : (
-              <div className="grid gap-4">
+              <div className="grid md:grid-cols-2 gap-6">
                 {repos.map((repo) => (
                   <a key={repo.id} href={repo.html_url} target="_blank" rel="noreferrer" 
-                     className={`group p-8 border-2 ${t.border} flex justify-between items-center hover:bg-white hover:text-black transition-all duration-300 relative`}>
+                     className={`group p-10 border-2 ${t.border} flex flex-col justify-between hover:bg-white hover:text-black transition-all duration-300 relative`}>
                     <Corners />
-                    <div className="space-y-2">
-                      <h3 className="text-3xl font-black italic uppercase tracking-tighter">{repo.name}</h3>
-                      <p className="text-sm opacity-50 italic group-hover:text-black">{repo.description || 'No description provided.'}</p>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-start">
+                        <h3 className="text-3xl font-black italic tracking-tighter uppercase group-hover:line-through">{repo.name}</h3>
+                        <ExternalLink size={20} />
+                      </div>
+                      <p className="text-sm opacity-50 italic group-hover:opacity-100">{repo.description || 'System data redacted.'}</p>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <span className="text-[10px] font-black border-2 border-current px-3 py-1 uppercase">{repo.language || 'Code'}</span>
-                      <ExternalLink size={20} className="group-hover:rotate-45 transition-transform" />
+                    <div className="mt-8 flex gap-4 text-[10px] font-black">
+                      <span className="border border-current px-2 py-1">{repo.language || 'DATA'}</span>
+                      <span className="opacity-40 italic">STARS: {repo.stargazers_count}</span>
                     </div>
                   </a>
                 ))}
@@ -149,9 +200,9 @@ export default function App() {
           </div>
         )}
 
-        {/* PHOTOGRAPHY (COLOUR ON HOVER) */}
+        {/* --- PHOTOGRAPHY PAGE (COLOUR HOVER) --- */}
         {page === 'photography' && (
-          <div className="columns-1 md:columns-3 gap-6 space-y-6 animate-in zoom-in duration-700">
+          <div className="columns-1 md:columns-3 gap-8 space-y-8 animate-in zoom-in duration-700">
             {[
               "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005836/IMG_0649_jmyszm.jpg",
               "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005835/IMG_0645_b679gp.jpg",
@@ -160,37 +211,50 @@ export default function App() {
               "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005829/DSC00041_ufimhg.jpg",
               "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005829/DSC00052_qngaw6.jpg"
             ].map((url, i) => (
-              <div key={i} className="border-2 border-current overflow-hidden group bg-black cursor-none">
-                <img src={url} className="w-full grayscale brightness-75 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700 ease-in-out scale-105 group-hover:scale-100" alt="Work" />
+              <div key={i} className={`border-2 ${t.border} overflow-hidden group bg-black transition-all duration-500 hover:scale-[1.02]`}>
+                <img 
+                  src={url} 
+                  className="w-full grayscale brightness-75 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700 ease-in-out" 
+                  alt="Gallery" 
+                />
               </div>
             ))}
           </div>
         )}
 
-        {/* CONTACT */}
-        {page === 'contact' && (
-          <div className="grid gap-4 animate-in slide-in-from-bottom duration-500">
-            {[
-              { label: 'GitHub', value: '@ALXGRAPHY', url: 'https://github.com/alxgraphy' },
-              { label: 'Instagram', value: '@ALEXEDGRAPHY', url: 'https://instagram.com/alexedgraphy' },
-              { label: 'Email', value: 'ALXGRAPHY@ICLOUD.COM', url: 'mailto:alxgraphy@icloud.com' }
-            ].map((item, i) => (
-              <a key={i} href={item.url} className={`p-12 border-2 ${t.border} flex justify-between items-center group hover:bg-white hover:text-black transition-all`}>
-                <div>
-                  <p className="text-[10px] font-black opacity-30 mb-2 uppercase tracking-widest">{item.label}</p>
-                  <p className="text-5xl font-black italic tracking-tighter group-hover:translate-x-4 transition-transform">{item.value}</p>
-                </div>
-                <ArrowRight size={48} className="group-hover:rotate-45 transition-transform" />
-              </a>
-            ))}
+        {/* --- ABOUT --- */}
+        {page === 'about' && (
+          <div className="grid md:grid-cols-12 gap-12 animate-in slide-in-from-left duration-500">
+            <div className="md:col-span-5 relative">
+              <div className={`p-4 border-2 ${t.border}`}>
+                <img src="https://avatars.githubusercontent.com/u/198081098?v=4" className="w-full grayscale" alt="Profile" />
+                <Corners />
+              </div>
+            </div>
+            <div className="md:col-span-7 space-y-12">
+              <h2 className="text-8xl font-black italic tracking-tighter uppercase underline decoration-4 underline-offset-8">Manifesto</h2>
+              <p className="text-4xl font-light leading-tight italic opacity-80">
+                A 12-year-old developer carving industrial logic into the digital sphere. Specializing in <span className="font-black bg-white text-black px-2">React Architecture</span> and urban geometry.
+              </p>
+            </div>
           </div>
         )}
+
       </main>
 
-      <footer className="py-20 px-12 border-t-2 border-current flex justify-between items-center opacity-20 text-[10px] font-black uppercase tracking-widest">
-        <p>ALX_CORE_v11.0</p>
-        <p>© 2026 EDITION</p>
-      </footer>
+      {/* SYSTEM SCANLINE EFFECT */}
+      <div className="fixed inset-0 pointer-events-none z-[100] opacity-5 overflow-hidden">
+        <div className="w-full h-[1px] bg-white animate-scan-y absolute top-0" />
+      </div>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes scan-y {
+          0% { top: 0; }
+          100% { top: 100%; }
+        }
+        .animate-scan-y { animation: scan-y 8s linear infinite; }
+        .text-transparent { -webkit-text-fill-color: transparent; }
+      `}} />
     </div>
   );
 }
