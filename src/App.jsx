@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Camera, Code, Terminal, Layers, ArrowRight, 
-  ExternalLink, Loader2, X, Activity, Globe, GitCommit, Clock, BarChart3, Mail, Github, Instagram
+  ExternalLink, Loader2, X, Activity, Globe, GitCommit, Clock, BarChart3, Mail, Github, Instagram, Cpu, Database
 } from 'lucide-react';
 
 export default function App() {
@@ -12,7 +12,22 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [selectedProject, setSelectedProject] = useState(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [time, setTime] = useState(new Date());
 
+  // CLOCK LOGIC
+  useEffect(() => {
+    const timer = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const getGreeting = () => {
+    const hour = time.getHours();
+    if (hour < 12) return "Good_Morning";
+    if (hour < 18) return "Good_Afternoon";
+    return "Good_Evening";
+  };
+
+  // ROUTING
   useEffect(() => {
     const handleHash = () => {
       const hash = window.location.hash.replace('#/', '') || 'home';
@@ -25,6 +40,7 @@ export default function App() {
 
   const navigate = (path) => { window.location.hash = `#/${path}`; };
 
+  // DATA FETCHING
   useEffect(() => {
     fetch('https://api.github.com/users/alxgraphy/repos?sort=updated&per_page=10')
       .then(res => res.json())
@@ -59,7 +75,6 @@ export default function App() {
     </>
   );
 
-  // FUTURE PATTERNS BLUEPRINT GRID
   const BackgroundGrid = () => (
     <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.03]" 
       style={{ 
@@ -69,21 +84,23 @@ export default function App() {
     />
   );
 
+  // LANDING SCREEN
   if (!hasEntered) {
     return (
       <div className="min-h-screen bg-[#050505] text-white font-mono flex items-center justify-center p-6 cursor-none overflow-hidden">
         <BackgroundGrid />
-        <div className="max-w-xl w-full space-y-8 relative z-10 animate-in fade-in zoom-in duration-1000">
+        <div className="max-w-xl w-full space-y-12 relative z-10 animate-in fade-in zoom-in duration-1000">
+          <div className="space-y-2 border-l border-white/20 pl-6">
+            <p className="text-[10px] font-bold text-white/40 uppercase tracking-[0.4em]">{getGreeting()}</p>
+            <p className="text-3xl font-black italic tracking-tighter uppercase">{time.toLocaleTimeString()}</p>
+          </div>
           <div className="space-y-4">
-            <div className="flex items-center gap-4">
-              <span className="h-[1px] w-12 bg-white/20" />
-              <p className="text-[10px] tracking-[0.5em] text-white/40 uppercase">System_Pattern_v16.2</p>
-            </div>
+            <p className="text-[10px] tracking-[0.5em] text-white/40 uppercase">Initial_Boot_Sequence_v16.5</p>
             <h1 className="text-8xl font-black italic tracking-tighter uppercase leading-[0.8]">ALX.<br/><span className="text-outline text-transparent" style={{ WebkitTextStroke: '1px white' }}>CORE</span></h1>
           </div>
           <button 
             onClick={() => { setHasEntered(true); navigate('home'); }}
-            className="group w-full border border-white/20 p-8 hover:border-white hover:bg-white hover:text-black transition-all duration-700 relative overflow-hidden"
+            className="group w-full border border-white/20 p-8 hover:border-white hover:bg-white hover:text-black transition-all duration-700 relative"
           >
             <div className="relative z-10 flex justify-between items-center font-black uppercase tracking-[0.3em] text-xs">
               <span>Initialize_Pattern_Library</span>
@@ -121,6 +138,7 @@ export default function App() {
         </div>
       </div>
 
+      {/* NAV SIDEBAR STYLE */}
       <header className="fixed top-10 w-full z-50 flex justify-between items-end px-6 md:px-12 py-8 pointer-events-none">
         <button onClick={() => navigate('home')} className="text-4xl font-black italic tracking-tighter pointer-events-auto">ALX.</button>
         <nav className="flex flex-col items-end gap-2 pointer-events-auto">
@@ -137,6 +155,7 @@ export default function App() {
 
       <main className="relative z-10 pt-48 pb-32 px-6 md:px-12 max-w-7xl mx-auto">
         
+        {/* PAGE: HOME */}
         {page === 'home' && (
           <div className="space-y-32 animate-in fade-in slide-in-from-bottom-8 duration-1000">
             <div className="space-y-6">
@@ -148,55 +167,84 @@ export default function App() {
                 <span className="text-outline text-transparent">WONDWOSSEN</span>
               </h1>
             </div>
-            
             <div className="grid md:grid-cols-2 gap-16 items-start">
               <div className="space-y-8 border-l border-white/20 pl-8">
                 <p className="text-2xl font-light italic text-white/70 leading-relaxed">
-                  Building modular design systems and high-fidelity interfaces that bridge the gap between Figma patterns and production code.
+                  Building modular design systems and high-fidelity interfaces.
                 </p>
                 <div className="flex gap-4">
                   <div className="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-[9px] font-bold tracking-widest uppercase">Variable-Based</div>
-                  <div className="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-[9px] font-bold tracking-widest uppercase">Tokenized-UI</div>
+                  <div className="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-[9px] font-bold tracking-widest uppercase">Brutalist-UX</div>
                 </div>
               </div>
               <div className="relative aspect-square border border-white/10 p-4">
                 <Corners />
-                <img src="https://avatars.githubusercontent.com/u/198081098?v=4" className="w-full h-full object-cover grayscale contrast-125 opacity-80" alt="Alex" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#050505] to-transparent opacity-60" />
+                <img src="https://avatars.githubusercontent.com/u/198081098?v=4" className="w-full h-full object-cover grayscale contrast-125" alt="Alex" />
               </div>
             </div>
           </div>
         )}
 
-        {page === 'code' && (
-          <div className="space-y-16 animate-in fade-in duration-700">
-            <div className="flex justify-between items-end border-b border-white/10 pb-8">
-              <h2 className="text-7xl font-black italic uppercase tracking-tighter">Library</h2>
-              <span className="text-[10px] font-bold opacity-30 tracking-[0.4em] uppercase">Total_Modules: {repos.length}</span>
+        {/* PAGE: ABOUT */}
+        {page === 'about' && (
+          <div className="max-w-4xl space-y-16 animate-in slide-in-from-left duration-700">
+            <h2 className="text-7xl font-black italic uppercase tracking-tighter">Profile</h2>
+            <div className="space-y-12 text-3xl font-light italic opacity-80 leading-snug border-l-[10px] border-white/10 pl-10">
+              <p>I operate at the intersection of Structural Logic and Digital Optics.</p>
+              <p>Based in Toronto, I use React to build interfaces that feel like physical machinery, and a Nikon D3200 to document the architecture that inspires them.</p>
             </div>
+          </div>
+        )}
+
+        {/* PAGE: SKILLS */}
+        {page === 'skills' && (
+          <div className="space-y-16 animate-in fade-in duration-500">
+            <h2 className="text-7xl font-black italic uppercase tracking-tighter">Capability</h2>
+            <div className="grid md:grid-cols-3 gap-0 border border-white/10">
+              {[
+                { title: 'Code', items: ['React.js', 'Tailwind', 'Vite', 'Node.js'], icon: <Terminal /> },
+                { title: 'Optics', items: ['Nikon D3200', '55mm Prime', 'Manual Controls'], icon: <Camera /> },
+                { title: 'Systems', items: ['Brutalism', 'Figma Tokens', 'Architecture'], icon: <Cpu /> }
+              ].map((s, i) => (
+                <div key={i} className="p-16 border-r border-white/10 last:border-r-0 group hover:bg-white transition-all duration-500">
+                  <div className="mb-10 text-white/40 group-hover:text-black transition-colors">{s.icon}</div>
+                  <h3 className="text-3xl font-black uppercase mb-10 italic group-hover:text-black">{s.title}</h3>
+                  <div className="space-y-4">
+                    {s.items.map(item => (
+                      <div key={item} className="text-xs font-bold uppercase tracking-widest opacity-40 group-hover:opacity-100 group-hover:text-black/60">{item}</div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* PAGE: CODE */}
+        {page === 'code' && (
+          <div className="space-y-16 animate-in slide-in-from-bottom duration-700">
+            <h2 className="text-7xl font-black italic uppercase tracking-tighter">Library</h2>
             <div className="grid md:grid-cols-2 gap-6">
               {loading ? <Loader2 className="animate-spin text-white/20" /> : repos.map((repo) => (
                 <button key={repo.id} onClick={() => setSelectedProject(repo)} 
-                  className="group relative p-10 border border-white/10 bg-white/[0.02] hover:bg-white hover:text-black transition-all duration-500 text-left">
+                  className="group relative p-12 border border-white/10 bg-white/[0.02] hover:bg-white hover:text-black transition-all duration-500 text-left">
+                  <Corners />
                   <div className="flex justify-between items-start mb-12">
                     <span className="text-[9px] font-bold tracking-[0.3em] uppercase opacity-40 group-hover:text-black/40">Token_ID: {repo.id.toString().slice(-4)}</span>
-                    <GitCommit size={14} className="opacity-20 group-hover:opacity-100" />
+                    <Database size={14} className="opacity-20 group-hover:opacity-100" />
                   </div>
-                  <h3 className="text-3xl font-black uppercase italic tracking-tighter mb-2">{repo.name}</h3>
-                  <div className="h-[1px] w-full bg-white/10 group-hover:bg-black/10 my-6" />
-                  <p className="text-[10px] font-bold uppercase tracking-widest group-hover:text-black/60">{repo.language || 'JSON'} // v1.0.0</p>
+                  <h3 className="text-4xl font-black uppercase italic tracking-tighter mb-4">{repo.name}</h3>
+                  <div className="text-[10px] font-bold uppercase tracking-widest group-hover:text-black/60">{repo.language || 'JSON'} // v1.0.0</div>
                 </button>
               ))}
             </div>
           </div>
         )}
 
+        {/* PAGE: PHOTOGRAPHY */}
         {page === 'photography' && (
           <div className="space-y-16 animate-in zoom-in-95 duration-700">
-             <div className="flex justify-between items-end border-b border-white/10 pb-8">
-              <h2 className="text-7xl font-black italic uppercase tracking-tighter">Optics</h2>
-              <span className="text-[10px] font-bold opacity-30 tracking-[0.4em] uppercase">Capture_Mode: Architecture</span>
-            </div>
+            <h2 className="text-7xl font-black italic uppercase tracking-tighter">Optics</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
                 "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005836/IMG_0649_jmyszm.jpg",
@@ -207,30 +255,46 @@ export default function App() {
                 "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005829/DSC00052_qngaw6.jpg"
               ].map((url, i) => (
                 <div key={i} className="group relative aspect-[4/5] border border-white/10 bg-black overflow-hidden">
-                  <img src={url} className="w-full h-full object-cover grayscale brightness-75 group-hover:grayscale-0 group-hover:brightness-100 group-hover:scale-105 transition-all duration-1000" alt="Capture" />
-                  <div className="absolute top-4 left-4 text-[8px] font-bold uppercase tracking-widest bg-black/60 px-2 py-1 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity">Lens: 55mm_Prime</div>
+                  <img src={url} className="w-full h-full object-cover grayscale brightness-75 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-1000" alt="Capture" />
                 </div>
               ))}
             </div>
           </div>
         )}
 
-        {/* Other pages updated with same minimal border/variable styling */}
+        {/* PAGE: CONTACT */}
+        {page === 'contact' && (
+          <div className="max-w-4xl mx-auto space-y-20 py-10 animate-in slide-in-from-bottom duration-500">
+            <h2 className="text-[15vw] font-black italic uppercase tracking-tighter leading-none text-center underline decoration-8">Sync</h2>
+            <div className="grid gap-6">
+              {[
+                { platform: 'Email', handle: 'alxgraphy@icloud.com', url: 'mailto:alxgraphy@icloud.com', icon: <Mail /> },
+                { platform: 'GitHub', handle: '@alxgraphy', url: 'https://github.com/alxgraphy', icon: <Github /> },
+                { platform: 'Instagram', handle: '@alexedgraphy', url: 'https://instagram.com/alexedgraphy', icon: <Instagram /> }
+              ].map((item, i) => (
+                <a key={i} href={item.url} target="_blank" rel="noreferrer" className="p-14 border border-white/10 flex justify-between items-center group hover:bg-white hover:text-black transition-all">
+                  <p className="text-4xl md:text-5xl font-black italic tracking-tighter">{item.handle}</p>
+                  <ArrowRight size={48} className="group-hover:rotate-45 transition-transform" />
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+
       </main>
 
       {/* MODAL */}
       {selectedProject && (
-        <div className="fixed inset-0 z-[100] bg-[#050505]/95 backdrop-blur-xl flex items-center justify-center p-6 animate-in fade-in duration-300">
+        <div className="fixed inset-0 z-[100] bg-[#050505]/95 backdrop-blur-xl flex items-center justify-center p-6">
           <div className="relative w-full max-w-2xl border border-white/10 bg-black p-12">
             <Corners />
-            <button onClick={() => setSelectedProject(null)} className="absolute top-8 right-8 text-white/40 hover:text-white hover:rotate-90 transition-all"><X size={20}/></button>
+            <button onClick={() => setSelectedProject(null)} className="absolute top-8 right-8 text-white/40 hover:text-white transition-all"><X size={20}/></button>
             <div className="space-y-8">
-              <span className="text-[10px] font-bold tracking-[0.5em] text-white/30 uppercase">Component_Inspect</span>
               <h2 className="text-5xl font-black italic uppercase tracking-tighter">{selectedProject.name}</h2>
-              <p className="text-xl font-light italic text-white/60">{selectedProject.description || "Detailed documentation for this module is restricted to internal team access."}</p>
+              <p className="text-xl font-light italic text-white/60">{selectedProject.description || "Component metadata restricted."}</p>
               <a href={selectedProject.html_url} target="_blank" rel="noreferrer" className="flex items-center justify-between border border-white/20 px-8 py-5 hover:bg-white hover:text-black transition-all group">
-                <span className="font-bold uppercase text-[10px] tracking-widest">Open_Source_Repo</span>
-                <ExternalLink size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                <span className="font-bold uppercase text-[10px] tracking-widest">Access_Module</span>
+                <ExternalLink size={16} />
               </a>
             </div>
           </div>
