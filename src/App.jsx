@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Moon, Sun, Camera, Code, Terminal, Layers, ArrowRight, 
+  Camera, Code, Terminal, Layers, ArrowRight, 
   MapPin, ExternalLink, Loader2, Target, X,
   Instagram, Github, Mail, Activity, Globe, GitCommit, Clock
 } from 'lucide-react';
@@ -30,20 +30,19 @@ const CypherText = ({ text, className }) => {
 
 export default function App() {
   const [page, setPage] = useState('home');
-  const [theme, setTheme] = useState('dark');
   const [repos, setRepos] = useState([]);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-  // DATA FETCHING
+  // CONSTANT DARK THEME VALUES
+  const t = { bg: 'bg-black', text: 'text-white', border: 'border-white', panel: 'bg-[#0a0a0a]' };
+
   useEffect(() => {
-    // Fetch Projects
     fetch('https://api.github.com/users/alxgraphy/repos?sort=updated&per_page=10')
       .then(res => res.json())
       .then(data => setRepos(Array.isArray(data) ? data : []));
 
-    // Fetch Live GitHub Activity (Push/Pull)
     fetch('https://api.github.com/users/alxgraphy/events/public')
       .then(res => res.json())
       .then(data => {
@@ -68,10 +67,6 @@ export default function App() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  const t = theme === 'dark' 
-    ? { bg: 'bg-black', text: 'text-white', border: 'border-white', panel: 'bg-[#0a0a0a]' }
-    : { bg: 'bg-white', text: 'text-black', border: 'border-black', panel: 'bg-[#f5f5f5]' };
-
   const Corners = () => (
     <>
       <div className={`absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 ${t.border}`} />
@@ -82,7 +77,7 @@ export default function App() {
   );
 
   return (
-    <div className={`min-h-screen ${t.bg} ${t.text} font-mono transition-colors duration-500 overflow-x-hidden cursor-none`}>
+    <div className={`min-h-screen ${t.bg} ${t.text} font-mono overflow-x-hidden cursor-none`}>
       
       <style>{`
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
@@ -90,15 +85,15 @@ export default function App() {
       `}</style>
 
       {/* CURSOR */}
-      <div className="fixed top-0 left-0 w-8 h-8 border border-current rounded-full pointer-events-none z-[9999] mix-blend-difference flex items-center justify-center transition-transform duration-75 ease-out"
+      <div className="fixed top-0 left-0 w-8 h-8 border border-white rounded-full pointer-events-none z-[9999] mix-blend-difference flex items-center justify-center transition-transform duration-75 ease-out"
         style={{ transform: `translate(${mousePos.x - 16}px, ${mousePos.y - 16}px)` }}>
-        <div className="w-1 h-1 bg-current animate-pulse" />
+        <div className="w-1 h-1 bg-white animate-pulse" />
       </div>
 
       {/* TOP GITHUB ACTIVITY BAR */}
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-9 z-[60] bg-black border-x border-b border-white overflow-hidden hidden sm:block">
         <div className="animate-marquee whitespace-nowrap flex gap-12 items-center h-full text-white px-4">
-          {(events.length > 0 ? [...events, ...events] : ["INITIALIZING_LIVE_DATA_STREAM...", "CONNECTING_TO_ALX_NODE..."]).map((log, i) => (
+          {(events.length > 0 ? [...events, ...events] : ["CONNECTING_TO_ALX_NODE..."]).map((log, i) => (
             <span key={i} className="text-[8px] font-black uppercase tracking-[0.2em] flex items-center gap-3">
               <div className="w-1 h-1 bg-green-500 animate-pulse" />
               {log}
@@ -113,9 +108,6 @@ export default function App() {
           {['about', 'skills', 'code', 'photography', 'contact'].map(item => (
             <button key={item} onClick={() => setPage(item)} className={`hover:line-through ${page === item ? 'underline decoration-2 underline-offset-4' : ''}`}>{item}</button>
           ))}
-          <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} className={`ml-4 p-2 border ${t.border} hover:invert transition-all`}>
-            {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
-          </button>
         </nav>
       </header>
 
@@ -126,13 +118,13 @@ export default function App() {
           <div className="space-y-24 animate-in fade-in duration-1000">
             <div className="grid lg:grid-cols-12 gap-12 items-center">
               <div className="lg:col-span-8 space-y-10">
-                <div className="inline-block px-3 py-1 border border-current text-[10px] font-bold uppercase tracking-widest flex items-center gap-2">
-                  <Activity size={12} className="animate-pulse" /> SYSTEM_ACTIVE // TORONTO_CA
+                <div className="inline-block px-3 py-1 border border-white text-[10px] font-bold uppercase tracking-widest flex items-center gap-2">
+                  <Activity size={12} className="animate-pulse text-green-500" /> SYSTEM_ACTIVE // TORONTO_CA
                 </div>
                 <h1 className="text-7xl md:text-[10vw] font-black leading-[0.85] tracking-tighter uppercase italic">
-                  ALEXANDER<br/><span className="text-transparent" style={{ WebkitTextStroke: `1px ${theme === 'dark' ? 'white' : 'black'}` }}>WONDWOSSEN</span>
+                  ALEXANDER<br/><span className="text-transparent" style={{ WebkitTextStroke: '1px white' }}>WONDWOSSEN</span>
                 </h1>
-                <p className="text-xl md:text-3xl font-light max-w-2xl opacity-70 italic border-l-4 border-current pl-6">Digital systems built with architectural precision and high-performance optics.</p>
+                <p className="text-xl md:text-3xl font-light max-w-2xl opacity-70 italic border-l-4 border-white pl-6">Digital systems built with architectural precision and high-performance optics.</p>
               </div>
               <div className="lg:col-span-4 relative group">
                 <div className={`p-4 border-2 ${t.border} transition-transform duration-500 group-hover:-translate-y-4`}>
@@ -149,7 +141,7 @@ export default function App() {
           <div className="grid lg:grid-cols-12 gap-16 animate-in slide-in-from-left duration-700">
             <div className="lg:col-span-8 space-y-12">
               <h2 className="text-8xl font-black italic uppercase tracking-tighter"><CypherText text="Profile" /></h2>
-              <div className="space-y-8 text-2xl md:text-3xl font-light italic leading-snug opacity-80 border-l-[10px] border-current pl-10">
+              <div className="space-y-8 text-2xl md:text-3xl font-light italic leading-snug opacity-80 border-l-[10px] border-white pl-10">
                 <p>I operate at the intersection of Structural Logic and Digital Optics.</p>
                 <p>Based in Toronto, I use React to build interfaces that feel like physical machinery, and a Nikon D3200 to document the architecture that inspires them.</p>
               </div>
@@ -161,13 +153,13 @@ export default function App() {
         {page === 'skills' && (
           <div className="space-y-12 animate-in fade-in duration-500">
             <h2 className="text-8xl font-black italic uppercase tracking-tighter"><CypherText text="Capability" /></h2>
-            <div className="grid md:grid-cols-3 gap-0 border-2 border-current">
+            <div className="grid md:grid-cols-3 gap-0 border-2 border-white">
               {[
                 { title: 'Code', items: ['React.js', 'Tailwind', 'Vite', 'Node.js'], icon: <Terminal /> },
                 { title: 'Optics', items: ['Nikon D3200', '55mm Prime', 'Manual Controls'], icon: <Camera /> },
                 { title: 'Design', items: ['Brutalism', 'Figma', 'Geometry'], icon: <Layers /> }
               ].map((s, i) => (
-                <div key={i} className={`p-16 border-r-2 last:border-r-0 ${t.border} group hover:bg-current transition-all duration-300`}>
+                <div key={i} className="p-16 border-r-2 last:border-r-0 border-white group hover:bg-white transition-all duration-300">
                   <h3 className="text-3xl font-black uppercase mb-10 italic group-hover:text-black">{s.title}</h3>
                   <div className="space-y-4">
                     {s.items.map(item => (
@@ -185,12 +177,12 @@ export default function App() {
         {/* CODE */}
         {page === 'code' && (
           <div className="grid md:grid-cols-2 gap-8 animate-in slide-in-from-right duration-500">
-             {loading ? <Loader2 className="animate-spin mx-auto col-span-2" size={48} /> : 
+             {loading ? <Loader2 className="animate-spin mx-auto col-span-2 text-white" size={48} /> : 
                 repos.map((repo) => (
                   <button key={repo.id} onClick={() => window.open(repo.html_url, '_blank')} 
-                     className={`group text-left p-12 border-2 ${t.border} hover:bg-white hover:text-black transition-all duration-500 relative`}>
+                     className="group text-left p-12 border-2 border-white hover:bg-white hover:text-black transition-all duration-500 relative">
                     <Corners />
-                    <h3 className="text-4xl font-black uppercase italic tracking-tighter mb-4">{repo.name}</h3>
+                    <h3 className="text-4xl font-black uppercase italic tracking-tighter mb-4 group-hover:line-through">{repo.name}</h3>
                     <p className="opacity-50 line-clamp-2 italic mb-6">{repo.description || 'System data redacted.'}</p>
                     <div className="flex justify-between items-center">
                        <span className="text-[10px] font-black border border-current px-3 py-1 uppercase">{repo.language || 'JS'}</span>
@@ -215,7 +207,7 @@ export default function App() {
                 "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005829/DSC00041_ufimhg.jpg",
                 "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005829/DSC00052_qngaw6.jpg"
               ].map((url, i) => (
-                <div key={i} className="relative group border-2 border-current overflow-hidden bg-black">
+                <div key={i} className="relative group border-2 border-white overflow-hidden bg-black">
                   <img src={url} className="w-full grayscale brightness-75 group-hover:grayscale-0 transition-all duration-1000 ease-in-out" alt="Work" />
                 </div>
               ))}
@@ -233,7 +225,7 @@ export default function App() {
                 { platform: 'Instagram', handle: '@alexedgraphy', url: 'https://instagram.com/alexedgraphy', icon: <Instagram /> },
                 { platform: 'Email', handle: 'alxgraphy@icloud.com', url: 'mailto:alxgraphy@icloud.com', icon: <Mail /> }
               ].map((item, i) => (
-                <a key={i} href={item.url} target="_blank" className={`p-14 border-2 ${t.border} flex justify-between items-center group hover:bg-white hover:text-black transition-all`}>
+                <a key={i} href={item.url} target="_blank" rel="noreferrer" className="p-14 border-2 border-white flex justify-between items-center group hover:bg-white hover:text-black transition-all">
                   <p className="text-4xl md:text-5xl font-black italic tracking-tighter">{item.handle}</p>
                   <ArrowRight size={48} className="group-hover:rotate-45 transition-transform" />
                 </a>
