@@ -18,6 +18,10 @@ export default function App() {
   const [photoFilter, setPhotoFilter] = useState('all');
   const [imagesLoaded, setImagesLoaded] = useState({});
   const [scrolled, setScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [soundEnabled, setSoundEnabled] = useState(false);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setIsMobile('ontouchstart' in window);
@@ -73,7 +77,32 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const handleMouseMove = (e) => setMousePos({ x: e.clientX, y: e.clientY });
+    const handleMouseMove = (e) => {
+      const interactives = document.querySelectorAll('button, a');
+      let closest = null;
+      let minDist = 80;
+      
+      interactives.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const dist = Math.hypot(e.clientX - centerX, e.clientY - centerY);
+        
+        if (dist < minDist) {
+          minDist = dist;
+          closest = { x: centerX, y: centerY };
+        }
+      });
+      
+      if (closest) {
+        const pullX = (closest.x - e.clientX) * 0.15;
+        const pullY = (closest.y - e.clientY) * 0.15;
+        setMousePos({ x: e.clientX + pullX, y: e.clientY + pullY });
+      } else {
+        setMousePos({ x: e.clientX, y: e.clientY });
+      }
+    };
+    
     if (!isMobile) {
       window.addEventListener('mousemove', handleMouseMove);
       return () => window.removeEventListener('mousemove', handleMouseMove);
@@ -94,10 +123,41 @@ export default function App() {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
+      const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (window.scrollY / windowHeight) * 100;
+      setScrollProgress(scrolled);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLoadingProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          setTimeout(() => setIsLoading(false), 500);
+          return 100;
+        }
+        return prev + Math.random() * 15;
+      });
+    }, 100);
+    return () => clearInterval(interval);
+  }, []);
+
+  const playSound = (type) => {
+    if (!soundEnabled) return;
+    const audio = new Audio();
+    if (type === 'click') audio.src = 'data:audio/wav;base64,UklGRhwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQA=';
+    if (type === 'hover') audio.src = 'data:audio/wav;base64,UklGRhwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQA=';
+    audio.volume = 0.1;
+    audio.play().catch(() => {});
+  };
+
+  const handleNavigate = (path) => {
+    playSound('click');
+    navigate(path);
+  };
 
   const Corners = () => (
     <>
@@ -271,6 +331,20 @@ export default function App() {
     });
   };
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#050505] text-white font-mono flex items-center justify-center">
+        <div className="text-center space-y-8">
+          <div className="text-[10px] font-bold tracking-[0.3em] uppercase opacity-40">INITIALIZING_SYSTEM</div>
+          <div className="text-6xl font-black italic tracking-tighter">{Math.floor(loadingProgress)}%</div>
+          <div className="w-64 h-1 bg-white/10 mx-auto overflow-hidden">
+            <div className="h-full bg-white transition-all duration-300" style={{ width: `${loadingProgress}%` }} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (!hasEntered) {
     return (
       <div className="min-h-screen bg-[#050505] text-white font-mono flex items-center justify-center p-6 overflow-hidden" style={isMobile ? {} : { cursor: 'none' }}>
@@ -283,7 +357,7 @@ export default function App() {
           <div className="space-y-4">
             <h1 className="text-8xl font-black italic tracking-tighter uppercase leading-[0.8]">ALX.<br/><span className="text-outline text-transparent" style={{ WebkitTextStroke: '1px white' }}>CORE</span></h1>
           </div>
-          <button onClick={() => { setHasEntered(true); navigate('home'); }} className="group w-full border border-white/20 p-8 hover:bg-white hover:text-black transition-all duration-700">
+          <button onClick={() => { setHasEntered(true); handleNavigate('home'); }} className="group w-full border border-white/20 p-8 hover:bg-white hover:text-black transition-all duration-700 active:scale-95">
             <div className="flex justify-between items-center font-black uppercase tracking-[0.3em] text-xs">
               <span>Initialize_Pattern_Library</span>
               <ArrowRight className="group-hover:translate-x-2 transition-transform" />
@@ -306,6 +380,22 @@ export default function App() {
         <meta name="twitter:card" content="summary_large_image" />
       </head>
       <BackgroundGrid />
+      
+      {/* Scroll Progress Bar */}
+      <div className="fixed top-0 left-0 right-0 h-1 bg-white/10 z-[9999]">
+        <div className="h-full bg-white transition-all duration-150" style={{ width: `${scrollProgress}%` }} />
+      </div>
+
+      {/* Sound Toggle */}
+      <button 
+        onClick={() => setSoundEnabled(!soundEnabled)}
+        className="fixed bottom-8 right-8 z-[60] p-4 border border-white/20 bg-black hover:bg-white hover:text-black transition-all active:scale-90"
+        aria-label="Toggle sound">
+        <div className="text-[8px] font-bold tracking-widest uppercase">
+          {soundEnabled ? 'SOUND_ON' : 'SOUND_OFF'}
+        </div>
+      </button>
+
       <style>{`
         .text-outline { -webkit-text-stroke: 1px rgba(255,255,255,0.3); }
       `}</style>
@@ -320,12 +410,12 @@ export default function App() {
       <header className={`fixed top-0 w-full z-50 flex justify-between items-end px-6 md:px-12 py-12 pointer-events-none transition-transform duration-300 ${scrolled ? '-translate-y-full' : 'translate-y-0'}`}>
         <div className="relative pointer-events-auto">
           <Label text="SYS_ID: 001" />
-          <button onClick={() => navigate('home')} className="text-4xl font-black italic tracking-tighter hover:opacity-60 transition-opacity">ALX.</button>
+          <button onClick={() => handleNavigate('home')} onMouseEnter={() => playSound('hover')} className="text-4xl font-black italic tracking-tighter hover:opacity-60 transition-all active:scale-95">ALX.</button>
         </div>
         <nav className="flex flex-col items-end gap-2 pointer-events-auto relative">
           <Label text="INDEX_MAP" className="left-auto right-0" />
           {['about', 'education', 'skills', 'code', 'photography', 'contact'].map((item, idx) => (
-            <button key={item} onClick={() => navigate(item)} className="group flex items-center gap-4">
+            <button key={item} onClick={() => handleNavigate(item)} onMouseEnter={() => playSound('hover')} className="group flex items-center gap-4 transition-all active:scale-95">
               <span className={`text-[9px] font-bold uppercase tracking-widest transition-all ${page === item ? 'text-white' : 'text-white/30 group-hover:text-white'}`}>
                 {idx.toString().padStart(2, '0')} // {item}
               </span>
@@ -335,11 +425,12 @@ export default function App() {
         </nav>
       </header>
 
-      <main className="relative z-10 pt-48 pb-32 px-6 md:px-12 max-w-7xl mx-auto">
+      <main className="relative z-10 pt-48 pb-32 px-6 md:px-12 max-w-7xl mx-auto transition-opacity duration-500">
         
         {page === 'home' && (
           <div className="space-y-16 animate-in fade-in slide-in-from-bottom-8 duration-1000 flex flex-col items-center text-center">
-            <div className="relative w-80 h-80 md:w-[32rem] md:h-[32rem] border border-white/10 p-2 overflow-hidden group">
+            <div className="relative w-80 h-80 md:w-[32rem] md:h-[32rem] border border-white/10 p-2 overflow-hidden group"
+                 style={{ transform: `translateY(${scrollProgress * 0.3}px)` }}>
               <Label text="IMG_ASSET_MAIN" />
               <Corners />
               <img 
@@ -534,8 +625,8 @@ export default function App() {
             <div className="flex items-center justify-between gap-4 flex-wrap">
               <div className="flex gap-2 flex-wrap">
                 {categories.map(cat => (
-                  <button key={cat} onClick={() => setPhotoFilter(cat)}
-                    className={`px-4 py-2 text-[10px] font-bold uppercase tracking-widest border transition-all ${
+                  <button key={cat} onClick={() => { setPhotoFilter(cat); playSound('click'); }} onMouseEnter={() => playSound('hover')}
+                    className={`px-4 py-2 text-[10px] font-bold uppercase tracking-widest border transition-all active:scale-95 ${
                       photoFilter === cat 
                         ? 'bg-white text-black border-white' 
                         : 'border-white/20 text-white/60 hover:border-white/60'
@@ -545,8 +636,8 @@ export default function App() {
                   </button>
                 ))}
               </div>
-              <button onClick={downloadAllPhotos}
-                className="px-6 py-2 text-[10px] font-bold uppercase tracking-widest border border-white/20 hover:bg-white hover:text-black transition-all flex items-center gap-2">
+              <button onClick={downloadAllPhotos} onMouseEnter={() => playSound('hover')}
+                className="px-6 py-2 text-[10px] font-bold uppercase tracking-widest border border-white/20 hover:bg-white hover:text-black transition-all flex items-center gap-2 active:scale-95">
                 <Download size={12} /> Download All
               </button>
             </div>
