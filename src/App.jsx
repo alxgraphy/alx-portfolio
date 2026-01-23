@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Camera, Code, Terminal, Layers, ArrowRight, 
-  MapPin, ExternalLink, Loader2, Target, X,
-  Instagram, Github, Mail, Activity, Globe, GitCommit, Clock
+  ExternalLink, Loader2, X, Activity, Globe, GitCommit, Clock, BarChart3, Mail, Github, Instagram
 } from 'lucide-react';
 
 /* --- CYPHER EFFECT --- */
@@ -29,20 +28,21 @@ const CypherText = ({ text, className }) => {
 };
 
 export default function App() {
+  const [hasEntered, setHasEntered] = useState(false);
   const [page, setPage] = useState('home');
   const [repos, setRepos] = useState([]);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedProject, setSelectedProject] = useState(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-  // CONSTANT DARK THEME VALUES
-  const t = { bg: 'bg-black', text: 'text-white', border: 'border-white', panel: 'bg-[#0a0a0a]' };
-
   useEffect(() => {
+    // FETCH PROJECTS
     fetch('https://api.github.com/users/alxgraphy/repos?sort=updated&per_page=10')
       .then(res => res.json())
       .then(data => setRepos(Array.isArray(data) ? data : []));
 
+    // FETCH LIVE ACTIVITY
     fetch('https://api.github.com/users/alxgraphy/events/public')
       .then(res => res.json())
       .then(data => {
@@ -69,16 +69,49 @@ export default function App() {
 
   const Corners = () => (
     <>
-      <div className={`absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 ${t.border}`} />
-      <div className={`absolute -top-1 -right-1 w-4 h-4 border-t-2 border-r-2 ${t.border}`} />
-      <div className={`absolute -bottom-1 -left-1 w-4 h-4 border-b-2 border-l-2 ${t.border}`} />
-      <div className={`absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 ${t.border}`} />
+      <div className="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-white" />
+      <div className="absolute -top-1 -right-1 w-4 h-4 border-t-2 border-r-2 border-white" />
+      <div className="absolute -bottom-1 -left-1 w-4 h-4 border-b-2 border-l-2 border-white" />
+      <div className="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-white" />
     </>
   );
 
+  /* --- LANDING / BOOT SCREEN --- */
+  if (!hasEntered) {
+    return (
+      <div className="min-h-screen bg-black text-white font-mono flex items-center justify-center p-6 overflow-hidden cursor-none">
+        {/* CURSOR */}
+        <div className="fixed top-0 left-0 w-8 h-8 border border-white rounded-full pointer-events-none z-[9999] mix-blend-difference flex items-center justify-center"
+          style={{ transform: `translate(${mousePos.x - 16}px, ${mousePos.y - 16}px)` }}>
+          <div className="w-1 h-1 bg-white animate-pulse" />
+        </div>
+        
+        <div className="max-w-xl w-full space-y-8 animate-in fade-in zoom-in duration-1000">
+          <div className="space-y-2">
+            <p className="text-[10px] tracking-[0.5em] text-white/40 uppercase">Initial_Boot_Sequence_v16.0</p>
+            <h1 className="text-6xl font-black italic tracking-tighter uppercase leading-none">ALX.<br/>CORE</h1>
+          </div>
+          <div className="space-y-4 border-l border-white/20 pl-6 py-2">
+            <p className="text-xs opacity-60">LOCATION: TORONTO_NODE // 43.6532° N</p>
+            <p className="text-xs opacity-60">ENGINE: REACT_VITE // NIKON_55MM</p>
+            <p className="text-xs text-green-500 animate-pulse">STATUS: READY_FOR_UPLINK</p>
+          </div>
+          <button 
+            onClick={() => setHasEntered(true)}
+            className="group relative w-full border border-white p-6 hover:bg-white hover:text-black transition-all duration-500 overflow-hidden"
+          >
+            <div className="relative z-10 flex justify-between items-center font-black uppercase tracking-widest text-sm">
+              Initialize_System
+              <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+            </div>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className={`min-h-screen ${t.bg} ${t.text} font-mono overflow-x-hidden cursor-none`}>
-      
+    <div className="min-h-screen bg-black text-white font-mono overflow-x-hidden cursor-none">
       <style>{`
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         .animate-marquee { display: flex; animation: marquee 30s linear infinite; }
@@ -102,7 +135,7 @@ export default function App() {
         </div>
       </div>
 
-      <header className={`fixed top-0 w-full z-50 flex justify-between items-center px-6 md:px-12 py-10 backdrop-blur-md border-b ${t.border}`}>
+      <header className="fixed top-0 w-full z-50 flex justify-between items-center px-6 md:px-12 py-10 backdrop-blur-md border-b border-white">
         <button onClick={() => setPage('home')} className="text-4xl font-black italic tracking-tighter">ALX.</button>
         <nav className="flex items-center gap-6 text-[10px] font-black uppercase tracking-[0.3em]">
           {['about', 'skills', 'code', 'photography', 'contact'].map(item => (
@@ -111,9 +144,40 @@ export default function App() {
         </nav>
       </header>
 
+      {/* PROJECT MODAL (SCHEMATIC VIEW) */}
+      {selectedProject && (
+        <div className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center p-6">
+          <div className="relative w-full max-w-2xl border-2 border-white bg-black p-8 md:p-12 animate-in zoom-in duration-300">
+            <Corners />
+            <button onClick={() => setSelectedProject(null)} className="absolute top-6 right-6 hover:rotate-90 transition-transform"><X size={24}/></button>
+            <div className="space-y-8">
+              <div className="space-y-2">
+                <span className="text-[10px] font-black text-green-500 uppercase tracking-[0.4em]">Schematic_View</span>
+                <h2 className="text-5xl font-black italic uppercase tracking-tighter leading-none">{selectedProject.name}</h2>
+              </div>
+              <div className="space-y-4">
+                <h4 className="text-[10px] font-black uppercase tracking-widest opacity-40 border-b border-white/20 pb-1">Technical_Description</h4>
+                <p className="text-lg italic opacity-80 leading-relaxed">{selectedProject.description || "System data currently restricted."}</p>
+              </div>
+              <div className="space-y-4">
+                <h4 className="text-[10px] font-black uppercase tracking-widest opacity-40">Capability_Loadout</h4>
+                <div className="relative w-full h-10 border border-white/20 flex items-center px-4 overflow-hidden">
+                   <div className="absolute left-0 top-0 h-full bg-white opacity-20" style={{ width: '85%' }}></div>
+                   <div className="relative z-10 w-full flex justify-between text-[10px] font-black uppercase italic">
+                      <span>{selectedProject.language || 'JS'} // 85%</span>
+                      <span>SYSTEM_STABLE</span>
+                   </div>
+                </div>
+              </div>
+              <a href={selectedProject.html_url} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-4 bg-white text-black px-8 py-4 font-black uppercase text-xs tracking-widest hover:invert transition-all w-full">
+                Access_Repository <ExternalLink size={16}/>
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+
       <main className="relative z-10 pt-56 pb-32 px-6 md:px-12 max-w-7xl mx-auto">
-        
-        {/* HOME */}
         {page === 'home' && (
           <div className="space-y-24 animate-in fade-in duration-1000">
             <div className="grid lg:grid-cols-12 gap-12 items-center">
@@ -124,10 +188,10 @@ export default function App() {
                 <h1 className="text-7xl md:text-[10vw] font-black leading-[0.85] tracking-tighter uppercase italic">
                   ALEXANDER<br/><span className="text-transparent" style={{ WebkitTextStroke: '1px white' }}>WONDWOSSEN</span>
                 </h1>
-                <p className="text-xl md:text-3xl font-light max-w-2xl opacity-70 italic border-l-4 border-white pl-6">Digital systems built with architectural precision and high-performance optics.</p>
+                <p className="text-xl md:text-3xl font-light max-w-2xl opacity-70 italic border-l-4 border-white pl-6">Building digital environments with architectural precision.</p>
               </div>
               <div className="lg:col-span-4 relative group">
-                <div className={`p-4 border-2 ${t.border} transition-transform duration-500 group-hover:-translate-y-4`}>
+                <div className="p-4 border-2 border-white transition-transform duration-500 group-hover:-translate-y-4">
                   <Corners />
                   <img src="https://avatars.githubusercontent.com/u/198081098?v=4" className="w-full grayscale brightness-110 contrast-125" alt="Alex" />
                 </div>
@@ -136,7 +200,6 @@ export default function App() {
           </div>
         )}
 
-        {/* ABOUT */}
         {page === 'about' && (
           <div className="grid lg:grid-cols-12 gap-16 animate-in slide-in-from-left duration-700">
             <div className="lg:col-span-8 space-y-12">
@@ -149,7 +212,6 @@ export default function App() {
           </div>
         )}
 
-        {/* SKILLS */}
         {page === 'skills' && (
           <div className="space-y-12 animate-in fade-in duration-500">
             <h2 className="text-8xl font-black italic uppercase tracking-tighter"><CypherText text="Capability" /></h2>
@@ -174,27 +236,30 @@ export default function App() {
           </div>
         )}
 
-        {/* CODE */}
         {page === 'code' && (
-          <div className="grid md:grid-cols-2 gap-8 animate-in slide-in-from-right duration-500">
-             {loading ? <Loader2 className="animate-spin mx-auto col-span-2 text-white" size={48} /> : 
+          <div className="space-y-12">
+            <h2 className="text-8xl font-black italic uppercase tracking-tighter underline decoration-4"><CypherText text="Terminal" /></h2>
+            <div className="grid md:grid-cols-2 gap-8 animate-in slide-in-from-bottom duration-500">
+              {loading ? <Loader2 className="animate-spin mx-auto col-span-2" size={48} /> : 
                 repos.map((repo) => (
-                  <button key={repo.id} onClick={() => window.open(repo.html_url, '_blank')} 
-                     className="group text-left p-12 border-2 border-white hover:bg-white hover:text-black transition-all duration-500 relative">
+                  <button key={repo.id} onClick={() => setSelectedProject(repo)} 
+                    className="group text-left p-12 border-2 border-white hover:bg-white hover:text-black transition-all duration-500 relative">
                     <Corners />
-                    <h3 className="text-4xl font-black uppercase italic tracking-tighter mb-4 group-hover:line-through">{repo.name}</h3>
-                    <p className="opacity-50 line-clamp-2 italic mb-6">{repo.description || 'System data redacted.'}</p>
-                    <div className="flex justify-between items-center">
-                       <span className="text-[10px] font-black border border-current px-3 py-1 uppercase">{repo.language || 'JS'}</span>
-                       <ArrowRight size={20} className="group-hover:translate-x-4 transition-transform"/>
+                    <div className="flex justify-between items-start mb-4">
+                      <h3 className="text-4xl font-black uppercase italic tracking-tighter">{repo.name}</h3>
+                      <BarChart3 size={20} className="opacity-20 group-hover:opacity-100" />
+                    </div>
+                    <div className="flex justify-between items-center mt-8">
+                      <span className="text-[10px] font-black border border-current px-3 py-1 uppercase">{repo.language || 'JS'}</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Deconstruct →</span>
                     </div>
                   </button>
                 ))
               }
+            </div>
           </div>
         )}
 
-        {/* PHOTOGRAPHY */}
         {page === 'photography' && (
           <div className="space-y-12 animate-in zoom-in duration-700">
             <h2 className="text-8xl font-black italic uppercase tracking-tighter"><CypherText text="Optics" /></h2>
@@ -215,7 +280,6 @@ export default function App() {
           </div>
         )}
 
-        {/* CONTACT */}
         {page === 'contact' && (
           <div className="max-w-4xl mx-auto space-y-20 py-10 animate-in slide-in-from-bottom duration-500">
             <h2 className="text-[15vw] font-black italic uppercase tracking-tighter leading-none text-center underline decoration-8">Sync</h2>
@@ -233,7 +297,6 @@ export default function App() {
             </div>
           </div>
         )}
-
       </main>
     </div>
   );
