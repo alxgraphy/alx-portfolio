@@ -8,7 +8,6 @@ export default function App() {
   const [hasEntered, setHasEntered] = useState(false);
   const [page, setPage] = useState('home');
   const [repos, setRepos] = useState([]);
-  const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedProject, setSelectedProject] = useState(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -42,18 +41,8 @@ export default function App() {
   useEffect(() => {
     fetch('https://api.github.com/users/alxgraphy/repos?sort=updated&per_page=10')
       .then(res => res.json())
-      .then(data => setRepos(Array.isArray(data) ? data : []));
-
-    fetch('https://api.github.com/users/alxgraphy/events/public')
-      .then(res => res.json())
       .then(data => {
-        if (Array.isArray(data)) {
-          const processed = data
-            .filter(e => ['PushEvent', 'PullRequestEvent'].includes(e.type))
-            .map(event => `${event.type.replace('Event', '').toUpperCase()}: [${event.repo.name.split('/')[1]}]`)
-            .slice(0, 8);
-          setEvents(processed);
-        }
+        setRepos(Array.isArray(data) ? data : []);
         setLoading(false);
       });
   }, []);
@@ -115,8 +104,6 @@ export default function App() {
     <div className="min-h-screen bg-[#050505] text-white font-mono overflow-x-hidden cursor-none selection:bg-white selection:text-black">
       <BackgroundGrid />
       <style>{`
-        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .animate-marquee { display: flex; animation: marquee 30s linear infinite; }
         .text-outline { -webkit-text-stroke: 1px rgba(255,255,255,0.3); }
       `}</style>
 
@@ -126,17 +113,8 @@ export default function App() {
         <div className="w-1 h-1 bg-white" />
       </div>
 
-      {/* SYSTEM TICKER */}
-      <div className="fixed top-0 left-0 w-full h-10 z-[60] bg-black/80 backdrop-blur-xl border-b border-white/10 overflow-hidden">
-        <div className="animate-marquee whitespace-nowrap flex gap-12 items-center h-full px-4 text-[9px] font-bold uppercase tracking-widest text-white/60">
-          {(events.length > 0 ? [...events, ...events] : ["UPLINKING_DATA_STREAM..."]).map((log, i) => (
-            <span key={i} className="flex items-center gap-3"><span className="w-1 h-1 bg-white/20 rounded-full" /> {log}</span>
-          ))}
-        </div>
-      </div>
-
       {/* NAVIGATION ARCHITECTURE */}
-      <header className="fixed top-10 w-full z-50 flex justify-between items-end px-6 md:px-12 py-8 pointer-events-none">
+      <header className="fixed top-0 w-full z-50 flex justify-between items-end px-6 md:px-12 py-12 pointer-events-none">
         <div className="relative pointer-events-auto">
           <Label text="SYS_ID: 001" />
           <button onClick={() => navigate('home')} className="text-4xl font-black italic tracking-tighter hover:opacity-60 transition-opacity">ALX.</button>
@@ -156,7 +134,7 @@ export default function App() {
 
       <main className="relative z-10 pt-48 pb-32 px-6 md:px-12 max-w-7xl mx-auto">
         
-        {/* --- PAGE: HOME (ENLARGED PHOTO) --- */}
+        {/* --- PAGE: HOME (MASSIVE PHOTO) --- */}
         {page === 'home' && (
           <div className="space-y-16 animate-in fade-in slide-in-from-bottom-8 duration-1000 flex flex-col items-center text-center">
             <div className="relative w-80 h-80 md:w-[32rem] md:h-[32rem] border border-white/10 p-2 overflow-hidden group">
@@ -169,7 +147,7 @@ export default function App() {
               />
             </div>
             <div className="space-y-6 relative">
-              <Label text="CORE_IDENT_v19" className="left-1/2 -translate-x-1/2" />
+              <Label text="CORE_IDENT_v19.1" className="left-1/2 -translate-x-1/2" />
               <div className="flex items-center justify-center gap-3 text-[10px] font-bold text-white/40 uppercase tracking-[0.4em]">
                 <Activity size={14} className="text-white" /> {getGreeting()} // {time.toLocaleTimeString()}
               </div>
