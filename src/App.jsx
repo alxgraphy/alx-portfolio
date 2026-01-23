@@ -396,15 +396,17 @@ export default function App() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="group relative border border-white/10 p-8 bg-white/[0.02] hover:bg-white transition-all duration-500">
                   <Corners />
-                  <div className="text-[9px] font-bold tracking-[0.3em] uppercase opacity-40 mb-6 group-hover:text-black/40">CERT_001</div>
-                  <h4 className="text-2xl font-black uppercase italic mb-4 group-hover:text-black">Academic Excellence</h4>
-                  <p className="text-xs uppercase tracking-widest text-white/60 group-hover:text-black/60">Recognition for outstanding performance</p>
+                  <div className="text-[9px] font-bold tracking-[0.3em] uppercase opacity-40 mb-6 group-hover:text-black/40">CERT_c54126</div>
+                  <h4 className="text-2xl font-black uppercase italic mb-4 group-hover:text-black">Canva Essentials</h4>
+                  <p className="text-xs uppercase tracking-widest text-white/60 group-hover:text-black/60 mb-3">1 hour training certification</p>
+                  <p className="text-[9px] tracking-widest text-white/40 group-hover:text-black/40">Issued: October 27, 2024</p>
                 </div>
                 <div className="group relative border border-white/10 p-8 bg-white/[0.02] hover:bg-white transition-all duration-500">
                   <Corners />
-                  <div className="text-[9px] font-bold tracking-[0.3em] uppercase opacity-40 mb-6 group-hover:text-black/40">CERT_002</div>
-                  <h4 className="text-2xl font-black uppercase italic mb-4 group-hover:text-black">Creative Achievement</h4>
-                  <p className="text-xs uppercase tracking-widest text-white/60 group-hover:text-black/60">Photography & digital arts</p>
+                  <div className="text-[9px] font-bold tracking-[0.3em] uppercase opacity-40 mb-6 group-hover:text-black/40">CERT_372de8</div>
+                  <h4 className="text-2xl font-black uppercase italic mb-4 group-hover:text-black">Human-Centered Design</h4>
+                  <p className="text-xs uppercase tracking-widest text-white/60 group-hover:text-black/60 mb-3">Field guide certification</p>
+                  <p className="text-[9px] tracking-widest text-white/40 group-hover:text-black/40">Issued: October 26, 2024</p>
                 </div>
               </div>
             </div>
