@@ -492,31 +492,6 @@ export default function App() {
               <h2 className="text-7xl font-black italic uppercase tracking-tighter">Library</h2>
             </div>
 
-            <div className="space-y-6">
-              <h3 className="text-2xl font-black italic uppercase tracking-tighter text-white/60">Featured Projects</h3>
-              <div className="grid md:grid-cols-2 gap-6 relative">
-                {featuredProjects.map((project) => (
-                  <div key={project.id} 
-                    className="group relative p-12 border border-white/10 bg-white/[0.02] hover:bg-white hover:text-black transition-all duration-500">
-                    <Corners />
-                    <div className="flex justify-between items-start mb-12">
-                      <span className="text-[9px] font-bold tracking-[0.3em] uppercase opacity-40 group-hover:text-black/40">FEATURED</span>
-                      <Database size={14} className="opacity-20 group-hover:opacity-100" />
-                    </div>
-                    <h3 className="text-3xl font-black uppercase italic tracking-tighter mb-4">{project.name}</h3>
-                    <p className="text-xs opacity-60 group-hover:text-black/60 mb-6">{project.description}</p>
-                    <div className="text-[10px] font-bold uppercase tracking-widest group-hover:text-black/60 mb-6">
-                      {project.language}
-                    </div>
-                    <a href={project.liveUrl} target="_blank" rel="noreferrer" 
-                       className="inline-flex items-center gap-2 border border-white/20 px-6 py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all">
-                      View Live <ExternalLink size={12} />
-                    </a>
-                  </div>
-                ))}
-              </div>
-            </div>
-
             {loading ? (
               <div className="flex items-center gap-4 text-white/40">
                 <Loader2 className="animate-spin" /> Loading repositories...
@@ -526,10 +501,8 @@ export default function App() {
                 <p className="text-xs uppercase tracking-widest">Error loading repositories: {error}</p>
               </div>
             ) : (
-              <div className="space-y-6">
-                <h3 className="text-2xl font-black italic uppercase tracking-tighter text-white/60">All Repositories</h3>
-                <div className="grid md:grid-cols-2 gap-6 relative">
-                  <Label text="REPO_FETCH_JSON" />
+              <div className="grid md:grid-cols-2 gap-6 relative">
+                <Label text="REPO_FETCH_JSON" />
                   {repos.map((repo) => (
                     <button key={repo.id} onClick={() => setSelectedProject(repo)} 
                       className="group relative p-12 border border-white/10 bg-white/[0.02] hover:bg-white hover:text-black transition-all duration-500 text-left">
