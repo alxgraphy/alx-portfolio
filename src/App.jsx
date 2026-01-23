@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Github, Mail, Camera, Moon, Sun, Instagram, Code, Palette, Layout, Database, ArrowRight, ExternalLink, Cpu, Activity, Zap, Terminal, Hash, Layers, Frame, Target, XCircle } from 'lucide-react';
 
 function App() {
@@ -6,22 +6,21 @@ function App() {
   const [theme, setTheme] = useState('light');
   const [repos, setRepos] = useState([]);
   const [showNav, setShowNav] = useState(true);
-  const [hasEntered, setHasEntered] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   
   const lastScrollY = useRef(0);
 
-  // --- OPTIMIZED CLOCK ---
+  // --- SMOOTH CLOCK ---
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
 
-  // --- SMOOTH HEADER LOGIC ---
+  // --- OPTIMIZED HEADER SCROLL ---
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+      if (currentScrollY > lastScrollY.current && currentScrollY > 80) {
         setShowNav(false);
       } else {
         setShowNav(true);
@@ -35,111 +34,102 @@ function App() {
   // --- NAVIGATION ---
   const navigate = (page) => {
     setCurrentPage(page);
-    window.history.pushState({}, '', page === 'home' ? '/' : `/${page}`);
-    window.scrollTo({ top: 0, behavior: 'instant' }); // Instant is less glitchy than smooth during state changes
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
-  // --- GITHUB FETCH ---
-  useEffect(() => {
-    fetch('https://api.github.com/users/alxgraphy/repos?sort=updated&per_page=12')
-      .then(res => res.json())
-      .then(data => { if (Array.isArray(data)) setRepos(data.filter(r => !r.fork)); })
-      .catch(err => console.error("API Limit reached or error:", err));
-  }, []);
-
   const t = theme === 'light' 
-    ? { bg: 'bg-white', text: 'text-black', border: 'border-black', accent: 'bg-black text-white', grid: 'bg-[url("https://www.transparenttextures.com/patterns/graphy.png")]' }
-    : { bg: 'bg-black', text: 'text-white', border: 'border-white', accent: 'bg-white text-black', grid: 'bg-[url("https://www.transparenttextures.com/patterns/asfalt-dark.png")]' };
+    ? { bg: 'bg-[#FFFFFF]', text: 'text-black', border: 'border-black', accent: 'bg-black text-white' }
+    : { bg: 'bg-[#000000]', text: 'text-white', border: 'border-white', accent: 'bg-white text-black' };
 
-  // --- 404 HANDLER ---
-  const validPages = ['home', 'about', 'skills', 'code', 'photography', 'contact'];
-  if (!validPages.includes(currentPage)) {
-    return (
-      <div className={`min-h-screen ${t.bg} ${t.text} flex flex-col items-center justify-center p-10 font-mono`}>
-        <XCircle size={80} className="mb-6 animate-pulse" />
-        <h1 className="text-9xl font-black italic">404</h1>
-        <p className="text-xl font-bold uppercase tracking-widest mt-4 text-center">Data Packet Lost in Transit.</p>
-        <button onClick={() => navigate('home')} className={`mt-10 px-10 py-4 border-2 ${t.border} font-black uppercase hover:invert transition-all`}>Return to Base</button>
-      </div>
-    );
-  }
-
-  // --- LANDING SCREEN ---
-  if (!hasEntered && currentPage === 'home') {
-    return (
-      <div className={`min-h-screen ${t.bg} ${t.text} flex flex-col items-center justify-center font-mono relative transition-colors duration-500`}>
-        <div className="z-10 text-center space-y-4 px-6">
-          <p className="text-[10px] tracking-[0.8em] uppercase opacity-40">Build 5.0 // System Initializing</p>
-          <h1 className="text-7xl md:text-[12vw] font-black tracking-tighter leading-none italic uppercase animate-pulse">Wondwossen</h1>
-          <button 
-            onClick={() => setHasEntered(true)}
-            className={`mt-12 px-16 py-6 border-2 ${t.border} text-xs font-black uppercase tracking-[0.5em] hover:invert transition-all active:scale-95`}
-          >
-            Access Files
-          </button>
-        </div>
-      </div>
-    );
-  }
+  // --- REUSABLE DECOR: CORNER BRACKETS ---
+  const Corners = () => (
+    <>
+      <div className={`absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 ${t.border}`} />
+      <div className={`absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 ${t.border}`} />
+      <div className={`absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 ${t.border}`} />
+      <div className={`absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 ${t.border}`} />
+    </>
+  );
 
   return (
-    <div className={`min-h-screen ${t.bg} ${t.text} font-sans selection:bg-black selection:text-white transition-colors duration-500`}>
+    <div className={`min-h-screen ${t.bg} ${t.text} font-sans selection:bg-black selection:text-white transition-colors duration-500 overflow-x-hidden`}>
       
-      {/* HEADER: HARDWARE ACCELERATED */}
+      {/* PERSISTENT HEADER */}
       <header 
-        className={`fixed top-0 w-full z-50 flex justify-between items-center px-6 md:px-12 py-8 bg-opacity-80 backdrop-blur-xl border-b ${t.border} transition-transform duration-500 ease-in-out`}
-        style={{ transform: showNav ? 'translate3d(0,0,0)' : 'translate3d(0,-100%,0)' }}
+        className={`fixed top-0 w-full z-50 flex justify-between items-center px-6 md:px-12 py-8 bg-opacity-90 backdrop-blur-md border-b ${t.border} transition-transform duration-500`}
+        style={{ transform: showNav ? 'translateY(0)' : 'translateY(-100%)' }}
       >
-        <button onClick={() => navigate('home')} className="text-4xl md:text-5xl font-black tracking-tighter italic">A.</button>
+        <div className="flex items-center gap-6">
+          <button onClick={() => navigate('home')} className="text-4xl font-black italic tracking-tighter hover:scale-110 transition-transform">A.</button>
+          <div className="hidden lg:flex flex-col text-[9px] font-bold opacity-40 uppercase tracking-[0.3em] border-l pl-6 border-current">
+            <span>43.6532° N</span>
+            <span>79.3832° W</span>
+          </div>
+        </div>
         
-        <nav className="flex items-center gap-6 md:gap-10 text-[10px] font-black uppercase tracking-[0.3em]">
+        <nav className="flex items-center gap-6 md:gap-10 text-[10px] font-black uppercase tracking-[0.4em]">
           {['about', 'skills', 'code', 'photography', 'contact'].map(pg => (
-            <button key={pg} onClick={() => navigate(pg)} className="hidden md:block hover:underline underline-offset-8 decoration-2 transition-all">{pg}</button>
+            <button key={pg} onClick={() => navigate(pg)} className={`hover:line-through transition-all ${currentPage === pg ? 'underline underline-offset-4' : ''}`}>
+              {pg}
+            </button>
           ))}
           <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} className={`p-2 border-2 ${t.border} hover:invert transition-all`}>
-            {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
+            {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
           </button>
         </nav>
       </header>
 
-      <main className="pt-48 pb-20 px-6 md:px-12 max-w-7xl mx-auto">
-        {/* HOME SECTION */}
+      {/* MAIN CONTENT AREA */}
+      <main className="pt-48 pb-20 px-6 md:px-12 max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-1000">
+        
+        {/* HOME PAGE */}
         {currentPage === 'home' && (
-          <div className="flex flex-col items-center space-y-24">
-            <div className="relative group">
-              <div className={`border-2 ${t.border} p-4 bg-transparent transition-transform duration-500 group-hover:rotate-[10deg] group-hover:scale-105`}>
-                <img src="https://avatars.githubusercontent.com/u/198081098?v=4" className="w-72 h-72 md:w-96 md:h-96 object-cover grayscale transition-all duration-700 group-hover:grayscale-0" alt="Alexander" />
+          <div className="space-y-32">
+            <div className="flex flex-col items-center">
+              <div className="relative group">
+                <div className={`border-2 ${t.border} p-4 transition-all duration-700 group-hover:rotate-3 group-hover:shadow-[20px_20px_0px_0px_rgba(0,0,0,0.1)]`}>
+                  <img src="https://avatars.githubusercontent.com/u/198081098?v=4" className="w-64 h-64 md:w-80 md:h-80 object-cover grayscale group-hover:grayscale-0" alt="Alexander" />
+                  <Corners />
+                </div>
+                <div className={`absolute -bottom-4 -right-10 ${t.accent} px-6 py-2 text-[10px] font-black uppercase tracking-widest italic`}>
+                  @alxgraphy
+                </div>
               </div>
-              <div className={`absolute -bottom-4 -right-8 ${t.accent} px-6 py-2 text-[10px] font-black uppercase tracking-widest italic shadow-xl`}>
-                Toronto / Grade 7
-              </div>
-            </div>
-            
-            <div className="text-center">
-              <h1 className="text-[15vw] font-black leading-none tracking-tighter uppercase italic">ALEXANDER</h1>
-              <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-left border-t border-current/20 pt-10">
-                <div><p className="text-[9px] uppercase opacity-40 mb-1">Status</p><p className="font-black text-sm uppercase">Available</p></div>
-                <div><p className="text-[9px] uppercase opacity-40 mb-1">Local Time</p><p className="font-black text-sm uppercase">{currentTime.toLocaleTimeString()}</p></div>
-                <div><p className="text-[9px] uppercase opacity-40 mb-1">Socials</p><p className="font-black text-sm uppercase">@alxgraphy</p></div>
-                <div><p className="text-[9px] uppercase opacity-40 mb-1">Lat/Lon</p><p className="font-black text-sm uppercase">43.65 / 79.38</p></div>
-              </div>
+              <h1 className="mt-12 text-[15vw] font-black leading-none tracking-tighter uppercase italic text-center">ALEXANDER</h1>
+              <p className="mt-8 text-xl md:text-3xl font-light text-center max-w-3xl opacity-80 leading-tight">
+                Building digital systems in <span className="font-bold underline">Toronto</span>. Grade 7 student, React developer, and visual archivist.
+              </p>
             </div>
           </div>
         )}
 
-        {/* SKILLS SECTION: EFFICIENT GRID */}
+        {/* ABOUT PAGE */}
+        {currentPage === 'about' && (
+          <div className="max-w-4xl mx-auto space-y-16">
+            <h2 className="text-7xl font-black italic uppercase">The Bio</h2>
+            <div className="space-y-8 text-2xl font-medium leading-relaxed border-l-4 border-current pl-10">
+              <p>I am Alexander Wondwossen. Based in Toronto, I am a 12-year-old creator focusing on the intersection of code and visual art.</p>
+              <p>I treat programming as a form of architecture. Using <span className="bg-black text-white px-2">React, Vite, and Tailwind CSS</span>, I build interfaces that prioritize speed and structural integrity.</p>
+              <p>Outside of dev, I capture the urban geometry of my city through street photography. My visuals directly influence my design philosophy: clean lines, high contrast, and zero fluff.</p>
+            </div>
+          </div>
+        )}
+
+        {/* SKILLS PAGE */}
         {currentPage === 'skills' && (
           <div className="space-y-16">
-            <h2 className="text-7xl font-black italic uppercase">Matrix</h2>
-            <div className="grid md:grid-cols-3 gap-6">
+            <h2 className="text-7xl font-black italic uppercase">Technical</h2>
+            <div className="grid md:grid-cols-3 gap-8">
               {[
-                { title: 'Development', list: ['React.js', 'Vite', 'JavaScript', 'Tailwind', 'Git'] },
-                { title: 'Visuals', list: ['35mm Analog', 'Lightroom', 'Street Photo', 'Color Theory'] },
-                { title: 'Systems', list: ['Figma Community', 'UI Patterns', 'Wireframing', 'UX Flow'] }
+                { title: 'Development', list: ['React.js', 'Vite', 'JavaScript ES6+', 'Tailwind CSS', 'Git Architecture'], icon: <Terminal /> },
+                { title: 'Visuals', list: ['Street Photography', '35mm Manual', 'Adobe Lightroom', 'Color Grading', 'Composition'], icon: <Camera /> },
+                { title: 'Design', list: ['UI/UX Logic', 'Minimalism', 'Typography Hierarchy', 'Wireframing', 'System Design'], icon: <Layout /> }
               ].map(skill => (
-                <div key={skill.title} className={`p-10 border-2 ${t.border} space-y-6 hover:bg-black hover:text-white transition-colors duration-300`}>
-                  <h3 className="text-2xl font-black uppercase italic underline decoration-2">{skill.title}</h3>
-                  <ul className="space-y-3 text-xs font-bold uppercase tracking-widest opacity-70">
+                <div key={skill.title} className={`p-12 border-2 ${t.border} relative hover:bg-black hover:text-white transition-all group`}>
+                  <Corners />
+                  <div className="mb-6 opacity-50 group-hover:opacity-100">{skill.icon}</div>
+                  <h3 className="text-3xl font-black uppercase mb-6 underline decoration-4 underline-offset-8">{skill.title}</h3>
+                  <ul className="space-y-3 text-xs font-bold uppercase tracking-[0.2em] opacity-70">
                     {skill.list.map(item => <li key={item}>// {item}</li>)}
                   </ul>
                 </div>
@@ -148,42 +138,45 @@ function App() {
           </div>
         )}
 
-        {/* PHOTOGRAPHY: STATIC GRID (LESS GLITCHY) */}
+        {/* PHOTOGRAPHY PAGE */}
         {currentPage === 'photography' && (
           <div className="space-y-12">
-            <h2 className="text-6xl font-black uppercase italic">The Gallery</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <h2 className="text-7xl font-black italic uppercase">Visuals</h2>
+            <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
               {[
                 "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005836/IMG_0649_jmyszm.jpg",
                 "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005835/IMG_0645_b679gp.jpg",
                 "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005835/DSC00059_qk2fxf.jpg",
+                "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005835/DSC00063_zkhohb.jpg",
                 "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005830/DSC00057_tbjyew.jpg",
                 "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005829/DSC00041_ufimhg.jpg",
-                "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005821/DSC_8617_wpcutg.jpg"
+                "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005829/DSC00046_yxqzyw.jpg",
+                "https://res.cloudinary.com/dyjibiyac/image/upload/v1769005829/DSC00052_qngaw6.jpg"
               ].map((url, i) => (
-                <div key={i} className={`border-2 ${t.border} overflow-hidden aspect-square bg-neutral-100 dark:bg-neutral-900`}>
-                  <img src={url} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="Gallery Work" loading="lazy" />
+                <div key={url} className={`border-2 ${t.border} overflow-hidden group relative`}>
+                  <img src={url} className="w-full grayscale hover:grayscale-0 transition-all duration-1000" alt="Street Photo" loading="lazy" />
+                  <div className="absolute top-2 right-2 text-[8px] font-black bg-black text-white px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">00{i+1}</div>
                 </div>
               ))}
             </div>
           </div>
         )}
 
-        {/* CONTACT: HIGH DENSITY HANDLES */}
+        {/* CONTACT PAGE */}
         {currentPage === 'contact' && (
-          <div className="max-w-4xl mx-auto space-y-12 py-10">
-            <h2 className="text-8xl font-black italic uppercase tracking-tighter">Handles</h2>
-            <div className="grid gap-4">
+          <div className="max-w-4xl mx-auto space-y-20 py-10">
+            <h2 className="text-[12vw] font-black italic uppercase leading-none text-center underline decoration-8 underline-offset-[20px]">Contact</h2>
+            <div className="grid gap-6">
               {[
                 { label: 'GitHub', handle: '@alxgraphy', url: 'https://github.com/alxgraphy' },
                 { label: 'TikTok', handle: '@alxgraphy', url: 'https://tiktok.com/@alxgraphy' },
                 { label: 'Instagram', handle: '@alexedgraphy', url: 'https://instagram.com/alexedgraphy' },
                 { label: 'Email', handle: 'alxgraphy@icloud.com', url: 'mailto:alxgraphy@icloud.com' }
-              ].map(link => (
-                <a key={link.label} href={link.url} target="_blank" className={`p-8 border-2 ${t.border} flex justify-between items-center group hover:invert transition-all`}>
-                  <span className="text-[10px] font-black uppercase tracking-widest opacity-50">{link.label}</span>
-                  <span className="text-2xl font-black italic">{link.handle}</span>
-                  <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+              ].map(item => (
+                <a key={item.label} href={item.url} target="_blank" className={`p-10 border-2 ${t.border} flex justify-between items-center group hover:bg-black hover:text-white transition-all`}>
+                  <span className="text-[10px] font-black uppercase tracking-[0.4em] opacity-50">{item.label}</span>
+                  <span className="text-2xl font-black italic group-hover:translate-x-2 transition-transform">{item.handle}</span>
+                  <ArrowRight />
                 </a>
               ))}
             </div>
@@ -191,20 +184,20 @@ function App() {
         )}
       </main>
 
-      {/* FOOTER */}
+      {/* PERSISTENT FOOTER */}
       <footer className={`w-full py-16 px-6 md:px-12 border-t-2 ${t.border} flex flex-col md:flex-row justify-between items-center gap-10 font-black uppercase text-[10px] tracking-widest`}>
         <div className="flex flex-col gap-1">
           <span>Toronto, Canada 🇨🇦</span>
-          <span className="opacity-40">System Release 5.0.1</span>
+          <span className="opacity-40">{currentTime.toLocaleTimeString()}</span>
         </div>
-        <div className="text-center group">
-          Made with ❤️ by <br/> 
-          <a href="https://github.com/alxgraphy" target="_blank" className="text-lg underline underline-offset-4 decoration-2 hover:invert px-2 transition-all">Alexander Wondwossen</a>
+        <div className="text-center">
+          Designed & Built By <br/> 
+          <a href="https://github.com/alxgraphy" className="text-lg underline underline-offset-4 decoration-2 hover:line-through transition-all">Alexander Wondwossen</a>
         </div>
-        <div className="flex gap-8 opacity-60">
-          <a href="https://tiktok.com/@alxgraphy" className="hover:opacity-100 transition-opacity">TikTok</a>
-          <a href="https://github.com/alxgraphy" className="hover:opacity-100 transition-opacity">GitHub</a>
-          <a href="https://instagram.com/alexedgraphy" className="hover:opacity-100 transition-opacity">Insta</a>
+        <div className="flex gap-8 opacity-60 font-black">
+          <a href="https://github.com/alxgraphy" target="_blank">GH</a>
+          <a href="https://tiktok.com/@alxgraphy" target="_blank">TT</a>
+          <a href="https://instagram.com/alexedgraphy" target="_blank">IG</a>
         </div>
       </footer>
     </div>
