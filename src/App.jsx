@@ -3,6 +3,7 @@ import {
   Camera, Terminal, ArrowRight, ExternalLink, Loader2, X, Activity, 
   Database, Award, GraduationCap, Code2, Aperture, Download, Filter
 } from 'lucide-react';
+import { Analytics } from '@vercel/analytics/react';
 
 export default function App() {
   const [hasEntered, setHasEntered] = useState(false);
@@ -683,6 +684,7 @@ export default function App() {
           </div>
         </div>
       )}
+      <Analytics />
     </div>
   );
 }
