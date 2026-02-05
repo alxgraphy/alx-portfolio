@@ -813,7 +813,7 @@ export default function App() {
                   <div className="space-y-4 text-sm">
                     <div className="flex justify-between pb-3 border-b border-white/5">
                       <span className="uppercase tracking-widest text-white/40">Email</span>
-                      <a href="mailto:thealxlabs@gmail.com" className="hover:text-white/60 transition-colors">thealxlabs@gmail.com</a>
+                      <a href="mailto:@gmail.com" className="hover:text-white/60 transition-colors">thealxlabs@icloud.com</a>
                     </div>
                     <div className="flex justify-between pb-3 border-b border-white/5">
                       <span className="uppercase tracking-widest text-white/40">GitHub</span>
@@ -910,7 +910,7 @@ export default function App() {
           <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/40">© 2025 ALX.CORE — All Rights Reserved</p>
           <div className="flex gap-8 text-[9px] font-bold uppercase tracking-widest">
             <a href="https://github.com/thealxlabs" target="_blank" rel="noreferrer" className="text-white/40 hover:text-white transition-colors">GitHub</a>
-            <a href="mailto:thealxlabs@gmail.com" className="text-white/40 hover:text-white transition-colors">Email</a>
+            <a href="mailto:thealxlabs@icloud.com" className="text-white/40 hover:text-white transition-colors">Email</a>
           </div>
         </div>
       </footer>
