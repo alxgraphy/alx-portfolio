@@ -52,35 +52,35 @@ const ART_CONTENT = {
       id: 'movement-on-paper',
       title: 'Movement_On_Paper',
       label: 'ART_001',
-      imgUrl: "https://drive.google.com/uc?export=view&id=1Ds9Ssut63Imj_BxQPST66nFRxeNRBHTV",
+      imgUrl: "https://lh3.googleusercontent.com/d/1Ds9Ssut63Imj_BxQPST66nFRxeNRBHTV",
       description: null
     },
     {
       id: 'quilt-art',
       title: 'Quilt_Art',
       label: 'ART_002',
-      imgUrl: "https://drive.google.com/uc?export=view&id=1H4KTtEhGqNeKMiML4H6gwpb3e6oj-Eqh",
+      imgUrl: "https://lh3.googleusercontent.com/d/1H4KTtEhGqNeKMiML4H6gwpb3e6oj-Eqh",
       description: null
     },
     {
       id: 'birthday-cards',
       title: 'Happy_Birthday_Cards',
       label: 'ART_003',
-      imgUrl: "https://drive.google.com/uc?export=view&id=1JHWSHNCz8WNi2AG18G4yp_QLtiqHw87n",
+      imgUrl: "https://lh3.googleusercontent.com/d/1JHWSHNCz8WNi2AG18G4yp_QLtiqHw87n",
       description: null
     },
     {
       id: 'mandela-art',
       title: 'Mandela_Art',
       label: 'ART_004',
-      imgUrl: "https://drive.google.com/uc?export=view&id=1MIVIv8s5-ulPPlNUSqT7jEfPu-XOCpNo",
+      imgUrl: "https://lh3.googleusercontent.com/d/1MIVIv8s5-ulPPlNUSqT7jEfPu-XOCpNo",
       description: null
     },
     {
       id: 'student-words',
       title: 'Student_Words',
       label: 'ART_005',
-      imgUrl: "https://drive.google.com/uc?export=view&id=1R1d8-ItBaGQXwA_nnDJQlzlwgLyKjV5Z",
+      imgUrl: "https://lh3.googleusercontent.com/d/1R1d8-ItBaGQXwA_nnDJQlzlwgLyKjV5Z",
       description: null
     },
     {
@@ -88,16 +88,16 @@ const ART_CONTENT = {
       title: 'Indigenous_Dot_Painting',
       label: 'ART_006',
       subtitle: 'Art & History',
-      imgUrl: "https://drive.google.com/uc?export=view&id=1UmPxshFgUaZTZgQ9dcKEollUDEtwPCT2",
+      imgUrl: "https://lh3.googleusercontent.com/d/1UmPxshFgUaZTZgQ9dcKEollUDEtwPCT2",
       description: null
     }
   ],
   extraImages: [
-    "https://drive.google.com/uc?export=view&id=1ckyn27DaKGDSFXP8YO2xY_aoHXGXSVOE",
-    "https://drive.google.com/uc?export=view&id=1eSJ6T46Gz6JRDT7pcQZ_iTOUB3Tv8Ir4",
-    "https://drive.google.com/uc?export=view&id=1fqfIxiKtRiYXHIVqj9Vuf1BgRdQCqsbf",
-    "https://drive.google.com/uc?export=view&id=1uJG657Q_b1KTMKZWF4zOpzWVP8ndT0BB",
-    "https://drive.google.com/uc?export=view&id=1BeB_q2t47mOfwtdImQ7NNR76MTICQoY-"
+    "https://lh3.googleusercontent.com/d/1ckyn27DaKGDSFXP8YO2xY_aoHXGXSVOE",
+    "https://lh3.googleusercontent.com/d/1eSJ6T46Gz6JRDT7pcQZ_iTOUB3Tv8Ir4",
+    "https://lh3.googleusercontent.com/d/1fqfIxiKtRiYXHIVqj9Vuf1BgRdQCqsbf",
+    "https://lh3.googleusercontent.com/d/1uJG657Q_b1KTMKZWF4zOpzWVP8ndT0BB",
+    "https://lh3.googleusercontent.com/d/1BeB_q2t47mOfwtdImQ7NNR76MTICQoY-"
   ]
 };
 
@@ -285,7 +285,7 @@ export default function App() {
   // ─────────────────────────────────────────────
   if (!hasEntered) {
     return (
-      <div className="min-h-screen bg-[#050505] text-white font-mono flex items-center justify-center p-6 overflow-hidden" style={isMobile ? {} : { cursor: 'none' }}>
+      <div className="min-h-screen bg-[#050505] text-white font-mono flex items-center justify-center p-6 overflow-hidden">
         <BackgroundGrid />
         <div className="max-w-xl w-full space-y-12 relative z-10 animate-in fade-in zoom-in duration-1000">
           <div className="space-y-2 border-l border-white/20 pl-6">
@@ -295,7 +295,7 @@ export default function App() {
           <div className="space-y-4">
             <h1 className="text-8xl font-black italic tracking-tighter uppercase leading-[0.8]">ALX.<br/><span className="text-outline text-transparent" style={{ WebkitTextStroke: '1px white' }}>CORE</span></h1>
           </div>
-          <button onClick={() => { setHasEntered(true); navigate('home'); }} className="group w-full border border-white/20 p-8 hover:bg-white hover:text-black transition-all duration-700">
+          <button onClick={() => { setHasEntered(true); navigate('home'); }} className="group w-full border border-white/20 p-8 hover:bg-white hover:text-black transition-all duration-700 cursor-pointer">
             <div className="flex justify-between items-center font-black uppercase tracking-[0.3em] text-xs">
               <span>Initialize_Pattern_Library</span>
               <ArrowRight className="group-hover:translate-x-2 transition-transform" />
@@ -310,13 +310,13 @@ export default function App() {
   // MAIN APP
   // ─────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-[#050505] text-white font-mono overflow-x-hidden selection:bg-white selection:text-black" style={isMobile ? {} : { cursor: 'none' }}>
+    <div className="min-h-screen bg-[#050505] text-white font-mono overflow-x-hidden selection:bg-white selection:text-black">
       <BackgroundGrid />
       <style>{'.text-outline { -webkit-text-stroke: 1px rgba(255,255,255,0.3); }'}</style>
 
       {/* Custom cursor */}
       {!isMobile && (
-        <div className="fixed top-0 left-0 w-10 h-10 border border-white/20 rounded-full pointer-events-none z-[9999] mix-blend-difference flex items-center justify-center"
+        <div className="fixed top-0 left-0 w-10 h-10 border border-white/20 rounded-full pointer-events-none z-[9999] mix-blend-difference flex items-center justify-center transition-transform duration-100 ease-out"
           style={{ transform: `translate(${mousePos.x - 20}px, ${mousePos.y - 20}px)` }}>
           <div className="w-1 h-1 bg-white" />
         </div>
