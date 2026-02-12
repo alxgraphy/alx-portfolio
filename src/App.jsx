@@ -20,7 +20,7 @@ const SOCIAL_STUDIES_CONTENT = {
       id: 'ancestry-tree',
       title: 'Ancestry_Family_Tree',
       label: 'PROJ_SS_001',
-      date: 'Sep 2024',
+      date: 'Nov 2025',
       description: 'A presentation of my ancestry tree which includes history, a diagram and more.',
       type: 'presentation' // was a Google Slides embed — no direct link available
     }
@@ -30,15 +30,15 @@ const SOCIAL_STUDIES_CONTENT = {
       id: 'marrow-thieves',
       title: 'The_Marrow_Thieves',
       label: 'BOOK_SS_001',
-      date: 'Jan 2025 — Ongoing',
+      date: 'Jan 2026 — Jan 2026',
       coverUrl: "https://upload.wikimedia.org/wikipedia/en/8/89/The_Marrow_Thieves.jpg",
-      description: null
+      description: 'humanity has lost the ability to dream, driving them to madness in a climate-ravaged dystopia. Indigenous people, who can still dream, are hunted by "Recruiters" for their bone marrow to create a cure'
     },
     {
       id: 'paper-cranes',
       title: 'One_Thousand_Paper_Cranes',
       label: 'BOOK_SS_002',
-      date: null,
+      date: 'Nov 2025 - Dec 2025',
       coverUrl: "https://m.media-amazon.com/images/I/61eluMBcxRL._AC_UF1000,1000_QL80_.jpg",
       description: 'Based on the true story of Sadako Sasaki, a Japanese girl living in Hiroshima who develops leukemia from the 1945 atomic bombing.'
     }
@@ -49,47 +49,47 @@ const SOCIAL_STUDIES_CONTENT = {
 const ART_CONTENT = {
   pieces: [
     {
-      id: 'movement-on-paper',
-      title: 'Movement_On_Paper',
+      id: 'student-words',
+      title: 'Student_Words',
       label: 'ART_001',
       imgUrl: "https://lh3.googleusercontent.com/d/1Ds9Ssut63Imj_BxQPST66nFRxeNRBHTV",
-      description: null
+      description: 'A Mock Version Of Ballet Movements',
     },
     {
       id: 'quilt-art',
       title: 'Quilt_Art',
       label: 'ART_002',
       imgUrl: "https://lh3.googleusercontent.com/d/1H4KTtEhGqNeKMiML4H6gwpb3e6oj-Eqh",
-      description: null
+      description: 'Using leftover Quilt to make new Art',
+    },
+    {
+      id: 'movement-on-paper',
+      title: 'Movement_On_Paper',
+      label: 'ART_003',
+      imgUrl: "https://lh3.googleusercontent.com/d/1JHWSHNCz8WNi2AG18G4yp_QLtiqHw87n",
+      description: 'A Mock Version Of Ballet Movements',
     },
     {
       id: 'birthday-cards',
-      title: 'Happy_Birthday_Cards',
-      label: 'ART_003',
-      imgUrl: "https://lh3.googleusercontent.com/d/1JHWSHNCz8WNi2AG18G4yp_QLtiqHw87n",
-      description: null
-    },
-    {
-      id: 'mandela-art',
-      title: 'Mandela_Art',
+      title: 'Birthday_Cards',
       label: 'ART_004',
       imgUrl: "https://lh3.googleusercontent.com/d/1MIVIv8s5-ulPPlNUSqT7jEfPu-XOCpNo",
-      description: null
+      description: 'Birthday Cards',
     },
     {
-      id: 'student-words',
-      title: 'Student_Words',
+      id: 'gr7-main-portrait',
+      title: 'Grade_7_Portrait',
       label: 'ART_005',
       imgUrl: "https://lh3.googleusercontent.com/d/1R1d8-ItBaGQXwA_nnDJQlzlwgLyKjV5Z",
-      description: null
+      description: 'My 1st Portrait',
     },
     {
-      id: 'indigenous-dot-painting',
-      title: 'Indigenous_Dot_Painting',
+      id: 'happy-birthday-back',
+      title: 'Back_Of_Birthday_Card',
       label: 'ART_006',
       subtitle: 'Art & History',
       imgUrl: "https://lh3.googleusercontent.com/d/1UmPxshFgUaZTZgQ9dcKEollUDEtwPCT2",
-      description: null
+      description: 'The Back Of the Birthday Cards',
     }
   ],
   extraImages: [
