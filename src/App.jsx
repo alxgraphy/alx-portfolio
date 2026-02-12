@@ -532,7 +532,7 @@ export default function App() {
                       <div className="relative">
                         <span className="absolute top-2 left-2 text-[9px] font-bold tracking-[0.2em] uppercase bg-black/60 px-2 py-1 z-10">{book.label}</span>
                         {book.coverUrl ? (
-                          <img src={book.coverUrl} alt={book.title} className="w-full h-48 object-cover" />
+                          <img src={book.coverUrl} alt={book.title} className="w-full h-48 object-contain bg-white/[0.03]" />
                         ) : (
                           <div className="w-full h-48 bg-white/[0.03] border-b border-white/10 flex items-end p-3">
                             <span className="text-[9px] font-bold tracking-[0.2em] uppercase text-white/20">NO_IMG_AVAILABLE</span>
