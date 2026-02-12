@@ -31,7 +31,7 @@ const SOCIAL_STUDIES_CONTENT = {
       title: 'The_Marrow_Thieves',
       label: 'BOOK_SS_001',
       date: 'Jan 2025 — Ongoing',
-      coverUrl: null, // TODO: upload cover image and paste URL here
+      coverUrl: "https://upload.wikimedia.org/wikipedia/en/8/89/The_Marrow_Thieves.jpg",
       description: null
     },
     {
@@ -39,7 +39,7 @@ const SOCIAL_STUDIES_CONTENT = {
       title: 'One_Thousand_Paper_Cranes',
       label: 'BOOK_SS_002',
       date: null,
-      coverUrl: null, // TODO: upload cover image and paste URL here
+      coverUrl: "https://m.media-amazon.com/images/I/61eluMBcxRL._AC_UF1000,1000_QL80_.jpg",
       description: 'Based on the true story of Sadako Sasaki, a Japanese girl living in Hiroshima who develops leukemia from the 1945 atomic bombing.'
     }
   ]
