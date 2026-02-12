@@ -53,35 +53,35 @@ const ART_CONTENT = {
       title: 'Student_Words',
       label: 'ART_001',
       imgUrl: "https://lh3.googleusercontent.com/d/1Ds9Ssut63Imj_BxQPST66nFRxeNRBHTV",
-      description: 'A Mock Version Of Ballet Movements',
+      description: 'My Student Words'
     },
     {
       id: 'quilt-art',
       title: 'Quilt_Art',
       label: 'ART_002',
       imgUrl: "https://lh3.googleusercontent.com/d/1H4KTtEhGqNeKMiML4H6gwpb3e6oj-Eqh",
-      description: 'Using leftover Quilt to make new Art',
+      description: 'Using leftover Quilt to make new Art'
     },
     {
       id: 'movement-on-paper',
       title: 'Movement_On_Paper',
       label: 'ART_003',
       imgUrl: "https://lh3.googleusercontent.com/d/1JHWSHNCz8WNi2AG18G4yp_QLtiqHw87n",
-      description: 'A Mock Version Of Ballet Movements',
+      description: 'A Mock Version Of Ballet Movements'
     },
     {
       id: 'birthday-cards',
       title: 'Birthday_Cards',
       label: 'ART_004',
       imgUrl: "https://lh3.googleusercontent.com/d/1MIVIv8s5-ulPPlNUSqT7jEfPu-XOCpNo",
-      description: 'Birthday Cards',
+      description: 'Birthday Cards'
     },
     {
       id: 'gr7-main-portrait',
       title: 'Grade_7_Portrait',
       label: 'ART_005',
       imgUrl: "https://lh3.googleusercontent.com/d/1R1d8-ItBaGQXwA_nnDJQlzlwgLyKjV5Z",
-      description: 'My 1st Portrait',
+      description: 'My 1st Portrait'
     },
     {
       id: 'happy-birthday-back',
@@ -89,7 +89,7 @@ const ART_CONTENT = {
       label: 'ART_006',
       subtitle: 'Art & History',
       imgUrl: "https://lh3.googleusercontent.com/d/1UmPxshFgUaZTZgQ9dcKEollUDEtwPCT2",
-      description: 'The Back Of the Birthday Cards',
+      description: 'The Back Of the Birthday Cards'
     }
   ],
   extraImages: [
@@ -891,7 +891,7 @@ export default function App() {
             </button>
             <div className="border border-white/20 p-2 bg-[#050505]">
               <Corners />
-              <img src={selectedPhoto.url} alt={selectedPhoto.title} className="w-full h-auto" />
+              <img src={selectedPhoto.url} alt={selectedPhoto.title} className="w-full h-auto max-h-[80vh] object-contain mx-auto" />
             </div>
             <div className="mt-6 space-y-2">
               <h3 className="text-2xl font-black uppercase italic tracking-tighter">{selectedPhoto.title}</h3>
