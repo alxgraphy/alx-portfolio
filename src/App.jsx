@@ -4,8 +4,8 @@ import {
   Database, Award, GraduationCap, Code2, Aperture, Download, Filter
 } from 'lucide-react';
 
-const MATH_IMG_1 = "https://github.com/user-attachments/assets/bcb8c8c8-4c1f-4ba7-a4aa-688f4e8c514f";
-const MATH_IMG_2 = "https://github.com/user-attachments/assets/0decc0ea-52b5-4ad8-89ce-8bebe6b3a6b2";
+const MATH_IMG_1 = "https://res.cloudinary.com/dyjibiyac/image/upload/v1770901612/Screenshot_2026-02-12_at_8.06.27_AM_hmyjvc.png";
+const MATH_IMG_2 = "https://res.cloudinary.com/dyjibiyac/image/upload/v1770901612/Screenshot_2026-02-12_at_8.06.39_AM_wpzo1t.png";
 const STORY_DOC = "https://docs.google.com/document/d/1rNfHCNyB9KjKROh2_g0Hz2_70FU4GAeOEx844VV4Fuk/edit";
 const HOMELESS_DOC = "https://docs.google.com/document/d/1kZLzbcLXqLunsfn6jI6U1Q8i1_IoaUXbNRVBMdeOg3E/edit";
 
